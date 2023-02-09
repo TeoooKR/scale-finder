@@ -38,7 +38,7 @@
         readonly private int[] aeolian_interval = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly private int[] locrain_interval = new int[6] { 2, 1, 2, 1, 2, 2 };
 
-        public int FindScale(int pitch, int accid, int type)
+        public int FindScale(int start_pitch, int accid, int type)
         {
             int[] sc_index = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
             int[] accidental = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
@@ -46,7 +46,7 @@
             string[] sub_sc = new string[7] { "", "", "", "", "", "", "" };
             string[] accidental_string = new string[7] { "", "", "", "", "", "", "" };
             string[] fin_sc = new string[7] { "", "", "", "", "", "", "" };
-            int pitch_index = pitch + accid;
+            int pitch_index = start_pitch + accid;
 
             if (type == type_MAJOR || type == type_IONIAN)
             {
@@ -79,18 +79,15 @@
 
             for (int i = 0; i < def_pitch_index.Length; i++)
             {
-                if (pitch == def_pitch_index[i])
+                if (start_pitch == def_pitch_index[i])
                 {
-                    accidental_index = get_accidental_index(accidental, i, def_pitch_index, sc_index);
+                    accidental_index = get_accidental_index(accidental, i, sc_index);
                     sub_sc = get_sc_order(sc, i);
                 }
             }
 
-            for (int i = 0; i < accidental_index.Length; i++)
-            {
-
-            }
-
+            //for (int i = 0; i < accidental_index.Length; i++)
+            //{}
 
             int result = pitch_index;
             Console.WriteLine("I Found Scale!!!!!!!!!!!!!!!!");
@@ -109,15 +106,15 @@
             return 1;
         }
 
-        private int[] get_accidental_index(int[] accidental, int pitch_order_index, int[] def_pitch_index, int[] sc_index)
+        private int[] get_accidental_index(int[] accidental, int start_pitch_index, int[] sc_index)
         {
             //> pitch_order_index [0~6]
             int j = 0;
-            if (pitch_order_index == 0)
+            if (start_pitch_index == 0)
             {
                 for (int i = 0; i < def_pitch_index.Length; i++)
                 {
-                    Console.WriteLine("---- " + i + " ----");
+                    Console.WriteLine("---- " + i + " ---- " + sc_index[i] + " / " + def_pitch_index[i]);
                     accidental[i] = sc_index[i] - def_pitch_index[i];
                     Console.WriteLine(accidental[i]);
                 }
@@ -126,7 +123,7 @@
 
             for (int i = 0; i < def_pitch_index.Length; i++)
             {
-                j = i + pitch_order_index;
+                j = i + start_pitch_index;
                 if (j > 6)
                 {
                     j = j % 6;
@@ -135,7 +132,7 @@
                 {
                     sc_index[i] = sc_index[i] % 12;
                 }
-                Console.WriteLine("---- " + i + " ----");
+                Console.WriteLine("---- " + i + " ---- " + sc_index[i] + " / " + def_pitch_index[i]);
                 accidental[i] = sc_index[i] - def_pitch_index[j];
                 if (accidental[i] >= 12)
                 {
