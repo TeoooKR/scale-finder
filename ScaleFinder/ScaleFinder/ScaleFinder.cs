@@ -43,10 +43,8 @@
         {
             int[] pitchList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
             int[] accidentalList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
-            string[] sub_sc = new string[7] { "", "", "", "", "", "", "" };
-            string[] accidental_string = new string[7] { "", "", "", "", "", "", "" };
-            string[] fin_sc = new string[7] { "", "", "", "", "", "", "" };
             int startPitch = basePitch + accidental;
+            string[] sub_sc = new string[7] { "", "", "", "", "", "", "" };
 
             if (type == type_MAJOR || type == type_IONIAN)
             {
@@ -82,10 +80,19 @@
                 if (basePitch == BasePitchList[i])
                 {
                     CalcAccidentalFromBass(accidentalList, i, pitchList);
-                    sub_sc = get_sc_order(BasePitchTextList, i);
+                    sub_sc = GetbassPitchOrder(BasePitchTextList, i);
+                    //Console.WriteLine("\nIndex\n---- " + i + " ----");
                     break;
                 }
             }
+
+            string[] sub = GetSignFromAccidental(accidentalList);
+
+            for (int i = 0; i < accidentalList.Length; i++)
+            {
+                Console.WriteLine("@@------ " + sub_sc[i] + sub[i] + " ------@@");
+            }
+
 
             //for (int i = 0; i < accidental_index.Length; i++)
             //{}
@@ -98,35 +105,97 @@
         private void GetPitchListByInterval(int[] result, int startPitch, int[] interval)
         {
             result[0] = startPitch;
-            Console.WriteLine("index = " + result[0]);
+            //Console.WriteLine("index = " + result[0]);
             for (int i = 0; i < interval.Length; i++)
             {
                 result[i + 1] = result[i] + interval[i];
-                Console.WriteLine("index = " + result[i + 1]);
+                //Console.WriteLine("index = " + result[i + 1]);
             }
         }
 
         private void CalcAccidentalFromBass(int[] accidental, int startPitchIndex, int[] pitchList)
         {
+            //Console.WriteLine("\nCalcAccidentalFromBass");
             //> pitch_order_index [0~6]
             int index = 0;
             for (int i = 0; i < pitchList.Length; i++)
             {
                 index = i + startPitchIndex;
-                Console.WriteLine("---- " + i + " ---- " + pitchList[i] + " / " + BasePitchList[index]);
+                //Console.WriteLine("---- " + i + " ---- " + pitchList[i] + " / " + BasePitchList[index]);
                 accidental[i] = pitchList[i] - BasePitchList[index];
-                Console.WriteLine(accidental[i]);
+                //Console.WriteLine(accidental[i]);
             }
         }
 
-        private string[] get_sc_order(string[] sc, int pitch_order_index)
+        private string[] GetbassPitchOrder(string[] BassPitchTextList, int BassPitchIndex)
         {
-            string[] result = { "C", "D", "E", "F", "G", "A", "B" };
-
+            string[] result = new string[7] { "", "", "", "", "", "", "" };
+            for (int i = 0; i < BassPitchTextList.Length; i++)
+            {
+                int j = i + BassPitchIndex;
+                if (j > 6)
+                {
+                    j = j % 7;
+                }
+                result[i] = BassPitchTextList[j];
+            }
             return result;
         }
+        private string[] GetSignFromAccidental(int[] accidentalList)
+        {
+            //Console.WriteLine("\n#x");
+            string[] accidentalString = new string[7] { "", "", "", "", "", "", "" };
+            int[] Accid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+            int[] doubleAccid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+            string[] Accid_str = new string[7] { "", "", "", "", "", "", "" };
+            string[] doubleAccid_str = new string[7] { "", "", "", "", "", "", "" };
+            for (int j = 0; j < accidentalList.Length; j++)
+            {
+                if (accidentalList[j] > 0)
+                {
+                    Accid[j] = accidentalList[j] % 2;
+                    doubleAccid[j] = accidentalList[j] / 2;
+                    if (Accid[j] > 0)
+                    {
+                        Accid_str[j] = "#";
+                    }
+                    if (doubleAccid[j] > 0)
+                    {
+                        for (int k = 0; k < doubleAccid[j]; k++)
+                        {
+                            doubleAccid_str[j] = doubleAccid_str[j] + "x";
+                        }
+                    }
+                }
+            }
+            //Console.WriteLine("\nGetSignFromAccidental");
+            for (int i = 0; i < accidentalString.Length; i++)
+            {
+                //Console.WriteLine("---- " + i + " ----");
+                if (accidentalList[i] == 0)
+                {
+                    accidentalString[i] = "";
+                    //Console.WriteLine(accidentalString[i]);
+                }
+                else if (accidentalList[i] > 0)
+                {
+                    accidentalString[i] = Accid_str[i] + doubleAccid_str[i];
+                    //Console.WriteLine(accidentalString[i]);
+                }
+                else if (accidentalList[i] < 0)
+                {
+                    for (int j = 0; j > accidentalList[i]; j--)
+                    {
+                        accidentalString[i] = accidentalString[i] + "b";
+                    }
+                    //Console.WriteLine(accidentalString[i]);
+                }
+
+            }
+            return accidentalString;
+        }
     }
-}
+}　
 
 
 
