@@ -8,7 +8,7 @@ namespace ScaleFinder
         int find = 0;
         static void Main(string[] args)
         {
-            int result = finder.FindScale(ScaleFinder.pitch_C, ScaleFinder.accid_NATURAL, ScaleFinder.type_MAJOR);
+            int result = finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, ScaleFinder.ModeMajor);
             //Console.WriteLine(">> MUSIC SCALE : " + result);
         }
     }
