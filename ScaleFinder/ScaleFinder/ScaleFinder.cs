@@ -1,4 +1,23 @@
-﻿namespace ScaleFinder {
+﻿/*
+MIT License
+Copyright(c) 2023 Teo Han [meteory.kr@gmail.com]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+namespace ScaleFinder {
     class ScaleFinder {
         //------ TYPE ------
         public const int ModeMajor = 1;
@@ -37,14 +56,14 @@
         readonly private int[] IntervalMixolydian = new int[6] { 2, 2, 1, 2, 2, 1 };
         readonly private int[] IntervalAeolian = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly private int[] IntervalLocrain = new int[6] { 2, 1, 2, 1, 2, 2 };
-
-        public int FindScale(int basePitch, int accidental, int type) {
-            int[] pitchList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
-            int[] accidentalList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+        
+        public Scale FindScale(int basePitch, int accidental, int type) {
+            Scale result = new Scale();
+            int[] accidentalList = result.GetAccidentalList();
+            int[] pitchList = result.GetPitchList();
             int startPitch = basePitch + accidental;
             string[] pitchTexts = new string[7] { "", "", "", "", "", "", "" };
-            string[] accidentalTexts = new string[7] { "", "", "", "", "", "", "" };
-
+            
             if (type == ModeMajor || type == ModeIonian) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalIonian);
             }
@@ -66,6 +85,10 @@
             else if (type == ModeLocrain) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalLocrain);
             }
+            else {
+                result.SetFound(false);
+                return result;
+            }
 
             for (int i = 0; i < BasePitchList.Length; i++) {
                 if (basePitch == BasePitchList[i]) {
@@ -75,13 +98,15 @@
                 }
             }
 
-            accidentalTexts = GetSignFromAccidental(accidentalList);
-
+            string[] accidentalTexts = GetSignFromAccidental(accidentalList);
+            string[] pitchTextResults = result.GetPitchTexts();
             for (int i = 0; i < accidentalList.Length; i++) {
-                Console.WriteLine("@@------ " + pitchTexts[i] + accidentalTexts[i] + " ------@@");
+                pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }
-            int result = startPitch;
-            Console.WriteLine("I Found Scale!!!!!!!!!!!!!!!!");
+            result.SetPitchTexts(pitchTextResults);
+            result.SetAccidentalList(accidentalList);
+            result.SetPitchList(pitchList);
+            result.SetFound(true);
             return result;
         }
 
@@ -141,6 +166,7 @@
             }
             return accidentalText;
         }
+
     }
 }
 
