@@ -21,5 +21,17 @@ namespace ScaleFinderUI {
         public MainWindow() {
             InitializeComponent();
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
+            
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e) {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            MessageBox.Show("오쫄티비~~~~", "캡숑");
+        }
     }
 }

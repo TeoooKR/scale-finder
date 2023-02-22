@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScaleFinderUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel HorizontalAlignment="Left">
-        <Button>Button 1</Button>
-        <Button>Button 2</Button>
-        <Button>Button 3</Button>
+        Title="MainWindow" Height="768" Width="1366">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Click="Button_Click" FontSize="30" Width="175" Height="175">눌러</Button>
+        <TextBox TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" TextChanged="TextBox_TextChanged_1" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
     </StackPanel>
 </Window>
+    
 
