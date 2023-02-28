@@ -29,29 +29,28 @@ namespace ScaleFinderUI {
 
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton tb = sender as RadioButton;
+            int basePitch = 0;
+            
             if (tb == null) {
                 return;
             }
             if ((bool)RBtnBaseC.IsChecked) {
-                Scale result = finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, ScaleFinder.ModeLocrain);
-
-                if (!result.GetFound()) {
-                    Debug.WriteLine("Error.. I cannot find your scale. sigh....");
-                    return;
-                }
-                result.PrintMyValues();
+                basePitch = ScaleFinder.PitchC;
             }
             else if ((bool)RBtnBaseD.IsChecked) {
-                Scale result = finder.FindScale(ScaleFinder.PitchD, ScaleFinder.AccidNatural, ScaleFinder.ModeLocrain);
-
-                if (!result.GetFound()) {
-                    Debug.WriteLine("Error.. I cannot find your scale. sigh....");
-                    return;
-                }
-                result.PrintMyValues();
+                basePitch = ScaleFinder.PitchD;
             }
-            
-            
+
+            TBSelectedScale.Text = (string)tb.Content;
+
+            Scale result = finder.FindScale(basePitch, ScaleFinder.AccidNatural, ScaleFinder.ModeMajor);
+
+            if (!result.GetFound()) {
+                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
+                return;
+            }
+            result.PrintMyValues();
+
         }
     }
 }

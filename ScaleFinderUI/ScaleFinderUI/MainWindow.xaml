@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1366">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBox TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BassPitch" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">C</RadioButton>
             <RadioButton Name="RBtnBaseD" Checked="HandleBasePitchChecked" GroupName="BassPitch" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">D</RadioButton>
         </StackPanel>
-        
-        
-        
+        <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+
+
     </StackPanel>
 </Window>
     
