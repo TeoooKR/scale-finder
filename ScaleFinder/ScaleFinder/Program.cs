@@ -22,7 +22,7 @@ namespace ScaleFinder {
     class Program {
         static ScaleFinder finder = new ScaleFinder();
         static void Main(string[] args) {
-            Scale result = finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, ScaleFinder.ModeMajor);
+            Scale result = finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, ScaleFinder.ModeLocrain);
             //Scale result = finder.FindScale(ScaleFinder.PitchB, 30, ScaleFinder.ModeMajor);
             if (!result.GetFound()) {
                 Console.WriteLine("Error.. I cannot find your scale. sigh....");
