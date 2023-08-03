@@ -37,6 +37,8 @@ namespace ScaleFinderUI {
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
         }
+
+        // Base Pitch
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton tb = sender as RadioButton;
             if (tb == null) {
@@ -76,6 +78,7 @@ namespace ScaleFinderUI {
             UpdateScaleResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
+        // Accidental
         private void HandleAccidChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
@@ -107,6 +110,7 @@ namespace ScaleFinderUI {
             UpdateScaleResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
+        // Type
         private void HandleTypeChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
