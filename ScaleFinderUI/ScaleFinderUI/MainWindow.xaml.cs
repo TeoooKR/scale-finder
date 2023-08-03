@@ -23,7 +23,7 @@ namespace ScaleFinderUI {
     public partial class MainWindow : Window {
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
-        private int Type = ScaleFinder.TypeMajor;
+        private int Type = ScaleFinder.TypeMajorScale;
         private string BasePitchText = "C";
         private string AccidText = String.Empty;
         private string TypeText = " Major";
@@ -113,11 +113,11 @@ namespace ScaleFinderUI {
                 return;
             }
             if ((bool)RBtnTypeMajor.IsChecked) {
-                Type = ScaleFinder.TypeMajor;
+                Type = ScaleFinder.TypeMajorScale;
                 TypeText = " Major";
             }
             else if ((bool)RBtnTypeMinor.IsChecked) {
-                Type = ScaleFinder.TypeMinor;
+                Type = ScaleFinder.TypeNaturalMinorScale;
                 TypeText = " Minor";
             }
             TBSelectedScale.Text = BasePitchText + AccidText + TypeText;

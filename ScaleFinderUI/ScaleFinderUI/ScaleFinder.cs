@@ -21,16 +21,22 @@ using System;
 
 namespace ScaleFinderUI {
     class ScaleFinder {
-        //------ TYPE ------
-        public const int TypeMajor = 1;
-        public const int TypeMinor = 6;
-        public const int ModeIonian = 1;
-        public const int ModeDorian = 2;
-        public const int ModePhtygian = 3;
-        public const int ModeLydian = 4;
-        public const int ModeMixolydian = 5;
-        public const int ModeAeolian = 6;
-        public const int ModeLocrain = 7;
+        // ------ TYPE ------
+
+        // Major
+        public const int TypeMajorScale = 1;
+
+        // Minor
+        public const int TypeNaturalMinorScale = 6;
+
+        // Mode
+        public const int IonianMode = 1;
+        public const int DorianMode = 2;
+        public const int PhtygianMode = 3;
+        public const int LydianMode = 4;
+        public const int MixolydianMode = 5;
+        public const int AeolianMode = 6;
+        public const int LocrainMode = 7;
 
         //------ PITCH ------
         readonly public static int PitchC = 1;
@@ -66,25 +72,25 @@ namespace ScaleFinderUI {
             int startPitch = basePitch + accidental;
             string[] pitchTexts = new string[7] { "", "", "", "", "", "", "" };
             
-            if (type == TypeMajor || type == ModeIonian) {
+            if (type == TypeMajorScale || type == IonianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalIonian);
             }
-            else if (type == ModeDorian) {
+            else if (type == DorianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalDorian);
             }
-            else if (type == ModePhtygian) {
+            else if (type == PhtygianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalPhtygian);
             }
-            else if (type == ModeLydian) {
+            else if (type == LydianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalLydian);
             }
-            else if (type == ModeMixolydian) {
+            else if (type == MixolydianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalMixolydian);
             }
-            else if (type == ModeAeolian || type == TypeMinor) {
+            else if (type == AeolianMode || type == TypeNaturalMinorScale) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalAeolian);
             }
-            else if (type == ModeLocrain) {
+            else if (type == LocrainMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalLocrain);
             }
             else {
