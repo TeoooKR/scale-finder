@@ -28,15 +28,18 @@ namespace ScaleFinderUI {
 
         // Minor
         public const int TypeNaturalMinorScale = 6;
+        public const int TypeMelodicMinorScaleAscending = 8;
+        public const int TypeMelodicMinorScaleDescending = 9;
+        public const int TypeHarmonicMinorScale = 10;
 
         // Mode
-        public const int IonianMode = 1;
-        public const int DorianMode = 2;
-        public const int PhtygianMode = 3;
-        public const int LydianMode = 4;
-        public const int MixolydianMode = 5;
-        public const int AeolianMode = 6;
-        public const int LocrainMode = 7;
+        public const int TypeIonianMode = 1;
+        public const int TypeDorianMode = 2;
+        public const int TypePhtygianMode = 3;
+        public const int TypeLydianMode = 4;
+        public const int TypeMixolydianMode = 5;
+        public const int TypeAeolianMode = 6;
+        public const int TypeLocrainMode = 7;
 
         //------ PITCH ------
         readonly public static int PitchC = 1;
@@ -57,13 +60,15 @@ namespace ScaleFinderUI {
         readonly private string[] BasePitchTextList = new string[7] { "C", "D", "E", "F", "G", "A", "B" };
 
         //------ MODE's Interval -------
+        readonly private int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
+        readonly private int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly private int[] IntervalIonian = new int[6] { 2, 2, 1, 2, 2, 2 };
         readonly private int[] IntervalDorian = new int[6] { 2, 1, 2, 2, 2, 1 };
         readonly private int[] IntervalPhtygian = new int[6] { 1, 2, 2, 2, 1, 2 };
         readonly private int[] IntervalLydian = new int[6] { 2, 2, 2, 1, 2, 2 };
         readonly private int[] IntervalMixolydian = new int[6] { 2, 2, 1, 2, 2, 1 };
         readonly private int[] IntervalAeolian = new int[6] { 2, 1, 2, 2, 1, 2 };
-        readonly private int[] IntervalLocrain = new int[6] { 2, 1, 2, 1, 2, 2 };
+        readonly private int[] IntervalLocrain = new int[6] { 1, 2, 2, 1, 2, 2 };
         
         public Scale FindScale(int basePitch, int accidental, int type) {
             Scale result = new Scale();
@@ -71,26 +76,32 @@ namespace ScaleFinderUI {
             int[] pitchList = result.GetPitchList();
             int startPitch = basePitch + accidental;
             string[] pitchTexts = new string[7] { "", "", "", "", "", "", "" };
-            
-            if (type == TypeMajorScale || type == IonianMode) {
+
+            if (type == TypeMajorScale) {
+                GetPitchListByInterval(pitchList, startPitch, IntervalMajorScale);
+            }
+            if (type == TypeNaturalMinorScale) {
+                GetPitchListByInterval(pitchList, startPitch, IntervalNaturalMinorScale);
+            }
+            if (type == TypeIonianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalIonian);
             }
-            else if (type == DorianMode) {
+            else if (type == TypeDorianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalDorian);
             }
-            else if (type == PhtygianMode) {
+            else if (type == TypePhtygianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalPhtygian);
             }
-            else if (type == LydianMode) {
+            else if (type == TypeLydianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalLydian);
             }
-            else if (type == MixolydianMode) {
+            else if (type == TypeMixolydianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalMixolydian);
             }
-            else if (type == AeolianMode || type == TypeNaturalMinorScale) {
+            else if (type == TypeAeolianMode || type == TypeNaturalMinorScale) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalAeolian);
             }
-            else if (type == LocrainMode) {
+            else if (type == TypeLocrainMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalLocrain);
             }
             else {

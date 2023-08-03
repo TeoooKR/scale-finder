@@ -26,7 +26,6 @@ namespace ScaleFinderUI {
         private int[] PitchList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private int[] AccidentalList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
-
         public string[] GetPitchTexts() {
             return PitchTexts;
         }

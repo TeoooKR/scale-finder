@@ -25,6 +25,14 @@
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnTypeMajor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="96" Height="48" Margin="5">Major</RadioButton>
             <RadioButton Name="RBtnTypeMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="96" Height="48" Margin="5">Minor</RadioButton>
+            <RadioButton Name="RBtnTypeIonian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="108" Height="48" Margin="5">Ionian</RadioButton>
+            <RadioButton Name="RBtnTypeDorian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="108" Height="48" Margin="5">Dorian</RadioButton>
+            <RadioButton Name="RBtnTypePhtygian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="132" Height="48" Margin="5">Phtygian</RadioButton>
+            <RadioButton Name="RBtnTypeLydian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="108" Height="48" Margin="5">Lydian</RadioButton>
+            <RadioButton Name="RBtnTypeMixolydian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="168" Height="48" Margin="5">Mixolydian</RadioButton>
+            <RadioButton Name="RBtnTypeAeolian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="120" Height="48" Margin="5">Aeolian</RadioButton>
+            <RadioButton Name="RBtnTypeLocrain" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="120" Height="48" Margin="5">Locrain</RadioButton>
+            
         </StackPanel>
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>

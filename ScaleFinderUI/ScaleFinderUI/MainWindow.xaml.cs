@@ -114,11 +114,39 @@ namespace ScaleFinderUI {
             }
             if ((bool)RBtnTypeMajor.IsChecked) {
                 Type = ScaleFinder.TypeMajorScale;
-                TypeText = " Major";
+                TypeText = " Major Scale";
             }
             else if ((bool)RBtnTypeMinor.IsChecked) {
                 Type = ScaleFinder.TypeNaturalMinorScale;
-                TypeText = " Minor";
+                TypeText = " Natural Minor Scale";
+            }
+            else if ((bool)RBtnTypeIonian.IsChecked) {
+                Type = ScaleFinder.TypeIonianMode;
+                TypeText = " Ionian Mode";
+            }
+            else if ((bool)RBtnTypeDorian.IsChecked) {
+                Type = ScaleFinder.TypeDorianMode;
+                TypeText = " Dorian Mode";
+            }
+            else if ((bool)RBtnTypePhtygian.IsChecked) {
+                Type = ScaleFinder.TypePhtygianMode;
+                TypeText = " Phtygian Mode";
+            }
+            else if ((bool)RBtnTypeLydian.IsChecked) {
+                Type = ScaleFinder.TypeLydianMode;
+                TypeText = " Lydian Mode";
+            }
+            else if ((bool)RBtnTypeMixolydian.IsChecked) {
+                Type = ScaleFinder.TypeMixolydianMode;
+                TypeText = " Mixolydian Mode";
+            }
+            else if ((bool)RBtnTypeAeolian.IsChecked) {
+                Type = ScaleFinder.TypeAeolianMode;
+                TypeText = " Aeolian Mode";
+            }
+            else if ((bool)RBtnTypeLocrain.IsChecked) {
+                Type = ScaleFinder.TypeLocrainMode;
+                TypeText = " Locrain Mode";
             }
             TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
             Scale result = Finder.FindScale(BasePitch, Accid, Type);
@@ -135,7 +163,7 @@ namespace ScaleFinderUI {
             for (int i = 0; i < texts.Length; i++) {
                 resultText += texts[i] + " ";
             }
-            TBScaleResult.Text = resultText;
+            TBScaleResult.Text = "Notes: " + resultText;
         }
     }
 }
