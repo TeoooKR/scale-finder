@@ -22,8 +22,8 @@ using System;
 namespace ScaleFinderUI {
     class ScaleFinder {
         //------ TYPE ------
-        public const int ModeMajor = 1;
-        public const int ModeMinor = 6;
+        public const int TypeMajor = 1;
+        public const int TypeMinor = 6;
         public const int ModeIonian = 1;
         public const int ModeDorian = 2;
         public const int ModePhtygian = 3;
@@ -66,7 +66,7 @@ namespace ScaleFinderUI {
             int startPitch = basePitch + accidental;
             string[] pitchTexts = new string[7] { "", "", "", "", "", "", "" };
             
-            if (type == ModeMajor || type == ModeIonian) {
+            if (type == TypeMajor || type == ModeIonian) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalIonian);
             }
             else if (type == ModeDorian) {
@@ -81,7 +81,7 @@ namespace ScaleFinderUI {
             else if (type == ModeMixolydian) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalMixolydian);
             }
-            else if (type == ModeAeolian || type == ModeMinor) {
+            else if (type == ModeAeolian || type == TypeMinor) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalAeolian);
             }
             else if (type == ModeLocrain) {

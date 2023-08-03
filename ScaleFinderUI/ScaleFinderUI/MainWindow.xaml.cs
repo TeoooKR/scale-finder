@@ -23,9 +23,10 @@ namespace ScaleFinderUI {
     public partial class MainWindow : Window {
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
+        private int Type = ScaleFinder.TypeMajor;
         private string BasePitchText = "C";
         private string AccidText = String.Empty;
-
+        private string TypeText = " Major";
         static ScaleFinder Finder = new();
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
@@ -34,6 +35,7 @@ namespace ScaleFinderUI {
         private void WindowLoaded(object sender, RoutedEventArgs e) {
             RBtnBaseC.IsChecked = true;
             RBtnAccidN.IsChecked = true;
+            RBtnTypeMajor.IsChecked = true;
         }
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton tb = sender as RadioButton;
@@ -61,25 +63,21 @@ namespace ScaleFinderUI {
             else if ((bool)RBtnBaseB.IsChecked) {
                 BasePitch = ScaleFinder.PitchB;
             }
-
             if (TBSelectedScale == null) {
                 return;
             }
             BasePitchText = (string)tb.Content;
-            TBSelectedScale.Text = BasePitchText + AccidText;
-            Scale result = Finder.FindScale(BasePitch, Accid, ScaleFinder.ModeMajor);
-
+            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
+            Scale result = Finder.FindScale(BasePitch, Accid, Type);
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-
             UpdateScaleResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
         private void HandleAccidChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
-
             if (rb == null) {
                 return;
             }
@@ -99,19 +97,39 @@ namespace ScaleFinderUI {
             if (TBSelectedScale == null) {
                 return;
             }
-            TBSelectedScale.Text = BasePitchText + AccidText;
-
-            Scale result = Finder.FindScale(BasePitch, Accid, ScaleFinder.ModeMajor);
+            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
+            Scale result = Finder.FindScale(BasePitch, Accid, Type);
 
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-
             UpdateScaleResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
+        private void HandleTypeChecked(object sender, RoutedEventArgs e) {
+            RadioButton rb = sender as RadioButton;
+            if (rb == null) {
+                return;
+            }
+            if ((bool)RBtnTypeMajor.IsChecked) {
+                Type = ScaleFinder.TypeMajor;
+                TypeText = " Major";
+            }
+            else if ((bool)RBtnTypeMinor.IsChecked) {
+                Type = ScaleFinder.TypeMinor;
+                TypeText = " Minor";
+            }
+            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
+            Scale result = Finder.FindScale(BasePitch, Accid, Type);
 
+            if (!result.GetFound()) {
+                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
+                return;
+            }
+            UpdateScaleResult(result.GetPitchTexts());
+            result.PrintMyValues();
+        }
         private void UpdateScaleResult(string[] texts) {
             string resultText = "";
             for (int i = 0; i < texts.Length; i++) {

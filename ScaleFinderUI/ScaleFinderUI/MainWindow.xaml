@@ -22,10 +22,12 @@
             <RadioButton Name="RBtnAccidS" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">#</RadioButton>
             <RadioButton Name="RBtnAccidF" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">♭</RadioButton>
         </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <RadioButton Name="RBtnTypeMajor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="96" Height="48" Margin="5">Major</RadioButton>
+            <RadioButton Name="RBtnTypeMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="96" Height="48" Margin="5">Minor</RadioButton>
+        </StackPanel>
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-
-
     </StackPanel>
 </Window>
     
