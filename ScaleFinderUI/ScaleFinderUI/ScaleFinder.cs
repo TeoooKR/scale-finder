@@ -62,10 +62,10 @@ namespace ScaleFinderUI {
         //------ MODE's Interval -------
         readonly private int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
         readonly private int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
-        readonly private int[] IntervalIonian = new int[6] { 2, 2, 1, 2, 2, 2 };
-        readonly private int[] IntervalDorian = new int[6] { 2, 1, 2, 2, 2, 1 };
-        readonly private int[] IntervalPhtygian = new int[6] { 1, 2, 2, 2, 1, 2 };
-        readonly private int[] IntervalLydian = new int[6] { 2, 2, 2, 1, 2, 2 };
+        readonly private int[] IntervalIonianMode = new int[6] { 2, 2, 1, 2, 2, 2 };
+        readonly private int[] IntervalDorianMode = new int[6] { 2, 1, 2, 2, 2, 1 };
+        readonly private int[] IntervalPhtygianMode = new int[6] { 1, 2, 2, 2, 1, 2 };
+        readonly private int[] IntervalLydianMode = new int[6] { 2, 2, 2, 1, 2, 2 };
         readonly private int[] IntervalMixolydian = new int[6] { 2, 2, 1, 2, 2, 1 };
         readonly private int[] IntervalAeolian = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly private int[] IntervalLocrain = new int[6] { 1, 2, 2, 1, 2, 2 };
@@ -80,25 +80,25 @@ namespace ScaleFinderUI {
             if (type == TypeMajorScale) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalMajorScale);
             }
-            if (type == TypeNaturalMinorScale) {
+            else if (type == TypeNaturalMinorScale) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalNaturalMinorScale);
             }
-            if (type == TypeIonianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalIonian);
+            else if (type == TypeIonianMode) {
+                GetPitchListByInterval(pitchList, startPitch, IntervalIonianMode);
             }
             else if (type == TypeDorianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalDorian);
+                GetPitchListByInterval(pitchList, startPitch, IntervalDorianMode);
             }
             else if (type == TypePhtygianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalPhtygian);
+                GetPitchListByInterval(pitchList, startPitch, IntervalPhtygianMode);
             }
             else if (type == TypeLydianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalLydian);
+                GetPitchListByInterval(pitchList, startPitch, IntervalLydianMode);
             }
             else if (type == TypeMixolydianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalMixolydian);
             }
-            else if (type == TypeAeolianMode || type == TypeNaturalMinorScale) {
+            else if (type == TypeAeolianMode) {
                 GetPitchListByInterval(pitchList, startPitch, IntervalAeolian);
             }
             else if (type == TypeLocrainMode) {
@@ -122,9 +122,13 @@ namespace ScaleFinderUI {
             for (int i = 0; i < accidentalList.Length; i++) {
                 pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }
+
+            result.SetBasePitchTexts(pitchTexts[0]);
+            result.SetBaseAccidentalTexts(accidentalTexts[1]);
             result.SetPitchTexts(pitchTextResults);
-            result.SetAccidentalList(accidentalList);
+            result.SetAccidentalTexts(accidentalTexts);
             result.SetPitchList(pitchList);
+            result.SetAccidentalList(accidentalList);
             result.SetFound(true);
             return result;
         }
@@ -167,11 +171,11 @@ namespace ScaleFinderUI {
                     accid[i] = accidentalList[i] % 2;
                     doubleAccid[i] = accidentalList[i] / 2;
                     if (accid[i] > 0) {
-                        accidText[i] = "#";
+                        accidText[i] = "♯";
                     }
                     if (doubleAccid[i] > 0) {
                         for (int j = 0; j < doubleAccid[i]; j++) {
-                            doubleAccidText[i] = doubleAccidText[i] + "x";
+                            doubleAccidText[i] += "𝄪";
                         }
                     }
                     accidentalText[i] = accidText[i] + doubleAccidText[i];
@@ -179,7 +183,7 @@ namespace ScaleFinderUI {
                 else if (accidentalList[i] < 0) {                                      //> Flat
                     int count = Math.Abs(accidentalList[i]);
                     for (int j = 0; j < count; j++) {
-                        accidentalText[i] = accidentalText[i] + "b";
+                        accidentalText[i] += "♭";
                     }
                 }
             }

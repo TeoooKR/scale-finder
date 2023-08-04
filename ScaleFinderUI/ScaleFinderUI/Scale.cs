@@ -22,15 +22,37 @@ using System.Diagnostics;
 
 namespace ScaleFinderUI {
     public class Scale {
+        private string BasePitchTexts = "";
+        private string BaseAccidentalTexts = "";
         private string[] PitchTexts = new string[7] { "", "", "", "", "", "", "" };
+        private string[] AccidentalTexts = new string[7] { "", "", "", "", "", "", "", };
         private int[] PitchList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private int[] AccidentalList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
+
+        public string GetBasePitchTexts() {
+            return BasePitchTexts;
+        }
+        public void SetBasePitchTexts(string basePitchTexts) {
+            this.BasePitchTexts = basePitchTexts;
+        }
+        public string GetBaseAccidentalTexts() {
+            return BaseAccidentalTexts;
+        }
+        public void SetBaseAccidentalTexts(string baseAccidentalTexts) {
+            this.BaseAccidentalTexts = baseAccidentalTexts;
+        }
         public string[] GetPitchTexts() {
             return PitchTexts;
         }
         public void SetPitchTexts(string[] pitchTexts) {
             this.PitchTexts = pitchTexts;
+        }
+        public string[] GetAccidentalTexts() {
+            return AccidentalTexts;
+        }
+        public void SetAccidentalTexts(string[] accidentalTexts) {
+            this.AccidentalTexts = accidentalTexts;
         }
         public int[] GetPitchList() {
             return PitchList;

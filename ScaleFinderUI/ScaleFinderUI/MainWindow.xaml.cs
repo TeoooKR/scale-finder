@@ -24,9 +24,9 @@ namespace ScaleFinderUI {
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
         private int Type = ScaleFinder.TypeMajorScale;
-        private string BasePitchText = "C";
-        private string AccidText = String.Empty;
-        private string TypeText = " Major";
+        private string SelectedBasePitchText = "C";
+        private string SelectedAccidText = String.Empty;
+        private string SelectedTypeText = " Major";
         static ScaleFinder Finder = new();
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
@@ -68,14 +68,13 @@ namespace ScaleFinderUI {
             if (TBSelectedScale == null) {
                 return;
             }
-            BasePitchText = (string)tb.Content;
-            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
             Scale result = Finder.FindScale(BasePitch, Accid, Type);
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-            UpdateScaleResult(result.GetPitchTexts());
+            SelectedBasePitchText = result.GetBasePitchTexts();
+            UpdateResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
         // Accidental
@@ -84,33 +83,29 @@ namespace ScaleFinderUI {
             if (rb == null) {
                 return;
             }
+
             if ((bool)RBtnAccidN.IsChecked) {
                 Accid = ScaleFinder.AccidNatural;
-                AccidText = "";
             }
             else if ((bool)RBtnAccidS.IsChecked) {
                 Accid = ScaleFinder.AccidSharp;
-                AccidText = "#";
             }
             else if ((bool)RBtnAccidF.IsChecked) {
                 Accid = ScaleFinder.AccidFlat;
-                AccidText = "♭";
             }
-
             if (TBSelectedScale == null) {
                 return;
             }
-            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
             Scale result = Finder.FindScale(BasePitch, Accid, Type);
-
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-            UpdateScaleResult(result.GetPitchTexts());
+            SelectedAccidText = result.GetBaseAccidentalTexts();
+            UpdateResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
-        // Type
+
         private void HandleTypeChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
@@ -118,55 +113,54 @@ namespace ScaleFinderUI {
             }
             if ((bool)RBtnTypeMajor.IsChecked) {
                 Type = ScaleFinder.TypeMajorScale;
-                TypeText = " Major Scale";
+                SelectedTypeText = "Major Scale";
             }
             else if ((bool)RBtnTypeMinor.IsChecked) {
                 Type = ScaleFinder.TypeNaturalMinorScale;
-                TypeText = " Natural Minor Scale";
+                SelectedTypeText = "Natural Minor Scale";
             }
             else if ((bool)RBtnTypeIonian.IsChecked) {
                 Type = ScaleFinder.TypeIonianMode;
-                TypeText = " Ionian Mode";
+                SelectedTypeText = "Ionian Mode";
             }
             else if ((bool)RBtnTypeDorian.IsChecked) {
                 Type = ScaleFinder.TypeDorianMode;
-                TypeText = " Dorian Mode";
+                SelectedTypeText = "Dorian Mode";
             }
             else if ((bool)RBtnTypePhtygian.IsChecked) {
                 Type = ScaleFinder.TypePhtygianMode;
-                TypeText = " Phtygian Mode";
+                SelectedTypeText = "Phtygian Mode";
             }
             else if ((bool)RBtnTypeLydian.IsChecked) {
                 Type = ScaleFinder.TypeLydianMode;
-                TypeText = " Lydian Mode";
+                SelectedTypeText = "Lydian Mode";
             }
             else if ((bool)RBtnTypeMixolydian.IsChecked) {
                 Type = ScaleFinder.TypeMixolydianMode;
-                TypeText = " Mixolydian Mode";
+                SelectedTypeText = "Mixolydian Mode";
             }
             else if ((bool)RBtnTypeAeolian.IsChecked) {
                 Type = ScaleFinder.TypeAeolianMode;
-                TypeText = " Aeolian Mode";
+                SelectedTypeText = "Aeolian Mode";
             }
             else if ((bool)RBtnTypeLocrain.IsChecked) {
                 Type = ScaleFinder.TypeLocrainMode;
-                TypeText = " Locrain Mode";
-            }
-            TBSelectedScale.Text = BasePitchText + AccidText + TypeText;
+                SelectedTypeText = "Locrain Mode";
+            }         
             Scale result = Finder.FindScale(BasePitch, Accid, Type);
-
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-            UpdateScaleResult(result.GetPitchTexts());
+            UpdateResult(result.GetPitchTexts());
             result.PrintMyValues();
         }
-        private void UpdateScaleResult(string[] texts) {
+        private void UpdateResult(string[] texts) {
             string resultText = "";
             for (int i = 0; i < texts.Length; i++) {
                 resultText += texts[i] + " ";
             }
+            TBSelectedScale.Text = SelectedBasePitchText + SelectedAccidText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + resultText;
         }
     }
