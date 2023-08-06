@@ -32,17 +32,18 @@ namespace ScaleFinderUI {
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
         static ScaleFinder Finder = new();
+
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
             InitializeComponent();
         }
+
         private void WindowLoaded(object sender, RoutedEventArgs e) {
             RBtnBaseC.IsChecked = true;
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
         }
 
-        // Base Pitch
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton tb = sender as RadioButton;
             if (tb == null) {
@@ -74,7 +75,7 @@ namespace ScaleFinderUI {
             }
             UpdateResult();
         }
-        // Accidental
+
         private void HandleAccidChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
@@ -140,6 +141,7 @@ namespace ScaleFinderUI {
             }
             UpdateResult();
         }
+
         protected void HandleTextChanged(object sender, EventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 return;
@@ -152,6 +154,7 @@ namespace ScaleFinderUI {
             UpdateResult();
             ((TextBox)sender).SelectAll();
         }
+
         private void HandleAccidCountDown(object sender, EventArgs e) {
             int AccidCountInt = Convert.ToInt32(TBAccidCount.Text);
             if (AccidCountInt < 2) {
@@ -160,6 +163,7 @@ namespace ScaleFinderUI {
             AccidCountInt -= 1;
             TBAccidCount.Text = AccidCountInt.ToString();
         }
+
         private void HandleAccidCountUp(object sender, EventArgs e) {
             int AccidCount = Convert.ToInt32(TBAccidCount.Text);
             if (AccidCount > 8) {
@@ -168,22 +172,27 @@ namespace ScaleFinderUI {
             AccidCount += 1;
             TBAccidCount.Text = AccidCount.ToString();
         }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
             Regex regex = new Regex("[^1-9]");
             e.Handled = regex.IsMatch(e.Text);
         }
+
         private void OnGotFocusAccidCount(object sender, RoutedEventArgs e) {
             ((TextBox)sender).SelectAll();
             //e.Handled = true;
         }
+
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 TBAccidCount.Text = "1";
             }
         }
+
         private void OnClickedAccidCount(object sender, RoutedEventArgs e) {
             ((TextBox)sender).SelectAll();
         }
+
         private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
             ((TextBox)sender).SelectAll();
         }
@@ -214,10 +223,6 @@ namespace ScaleFinderUI {
             TBSelectedScale.Text = SelectedBasePitchText + SelectedAccidText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + resultText;
             result.PrintMyValues();
-        }
-
-        private void AccidNumber_LostFocus(object sender, RoutedEventArgs e) {
-
         }
     }
 }
