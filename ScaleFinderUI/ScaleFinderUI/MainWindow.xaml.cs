@@ -15,6 +15,10 @@ using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using System.Diagnostics;
 using ScaleFinderUI;
+using Microsoft.Win32;
+using System.Reflection.Emit;
+using System.Text.RegularExpressions;
+using System.Windows.Automation.Text;
 
 namespace ScaleFinderUI {
     /// <summary>
@@ -68,14 +72,7 @@ namespace ScaleFinderUI {
             if (TBSelectedScale == null) {
                 return;
             }
-            Scale result = Finder.FindScale(BasePitch, Accid, Type);
-            if (!result.GetFound()) {
-                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
-                return;
-            }
-            SelectedBasePitchText = result.GetBasePitchTexts();
-            UpdateResult(result.GetPitchTexts());
-            result.PrintMyValues();
+            UpdateResult();
         }
         // Accidental
         private void HandleAccidChecked(object sender, RoutedEventArgs e) {
@@ -83,27 +80,21 @@ namespace ScaleFinderUI {
             if (rb == null) {
                 return;
             }
-
-            if ((bool)RBtnAccidN.IsChecked) {
-                Accid = ScaleFinder.AccidNatural;
+            if (rb.Name == "RBtnAccidN") {
+                ButtonDown.IsEnabled = false;
+                ButtonUp.IsEnabled = false;
+                TBAccidCount.IsEnabled = false;
             }
-            else if ((bool)RBtnAccidS.IsChecked) {
-                Accid = ScaleFinder.AccidSharp;
+            else {
+                ButtonDown.IsEnabled = true;
+                ButtonUp.IsEnabled = true;
+                TBAccidCount.IsEnabled = true;
             }
-            else if ((bool)RBtnAccidF.IsChecked) {
-                Accid = ScaleFinder.AccidFlat;
-            }
+            Accid = Convert.ToInt32(TBAccidCount.Text);
             if (TBSelectedScale == null) {
                 return;
             }
-            Scale result = Finder.FindScale(BasePitch, Accid, Type);
-            if (!result.GetFound()) {
-                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
-                return;
-            }
-            SelectedAccidText = result.GetBaseAccidentalTexts();
-            UpdateResult(result.GetPitchTexts());
-            result.PrintMyValues();
+            UpdateResult();
         }
 
         private void HandleTypeChecked(object sender, RoutedEventArgs e) {
@@ -146,22 +137,87 @@ namespace ScaleFinderUI {
             else if ((bool)RBtnTypeLocrain.IsChecked) {
                 Type = ScaleFinder.TypeLocrainMode;
                 SelectedTypeText = "Locrain Mode";
-            }         
-            Scale result = Finder.FindScale(BasePitch, Accid, Type);
+            }
+            UpdateResult();
+        }
+        protected void HandleTextChanged(object sender, EventArgs e) {
+            if (TBAccidCount.Text.Length < 1) {
+                return;
+            }
+            else if (TBAccidCount.Text.Length > 1) {
+                TBAccidCount.Text = TBAccidCount.Text.Substring(0, 1);
+                return;
+            }
+            Accid = Convert.ToInt32(TBAccidCount.Text);
+            UpdateResult();
+            ((TextBox)sender).SelectAll();
+        }
+        private void HandleAccidCountDown(object sender, EventArgs e) {
+            int AccidCountInt = Convert.ToInt32(TBAccidCount.Text);
+            if (AccidCountInt < 2) {
+                return;
+            }
+            AccidCountInt -= 1;
+            TBAccidCount.Text = AccidCountInt.ToString();
+        }
+        private void HandleAccidCountUp(object sender, EventArgs e) {
+            int AccidCount = Convert.ToInt32(TBAccidCount.Text);
+            if (AccidCount > 8) {
+                return;
+            }
+            AccidCount += 1;
+            TBAccidCount.Text = AccidCount.ToString();
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
+            Regex regex = new Regex("[^1-9]");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+        private void OnGotFocusAccidCount(object sender, RoutedEventArgs e) {
+            ((TextBox)sender).SelectAll();
+            //e.Handled = true;
+        }
+        private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
+            if (TBAccidCount.Text.Length < 1) {
+                TBAccidCount.Text = "1";
+            }
+        }
+        private void OnClickedAccidCount(object sender, RoutedEventArgs e) {
+            ((TextBox)sender).SelectAll();
+        }
+        private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
+            ((TextBox)sender).SelectAll();
+        }
+        
+        private void UpdateResult() {
+            int accid = Accid;
+            if (RBtnAccidN.IsChecked == true) {
+                accid = 0;
+            }
+            else if (RBtnAccidF.IsChecked == true) {
+                accid *= -1;
+            }
+            Scale result = Finder.FindScale(BasePitch, accid, Type);
+            SelectedBasePitchText = result.GetBasePitchTexts();
+            SelectedAccidText = result.GetBaseAccidentalTexts();
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
-            UpdateResult(result.GetPitchTexts());
-            result.PrintMyValues();
-        }
-        private void UpdateResult(string[] texts) {
+            if (TBSelectedScale == null) {
+                return;
+            }
+            string[] texts = result.GetPitchTexts();
             string resultText = "";
             for (int i = 0; i < texts.Length; i++) {
                 resultText += texts[i] + " ";
             }
             TBSelectedScale.Text = SelectedBasePitchText + SelectedAccidText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + resultText;
+            result.PrintMyValues();
+        }
+
+        private void AccidNumber_LostFocus(object sender, RoutedEventArgs e) {
+
         }
     }
 }
