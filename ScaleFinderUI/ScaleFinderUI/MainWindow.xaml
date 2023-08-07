@@ -22,8 +22,7 @@
             <RadioButton Name="RBtnAccidS" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">#</RadioButton>
             <RadioButton Name="RBtnAccidF" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource {x:Type ToggleButton}}" FontSize="30" Width="48" Height="48" Margin="5">♭</RadioButton>
             <Button Name="ButtonDown" Click="HandleAccidCountDown" FontSize="30" Width="48" Height="48" Margin="5">▽</Button>
-            <TextBox Name="TBAccidCount" PreviewTextInput="NumberValidationTextBox" PreviewMouseDown="OnMouseDownAccidCount"  GotFocus="OnGotFocusAccidCount" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="30" Width="48" Height="48" Margin="5">1
-            </TextBox>
+            <TextBox Name="TBAccidCount" PreviewTextInput="NumberValidationTextBox" PreviewMouseDown="OnMouseDownAccidCount"  GotFocus="OnGotFocusAccidCount" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="30" Width="48" Height="48" Margin="5">1</TextBox>
             <Button Name="ButtonUp" Click="HandleAccidCountUp" FontSize="30" Width="48" Height="48" Margin="5">△</Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
