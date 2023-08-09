@@ -191,7 +191,7 @@ namespace ScaleFinderUI {
                 accid *= -1;
             }
             Scale result = Finder.FindScale(BasePitch, accid, Type);
-            SelectedBasePitchText = result.GetBasePitchTexts();
+            SelectedBasePitchText = result.GetBasePitchText(0);
             SelectedAccidText = result.GetBaseAccidentalTexts();
             if (!result.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
