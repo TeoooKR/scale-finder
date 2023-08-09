@@ -69,7 +69,7 @@ namespace ScaleFinderUI {
         readonly private int[] IntervalMixolydian = new int[6] { 2, 2, 1, 2, 2, 1 };
         readonly private int[] IntervalAeolian = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly private int[] IntervalLocrain = new int[6] { 1, 2, 2, 1, 2, 2 };
-        
+
         public Scale FindScale(int basePitch, int accidental, int type) {
             Scale result = new Scale();
             int[] accidentalList = result.GetAccidentalList();
