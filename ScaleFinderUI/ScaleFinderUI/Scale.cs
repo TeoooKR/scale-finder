@@ -23,23 +23,17 @@ namespace ScaleFinderUI {
     public class Scale {
         private string BasePitchTexts = "";
         private string BaseAccidentalTexts = "";
-        private string[] PitchTexts = new string[7] { "", "", "", "", "", "", "" };
-        private string[] AccidentalTexts = new string[7] { "", "", "", "", "", "", "", };
-        private int[] PitchList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
-        private int[] AccidentalList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+        private string[] PitchTexts = new string[8] { "", "", "", "", "", "", "", "" };
+        private string[] AccidentalTexts = new string[8] { "", "", "", "", "", "", "", "" };
+        private int[] PitchList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
 
-        public string GetBasePitchTexts() {
-            return BasePitchTexts;
+        public string GetPitchText(int index) {
+            return PitchTexts[index];
         }
-        public void SetBasePitchTexts(string basePitchTexts) {
-            this.BasePitchTexts = basePitchTexts;
-        }
-        public string GetBaseAccidentalTexts() {
-            return BaseAccidentalTexts;
-        }
-        public void SetBaseAccidentalTexts(string baseAccidentalTexts) {
-            this.BaseAccidentalTexts = baseAccidentalTexts;
+        public string GetAccidentalText(int index) {
+            return AccidentalTexts[index];
         }
         public string[] GetPitchTexts() {
             return PitchTexts;

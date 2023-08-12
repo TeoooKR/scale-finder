@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using NAudio.Midi;
 
 namespace ScaleFinderUI {
     /// <summary>
@@ -17,6 +19,7 @@ namespace ScaleFinderUI {
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
         static ScaleFinder Finder = new();
+        Scale ScaleFindResult;
 
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
@@ -181,7 +184,9 @@ namespace ScaleFinderUI {
         private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
             ((TextBox)sender).SelectAll();
         }
-
+        private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
+            PlayMidi();
+        }
         private void UpdateResult() {
             int accid = Accid;
             if (RBtnAccidN.IsChecked == true) {
@@ -190,24 +195,48 @@ namespace ScaleFinderUI {
             else if (RBtnAccidF.IsChecked == true) {
                 accid *= -1;
             }
-            Scale result = Finder.FindScale(BasePitch, accid, Type);
-            SelectedBasePitchText = result.GetBasePitchTexts();
-            SelectedAccidText = result.GetBaseAccidentalTexts();
-            if (!result.GetFound()) {
+            ScaleFindResult = Finder.FindScale(BasePitch, accid, Type);
+            SelectedBasePitchText = ScaleFindResult.GetPitchText(0);
+            SelectedAccidText = ScaleFindResult.GetAccidentalText(0);
+            if (!ScaleFindResult.GetFound()) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
             }
             if (TBSelectedScale == null) {
                 return;
             }
-            string[] texts = result.GetPitchTexts();
+            string[] texts = ScaleFindResult.GetPitchTexts();
             string resultText = "";
             for (int i = 0; i < texts.Length; i++) {
                 resultText += texts[i] + " ";
             }
-            TBSelectedScale.Text = SelectedBasePitchText + SelectedAccidText + " " + SelectedTypeText;
+            TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + resultText;
-            result.PrintMyValues();
+            ScaleFindResult.PrintMyValues();
+        }
+
+        private void PlayMidi() {
+            MidiOut midiOut = new MidiOut(0);
+            int[] pitchList = ScaleFindResult.GetPitchList();
+            int pitchToPlay = 0;
+            for (int i = 0; i < pitchList.Length; i++) {
+                pitchToPlay = pitchList[i] + 59;
+                midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                Thread.Sleep(100);
+                midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                Thread.Sleep(50);
+            }
+            Thread.Sleep(400);
+            //for (int i = 0; i < pitchList.Length; i++) {
+            //    pitchToPlay = pitchList[i] + 59;
+            //    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+            //    Thread.Sleep(36);
+            //    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+            //    Thread.Sleep(1);
+            //}
+            //Thread.Sleep(400);
+            midiOut.Close();
+            midiOut.Dispose();
         }
     }
 }

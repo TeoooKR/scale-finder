@@ -39,6 +39,7 @@
         </StackPanel>
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <Button Name="BtnPlaySound" Click="HandleBtnPlaySound" FontSize="30" Width="200" Height="48" Margin="5">PLAY</Button>
     </StackPanel>
 </Window>
     

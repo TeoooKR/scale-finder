@@ -119,12 +119,11 @@ namespace ScaleFinderUI {
 
             string[] accidentalTexts = GetSignFromAccidental(accidentalList);
             string[] pitchTextResults = result.GetPitchTexts();
-            for (int i = 0; i < accidentalList.Length; i++) {
+            for (int i = 0; i < accidentalList.Length - 1; i++) {
                 pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }
+            pitchTextResults[7] = pitchTextResults[0];
 
-            result.SetBasePitchTexts(pitchTexts[0]);
-            result.SetBaseAccidentalTexts(accidentalTexts[1]);
             result.SetPitchTexts(pitchTextResults);
             result.SetAccidentalTexts(accidentalTexts);
             result.SetPitchList(pitchList);
@@ -138,15 +137,17 @@ namespace ScaleFinderUI {
             for (int i = 0; i < interval.Length; i++) {
                 result[i + 1] = result[i] + interval[i];
             }
+            result[7] = result[0] + 12;
         }
 
         private void CalcAccidentalFromBass(int[] accidental, int startPitchIndex, int[] pitchList) {
             //> pitch_order_index [0~6]
             int index = 0;
-            for (int i = 0; i < pitchList.Length; i++) {
+            for (int i = 0; i < pitchList.Length - 1; i++) {
                 index = i + startPitchIndex;
                 accidental[i] = pitchList[i] - BasePitchList[index];
             }
+            accidental[7] = accidental[0];
         }
 
         private string[] GetPitchTextByOrder(string[] BasePitchTextList, int BassPitchIndex) {
@@ -161,12 +162,12 @@ namespace ScaleFinderUI {
             return result;
         }
         private string[] GetSignFromAccidental(int[] accidentalList) {
-            string[] accidentalText = new string[7] { "", "", "", "", "", "", "" };
+            string[] accidentalText = new string[8] { "", "", "", "", "", "", "", "" };
             int[] accid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
             int[] doubleAccid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
             string[] accidText = new string[7] { "", "", "", "", "", "", "" };
             string[] doubleAccidText = new string[7] { "", "", "", "", "", "", "" };
-            for (int i = 0; i < accidentalList.Length; i++) {
+            for (int i = 0; i < accidentalList.Length - 1; i++) {
                 if (accidentalList[i] > 0) {                                          //> Sharp
                     accid[i] = accidentalList[i] % 2;
                     doubleAccid[i] = accidentalList[i] / 2;
@@ -187,6 +188,7 @@ namespace ScaleFinderUI {
                     }
                 }
             }
+            accidentalText[7] = accidentalText[0];
             return accidentalText;
         }
 
