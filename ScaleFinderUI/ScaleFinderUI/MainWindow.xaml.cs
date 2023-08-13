@@ -30,6 +30,7 @@ namespace ScaleFinderUI {
             RBtnBaseC.IsChecked = true;
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
+            RBtnSortAscending.IsChecked = true;
         }
 
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
@@ -130,6 +131,10 @@ namespace ScaleFinderUI {
             UpdateResult();
         }
 
+        private void HandleSortChecked(object sender, RoutedEventArgs e) {
+            return;
+        }
+
         protected void HandleTextChanged(object sender, EventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 return;
@@ -219,14 +224,60 @@ namespace ScaleFinderUI {
             MidiOut midiOut = new MidiOut(0);
             int[] pitchList = ScaleFindResult.GetPitchList();
             int pitchToPlay = 0;
-            for (int i = 0; i < pitchList.Length; i++) {
-                pitchToPlay = pitchList[i] + 59;
-                midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                Thread.Sleep(100);
-                midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                Thread.Sleep(50);
+            if (RBtnSortAscending.IsChecked == true) {
+                for (int i = 0; i < pitchList.Length; i++) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                Thread.Sleep(400);
             }
-            Thread.Sleep(400);
+            else if (RBtnSortDescending.IsChecked == true) {
+                for (int i = 7; i >= 0; i--) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                Thread.Sleep(400);
+            }
+            else if (RBtnSortAscendingDescending.IsChecked == true) {
+                for (int i = 0; i < pitchList.Length; i++) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                for (int i = 7; i >= 0; i--) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                Thread.Sleep(400);
+            }
+            else if (RBtnSortDescendingAscending.IsChecked == true) {
+                for (int i = 7; i >= 0; i--) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                for (int i = 0; i < pitchList.Length; i++) {
+                    pitchToPlay = pitchList[i] + 59;
+                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                    Thread.Sleep(200);
+                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                    Thread.Sleep(1);
+                }
+                Thread.Sleep(400);
+            }
             //for (int i = 0; i < pitchList.Length; i++) {
             //    pitchToPlay = pitchList[i] + 59;
             //    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
