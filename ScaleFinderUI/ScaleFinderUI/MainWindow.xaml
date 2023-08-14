@@ -43,6 +43,8 @@
         </StackPanel>
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <!--<TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>-->
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Ascending</RadioButton>
             <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Descending</RadioButton>
@@ -50,6 +52,11 @@
             <RadioButton Name="RBtnSortDescendingAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="320" Height="48" Margin="5">Descending-Ascending</RadioButton>
         </StackPanel>
         <Button Name="BtnPlaySound" Click="HandleBtnPlaySound" FontSize="30" Width="200" Height="48" Margin="5">PLAY</Button>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="TBSpeedText" TextAlignment="Center" TextWrapping="Wrap" Text="Note Speed: " Width="180" RenderTransformOrigin="1.907,1.105" FontSize="30" Height="44"/>
+            <TextBox x:Name="TBSoundSpeed" TextAlignment="Center" FontSize="30" Width="96" Height="48" Text="200"/>
+            <TextBlock x:Name="TBmsText" TextAlignment="Center" TextWrapping="Wrap" Text="ms" Width="48" RenderTransformOrigin="1.907,1.105" FontSize="30" Height="44"/>
+        </StackPanel>
     </StackPanel>
 </Window>
     

@@ -116,9 +116,10 @@ namespace ScaleFinderUI {
                     break;
                 }
             }
-
+            
             string[] accidentalTexts = GetSignFromAccidental(accidentalList);
             string[] pitchTextResults = result.GetPitchTexts();
+            
             for (int i = 0; i < accidentalList.Length - 1; i++) {
                 pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }

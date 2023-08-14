@@ -21,12 +21,11 @@ using System.Diagnostics;
 
 namespace ScaleFinderUI {
     public class Scale {
-        private string BasePitchTexts = "";
-        private string BaseAccidentalTexts = "";
         private string[] PitchTexts = new string[8] { "", "", "", "", "", "", "", "" };
         private string[] AccidentalTexts = new string[8] { "", "", "", "", "", "", "", "" };
         private int[] PitchList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        private int[] IntervalsList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
 
         public string GetPitchText(int index) {
@@ -58,6 +57,12 @@ namespace ScaleFinderUI {
         }
         public void SetAccidentalList(int[] accidentalList) {
             this.AccidentalList = accidentalList;
+        }
+        public int[] GetIntervalsList() {
+            return IntervalsList;
+        }
+        public void SetIntervalsList(int[] intervalsList) {
+            this.IntervalsList = intervalsList;
         }
         public bool GetFound() {
             return Found;

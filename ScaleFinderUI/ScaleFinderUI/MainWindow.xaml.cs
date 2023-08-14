@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -145,7 +146,6 @@ namespace ScaleFinderUI {
             }
             Accid = Convert.ToInt32(TBAccidCount.Text);
             UpdateResult();
-            ((TextBox)sender).SelectAll();
         }
 
         private void HandleAccidCountDown(object sender, EventArgs e) {
@@ -172,8 +172,6 @@ namespace ScaleFinderUI {
         }
 
         private void OnGotFocusAccidCount(object sender, RoutedEventArgs e) {
-            ((TextBox)sender).SelectAll();
-            //e.Handled = true;
         }
 
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
@@ -183,14 +181,25 @@ namespace ScaleFinderUI {
         }
 
         private void OnClickedAccidCount(object sender, RoutedEventArgs e) {
-            ((TextBox)sender).SelectAll();
         }
 
         private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
-            ((TextBox)sender).SelectAll();
         }
         private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
-            PlayMidi();
+            if (RBtnSortAscending.IsChecked == true) {
+                PlayMidi(0);
+            }
+            else if (RBtnSortDescending.IsChecked == true) {
+                PlayMidi(1);
+            }
+            else if (RBtnSortAscendingDescending.IsChecked == true) {
+                PlayMidi(0);
+                PlayMidi(1);
+            }
+            else if (RBtnSortDescendingAscending.IsChecked == true) {
+                PlayMidi(1);
+                PlayMidi(0);
+            }
         }
         private void UpdateResult() {
             int accid = Accid;
@@ -211,68 +220,42 @@ namespace ScaleFinderUI {
                 return;
             }
             string[] texts = ScaleFindResult.GetPitchTexts();
-            string resultText = "";
+            string scaleResultText = "";
+            string degreesText = "";
+            string intervalsText = "";
             for (int i = 0; i < texts.Length; i++) {
-                resultText += texts[i] + " ";
+                scaleResultText += texts[i] + " ";
+            }
+            for (int i = 0; i < ScaleFindResult.GetAccidentalTexts().Length - 1; i++) {
+                int j = i + 1;
+                degreesText += ScaleFindResult.GetAccidentalText(i) + j + " ";
             }
             TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
-            TBScaleResult.Text = "Notes: " + resultText;
+            TBScaleResult.Text = "Notes: " + scaleResultText;
+            TBDegrees.Text = "Degrees: " + degreesText;
             ScaleFindResult.PrintMyValues();
         }
 
-        private void PlayMidi() {
+        private void PlayMidi(int sort) {
             MidiOut midiOut = new MidiOut(0);
             int[] pitchList = ScaleFindResult.GetPitchList();
             int pitchToPlay = 0;
-            if (RBtnSortAscending.IsChecked == true) {
+            int speed = Convert.ToInt32(TBSoundSpeed.Text);
+            if (sort == 0) {
                 for (int i = 0; i < pitchList.Length; i++) {
                     pitchToPlay = pitchList[i] + 59;
                     midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
+                    Thread.Sleep(speed);
                     midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
                     Thread.Sleep(1);
                 }
                 Thread.Sleep(400);
             }
-            else if (RBtnSortDescending.IsChecked == true) {
+            else if (sort == 1) {
                 for (int i = 7; i >= 0; i--) {
                     pitchToPlay = pitchList[i] + 59;
                     midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                Thread.Sleep(400);
-            }
-            else if (RBtnSortAscendingDescending.IsChecked == true) {
-                for (int i = 0; i < pitchList.Length; i++) {
-                    pitchToPlay = pitchList[i] + 59;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                for (int i = 7; i >= 0; i--) {
-                    pitchToPlay = pitchList[i] + 59;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                Thread.Sleep(400);
-            }
-            else if (RBtnSortDescendingAscending.IsChecked == true) {
-                for (int i = 7; i >= 0; i--) {
-                    pitchToPlay = pitchList[i] + 59;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                for (int i = 0; i < pitchList.Length; i++) {
-                    pitchToPlay = pitchList[i] + 59;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(200);
+                    Thread.Sleep(speed);
                     midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
                     Thread.Sleep(1);
                 }
