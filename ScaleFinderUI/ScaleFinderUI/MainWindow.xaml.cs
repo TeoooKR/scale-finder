@@ -278,14 +278,6 @@ namespace ScaleFinderUI {
                 }
                 Thread.Sleep(400);
             }
-            //for (int i = 0; i < pitchList.Length; i++) {
-            //    pitchToPlay = pitchList[i] + 59;
-            //    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-            //    Thread.Sleep(36);
-            //    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-            //    Thread.Sleep(1);
-            //}
-            //Thread.Sleep(400);
             midiOut.Close();
             midiOut.Dispose();
         }
