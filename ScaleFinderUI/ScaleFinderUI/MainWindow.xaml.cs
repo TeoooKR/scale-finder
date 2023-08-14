@@ -15,7 +15,7 @@ namespace ScaleFinderUI {
     public partial class MainWindow : Window {
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
-        private int Type = ScaleFinder.TypeMajorScale;
+        private int[] Type = ScaleFinder.IntervalMajorScale;
         private string SelectedBasePitchText = "C";
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
@@ -94,39 +94,39 @@ namespace ScaleFinderUI {
                 return;
             }
             if ((bool)RBtnTypeMajor.IsChecked) {
-                Type = ScaleFinder.TypeMajorScale;
+                Type = ScaleFinder.IntervalMajorScale;
                 SelectedTypeText = "Major Scale";
             }
             else if ((bool)RBtnTypeMinor.IsChecked) {
-                Type = ScaleFinder.TypeNaturalMinorScale;
+                Type = ScaleFinder.IntervalNaturalMinorScale;
                 SelectedTypeText = "Natural Minor Scale";
             }
             else if ((bool)RBtnTypeIonian.IsChecked) {
-                Type = ScaleFinder.TypeIonianMode;
+                Type = ScaleFinder.IntervalIonianMode;
                 SelectedTypeText = "Ionian Mode";
             }
             else if ((bool)RBtnTypeDorian.IsChecked) {
-                Type = ScaleFinder.TypeDorianMode;
+                Type = ScaleFinder.IntervalDorianMode;
                 SelectedTypeText = "Dorian Mode";
             }
             else if ((bool)RBtnTypePhtygian.IsChecked) {
-                Type = ScaleFinder.TypePhtygianMode;
+                Type = ScaleFinder.IntervalPhtygianMode;
                 SelectedTypeText = "Phtygian Mode";
             }
             else if ((bool)RBtnTypeLydian.IsChecked) {
-                Type = ScaleFinder.TypeLydianMode;
+                Type = ScaleFinder.IntervalLydianMode;
                 SelectedTypeText = "Lydian Mode";
             }
             else if ((bool)RBtnTypeMixolydian.IsChecked) {
-                Type = ScaleFinder.TypeMixolydianMode;
+                Type = ScaleFinder.IntervalMixolydianMode;
                 SelectedTypeText = "Mixolydian Mode";
             }
             else if ((bool)RBtnTypeAeolian.IsChecked) {
-                Type = ScaleFinder.TypeAeolianMode;
+                Type = ScaleFinder.IntervalAeolianMode;
                 SelectedTypeText = "Aeolian Mode";
             }
             else if ((bool)RBtnTypeLocrain.IsChecked) {
-                Type = ScaleFinder.TypeLocrainMode;
+                Type = ScaleFinder.IntervalLocrainMode;
                 SelectedTypeText = "Locrain Mode";
             }
             UpdateResult();

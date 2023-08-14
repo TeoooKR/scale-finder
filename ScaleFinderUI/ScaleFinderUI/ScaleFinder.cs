@@ -21,25 +21,10 @@ using System;
 
 namespace ScaleFinderUI {
     class ScaleFinder {
-        // ------ TYPE ------
 
-        // Major
-        public const int TypeMajorScale = 1;
-
-        // Minor
-        public const int TypeNaturalMinorScale = 6;
-        public const int TypeMelodicMinorScaleAscending = 8;
-        public const int TypeMelodicMinorScaleDescending = 9;
-        public const int TypeHarmonicMinorScale = 10;
-
-        // Mode
-        public const int TypeIonianMode = 1;
-        public const int TypeDorianMode = 2;
-        public const int TypePhtygianMode = 3;
-        public const int TypeLydianMode = 4;
-        public const int TypeMixolydianMode = 5;
-        public const int TypeAeolianMode = 6;
-        public const int TypeLocrainMode = 7;
+        //------ Bass PITCH ------
+        readonly private int[] BasePitchList = new int[13] { 1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22 };
+        readonly private string[] BasePitchTextList = new string[7] { "C", "D", "E", "F", "G", "A", "B" };
 
         //------ PITCH ------
         readonly public static int PitchC = 1;
@@ -55,60 +40,24 @@ namespace ScaleFinderUI {
         readonly public static int AccidSharp = 1;
         readonly public static int AccidFlat = -1;
 
-        //------ Bass PITCH ------
-        readonly private int[] BasePitchList = new int[13] { 1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22 };
-        readonly private string[] BasePitchTextList = new string[7] { "C", "D", "E", "F", "G", "A", "B" };
+        //------ INTERVALS -------
+        readonly public static int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
+        readonly public static int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
+        readonly public static int[] IntervalIonianMode = new int[6] { 2, 2, 1, 2, 2, 2 };
+        readonly public static int[] IntervalDorianMode = new int[6] { 2, 1, 2, 2, 2, 1 };
+        readonly public static int[] IntervalPhtygianMode = new int[6] { 1, 2, 2, 2, 1, 2 };
+        readonly public static int[] IntervalLydianMode = new int[6] { 2, 2, 2, 1, 2, 2 };
+        readonly public static int[] IntervalMixolydianMode = new int[6] { 2, 2, 1, 2, 2, 1 };
+        readonly public static int[] IntervalAeolianMode = new int[6] { 2, 1, 2, 2, 1, 2 };
+        readonly public static int[] IntervalLocrainMode = new int[6] { 1, 2, 2, 1, 2, 2 };
 
-        //------ MODE's Interval -------
-        readonly private int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
-        readonly private int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
-        readonly private int[] IntervalIonianMode = new int[6] { 2, 2, 1, 2, 2, 2 };
-        readonly private int[] IntervalDorianMode = new int[6] { 2, 1, 2, 2, 2, 1 };
-        readonly private int[] IntervalPhtygianMode = new int[6] { 1, 2, 2, 2, 1, 2 };
-        readonly private int[] IntervalLydianMode = new int[6] { 2, 2, 2, 1, 2, 2 };
-        readonly private int[] IntervalMixolydian = new int[6] { 2, 2, 1, 2, 2, 1 };
-        readonly private int[] IntervalAeolian = new int[6] { 2, 1, 2, 2, 1, 2 };
-        readonly private int[] IntervalLocrain = new int[6] { 1, 2, 2, 1, 2, 2 };
-
-        public Scale FindScale(int basePitch, int accidental, int type) {
+        public Scale FindScale(int basePitch, int accidental, int[] intervals) {
             Scale result = new Scale();
             int[] accidentalList = result.GetAccidentalList();
             int[] pitchList = result.GetPitchList();
             int startPitch = basePitch + accidental;
             string[] pitchTexts = new string[7] { "", "", "", "", "", "", "" };
-
-            if (type == TypeMajorScale) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalMajorScale);
-            }
-            else if (type == TypeNaturalMinorScale) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalNaturalMinorScale);
-            }
-            else if (type == TypeIonianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalIonianMode);
-            }
-            else if (type == TypeDorianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalDorianMode);
-            }
-            else if (type == TypePhtygianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalPhtygianMode);
-            }
-            else if (type == TypeLydianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalLydianMode);
-            }
-            else if (type == TypeMixolydianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalMixolydian);
-            }
-            else if (type == TypeAeolianMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalAeolian);
-            }
-            else if (type == TypeLocrainMode) {
-                GetPitchListByInterval(pitchList, startPitch, IntervalLocrain);
-            }
-            else {
-                result.SetFound(false);
-                return result;
-            }
-
+            GetPitchListByInterval(pitchList, startPitch, intervals);
             for (int i = 0; i < BasePitchList.Length; i++) {
                 if (basePitch == BasePitchList[i]) {
                     CalcAccidentalFromBass(accidentalList, i, pitchList);
@@ -116,15 +65,12 @@ namespace ScaleFinderUI {
                     break;
                 }
             }
-            
             string[] accidentalTexts = GetSignFromAccidental(accidentalList);
             string[] pitchTextResults = result.GetPitchTexts();
-            
             for (int i = 0; i < accidentalList.Length - 1; i++) {
                 pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }
             pitchTextResults[7] = pitchTextResults[0];
-
             result.SetPitchTexts(pitchTextResults);
             result.SetAccidentalTexts(accidentalTexts);
             result.SetPitchList(pitchList);
@@ -142,7 +88,6 @@ namespace ScaleFinderUI {
         }
 
         private void CalcAccidentalFromBass(int[] accidental, int startPitchIndex, int[] pitchList) {
-            //> pitch_order_index [0~6]
             int index = 0;
             for (int i = 0; i < pitchList.Length - 1; i++) {
                 index = i + startPitchIndex;
@@ -162,6 +107,7 @@ namespace ScaleFinderUI {
             }
             return result;
         }
+
         private string[] GetSignFromAccidental(int[] accidentalList) {
             string[] accidentalText = new string[8] { "", "", "", "", "", "", "", "" };
             int[] accid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
@@ -192,7 +138,6 @@ namespace ScaleFinderUI {
             accidentalText[7] = accidentalText[0];
             return accidentalText;
         }
-
     }
 }
 
