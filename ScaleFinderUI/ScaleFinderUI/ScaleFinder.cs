@@ -67,14 +67,20 @@ namespace ScaleFinderUI {
             }
             string[] accidentalTexts = GetSignFromAccidental(accidentalList);
             string[] pitchTextResults = result.GetPitchTexts();
+            int[] intervalResults = result.GetIntervalsList();
             for (int i = 0; i < accidentalList.Length - 1; i++) {
                 pitchTextResults[i] = pitchTexts[i] + accidentalTexts[i];
             }
             pitchTextResults[7] = pitchTextResults[0];
+            for (int i = 0; i < intervalResults.Length - 1; i++) {
+                intervalResults[i] = intervals[i];
+            }
+            intervalResults[6] = pitchList[7] - pitchList[6];
             result.SetPitchTexts(pitchTextResults);
             result.SetAccidentalTexts(accidentalTexts);
             result.SetPitchList(pitchList);
             result.SetAccidentalList(accidentalList);
+            result.SetIntervalsList(intervalResults);
             result.SetFound(true);
             return result;
         }

@@ -219,20 +219,50 @@ namespace ScaleFinderUI {
             if (TBSelectedScale == null) {
                 return;
             }
-            string[] texts = ScaleFindResult.GetPitchTexts();
+            string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
+            int[] intervalsList = ScaleFindResult.GetIntervalsList();
+            int[] pitchList = ScaleFindResult.GetPitchList();
             string scaleResultText = "";
             string degreesText = "";
             string intervalsText = "";
-            for (int i = 0; i < texts.Length; i++) {
-                scaleResultText += texts[i] + " ";
+            string pitchListText = "";
+            for (int i = 0; i < scaleResultTexts.Length; i++) {
+                scaleResultText += scaleResultTexts[i] + " ";
             }
             for (int i = 0; i < ScaleFindResult.GetAccidentalTexts().Length - 1; i++) {
                 int j = i + 1;
                 degreesText += ScaleFindResult.GetAccidentalText(i) + j + " ";
             }
+            for (int i = 0; i < intervalsList.Length; i++) {
+                if (i > 5) {
+                    if (intervalsList[i] == 1) {
+                        intervalsText += "H";
+                    }
+                    else if (intervalsList[i] == 2) {
+                        intervalsText += "W";
+                    }
+                }
+                else {
+                    if (intervalsList[i] == 1) {
+                        intervalsText += "H-";
+                    }
+                    else if (intervalsList[i] == 2) {
+                        intervalsText += "W-";
+                    }
+                }
+            }
+            for (int i = 0; i < pitchList.Length; i++) {
+                pitchList[i] -= 1;
+                if (pitchList[i] > 11) {
+                    pitchList[i] -= 12;
+                }
+                pitchListText += pitchList[i] + " ";
+            }
             TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + scaleResultText;
             TBDegrees.Text = "Degrees: " + degreesText;
+            TBIntervalsResult.Text = "Intervals: " + intervalsText;
+            TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
         }
 

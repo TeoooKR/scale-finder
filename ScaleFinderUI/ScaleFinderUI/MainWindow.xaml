@@ -44,7 +44,8 @@
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-        <!--<TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>-->
+        <TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Ascending</RadioButton>
             <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Descending</RadioButton>
