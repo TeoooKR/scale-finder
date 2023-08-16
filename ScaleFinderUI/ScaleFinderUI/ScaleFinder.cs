@@ -43,6 +43,8 @@ namespace ScaleFinderUI {
         //------ INTERVALS -------
         readonly public static int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
         readonly public static int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
+        readonly public static int[] IntervalHarmonicMinorScale = new int[6] { 2, 1, 2, 2, 1, 3 };
+        readonly public static int[] IntervalMelodicMinorScale = new int[6] { 2, 1, 2, 2, 2, 2 };
         readonly public static int[] IntervalIonianMode = new int[6] { 2, 2, 1, 2, 2, 2 };
         readonly public static int[] IntervalDorianMode = new int[6] { 2, 1, 2, 2, 2, 1 };
         readonly public static int[] IntervalPhtygianMode = new int[6] { 1, 2, 2, 2, 1, 2 };
@@ -50,7 +52,6 @@ namespace ScaleFinderUI {
         readonly public static int[] IntervalMixolydianMode = new int[6] { 2, 2, 1, 2, 2, 1 };
         readonly public static int[] IntervalAeolianMode = new int[6] { 2, 1, 2, 2, 1, 2 };
         readonly public static int[] IntervalLocrainMode = new int[6] { 1, 2, 2, 1, 2, 2 };
-
         public Scale FindScale(int basePitch, int accidental, int[] intervals) {
             Scale result = new Scale();
             int[] accidentalList = result.GetAccidentalList();

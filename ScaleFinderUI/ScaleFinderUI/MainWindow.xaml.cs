@@ -1,18 +1,23 @@
-﻿using System;
+﻿using NAudio.Midi;
+using System;
 using System.Diagnostics;
-using System.Globalization;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using NAudio.Midi;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace ScaleFinderUI {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        //private Canvas MusicSheetCanvas;
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
         private int[] Type = ScaleFinder.IntervalMajorScale;
@@ -100,6 +105,14 @@ namespace ScaleFinderUI {
             else if ((bool)RBtnTypeMinor.IsChecked) {
                 Type = ScaleFinder.IntervalNaturalMinorScale;
                 SelectedTypeText = "Natural Minor Scale";
+            }
+            else if ((bool)RBtnTypeHarmonicMinor.IsChecked) {
+                Type = ScaleFinder.IntervalHarmonicMinorScale;
+                SelectedTypeText = "Harmonic Minor Scale";
+            }
+            else if ((bool)RBtnTypeMelodicMinor.IsChecked) {
+                Type = ScaleFinder.IntervalMelodicMinorScale;
+                SelectedTypeText = "Melodic Minor Scale";
             }
             else if ((bool)RBtnTypeIonian.IsChecked) {
                 Type = ScaleFinder.IntervalIonianMode;
@@ -222,10 +235,11 @@ namespace ScaleFinderUI {
             string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
             int[] intervalsList = ScaleFindResult.GetIntervalsList();
             int[] pitchList = ScaleFindResult.GetPitchList();
+            
             string scaleResultText = "";
             string degreesText = "";
             string intervalsText = "";
-            string pitchListText = "";
+            
             for (int i = 0; i < scaleResultTexts.Length; i++) {
                 scaleResultText += scaleResultTexts[i] + " ";
             }
@@ -241,6 +255,9 @@ namespace ScaleFinderUI {
                     else if (intervalsList[i] == 2) {
                         intervalsText += "W";
                     }
+                    else if (intervalsList[i] == 3) {
+                        intervalsText += "3H";
+                    }
                 }
                 else {
                     if (intervalsList[i] == 1) {
@@ -249,14 +266,20 @@ namespace ScaleFinderUI {
                     else if (intervalsList[i] == 2) {
                         intervalsText += "W-";
                     }
+                    else if (intervalsList[i] == 3) {
+                        intervalsText += "3H-";
+                    }
                 }
             }
-            for (int i = 0; i < pitchList.Length; i++) {
-                pitchList[i] -= 1;
-                if (pitchList[i] > 11) {
-                    pitchList[i] -= 12;
+            int[] tempList = new int[7];
+            string pitchListText = "";
+            for (int i = 0; i < pitchList.Length - 1; i++) {
+                tempList[i] = pitchList[i] - 1;
+                if (tempList[i] < 0) {
+                    tempList[i] += 12;
                 }
-                pitchListText += pitchList[i] + " ";
+                tempList[i] %= 12;
+                pitchListText += tempList[i] + " ";
             }
             TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + scaleResultText;
@@ -264,6 +287,7 @@ namespace ScaleFinderUI {
             TBIntervalsResult.Text = "Intervals: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
+            DrawMusicSheet();
         }
 
         private void PlayMidi(int sort) {
@@ -293,6 +317,29 @@ namespace ScaleFinderUI {
             }
             midiOut.Close();
             midiOut.Dispose();
+        }
+
+        private void DrawMusicSheet() {
+            int lineGap = 40;
+            this.CVMusicSheet.Children.Clear();
+
+            for (int i = 0; i < 5; i++) {
+                this.CVMusicSheet.Children.Add(CreateLine(20, lineGap, 1180, lineGap));
+                lineGap += 20;
+            }
+            
+        }
+        private Line CreateLine(double x1, double y1, double x2, double y2) {
+            Line line = new Line();
+            line.X1 = x1;
+            line.Y1 = y1; 
+            line.X2 = x2;
+            line.Y2 = y2;
+            line.StrokeThickness = 1.5;
+            line.Stroke = (Brush)(Brushes.Black);
+            line.SnapsToDevicePixels = true;
+            line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
+            return line;
         }
     }
 }

@@ -6,9 +6,11 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ScaleFinderUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="768" Width="1366">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-
+        Title="MainWindow" Height="1080" Width="1920">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Canvas x:Name="CVMusicSheet" Width="1200" Height="160" Background="#f0f0f0" Margin="40"></Canvas>
+        </StackPanel>
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">C</RadioButton>
             <RadioButton Name="RBtnBaseD" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">D</RadioButton>
@@ -33,6 +35,8 @@
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnTypeMajor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Major</RadioButton>
             <RadioButton Name="RBtnTypeMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Minor</RadioButton>
+            <RadioButton Name="RBtnTypeHarmonicMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Harmonic Minor</RadioButton>
+            <RadioButton Name="RBtnTypeMelodicMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Melodic Minor</RadioButton>
             <RadioButton Name="RBtnTypeIonian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Ionian</RadioButton>
             <RadioButton Name="RBtnTypeDorian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Dorian</RadioButton>
             <RadioButton Name="RBtnTypePhtygian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="132" Height="48" Margin="5">Phtygian</RadioButton>
@@ -41,16 +45,16 @@
             <RadioButton Name="RBtnTypeAeolian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Aeolian</RadioButton>
             <RadioButton Name="RBtnTypeLocrain" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Locrain</RadioButton>
         </StackPanel>
-        <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-        <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-        <TextBlock Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-        <TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
-        <TextBlock Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="500" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
+        <TextBlock Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Ascending</RadioButton>
-            <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Descending</RadioButton>
-            <RadioButton Name="RBtnSortAscendingDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="320" Height="48" Margin="5">Ascending-Descending</RadioButton>
-            <RadioButton Name="RBtnSortDescendingAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="320" Height="48" Margin="5">Descending-Ascending</RadioButton>
+            <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Ascending</RadioButton>
+            <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Descending</RadioButton>
+            <RadioButton Name="RBtnSortAscendingDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="288" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Ascending-Descending</RadioButton>
+            <RadioButton Name="RBtnSortDescendingAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="288" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Descending-Ascending</RadioButton>
         </StackPanel>
         <Button Name="BtnPlaySound" Click="HandleBtnPlaySound" FontSize="30" Width="200" Height="48" Margin="5">PLAY</Button>
         <StackPanel Orientation="Horizontal">
@@ -58,6 +62,7 @@
             <TextBox x:Name="TBSoundSpeed" TextAlignment="Center" FontSize="30" Width="96" Height="48" Text="200"/>
             <TextBlock x:Name="TBmsText" TextAlignment="Center" TextWrapping="Wrap" Text="ms" Width="48" RenderTransformOrigin="1.907,1.105" FontSize="30" Height="44"/>
         </StackPanel>
+        
     </StackPanel>
 </Window>
     
