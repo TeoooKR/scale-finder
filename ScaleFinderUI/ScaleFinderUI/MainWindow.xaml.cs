@@ -8,9 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using Image = System.Windows.Controls.Image;
 
 namespace ScaleFinderUI {
     /// <summary>
@@ -327,7 +329,6 @@ namespace ScaleFinderUI {
                 this.CVMusicSheet.Children.Add(CreateLine(20, lineGap, 1180, lineGap));
                 lineGap += 20;
             }
-            
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();

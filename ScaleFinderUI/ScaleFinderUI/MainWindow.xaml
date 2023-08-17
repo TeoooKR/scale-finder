@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="1080" Width="1920">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Canvas x:Name="CVMusicSheet" Width="1200" Height="160" Background="#f0f0f0" Margin="40"></Canvas>
         </StackPanel>
