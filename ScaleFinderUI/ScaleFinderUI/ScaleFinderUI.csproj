@@ -8,8 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\Flat.svg" />
+    <None Remove="assets\TrebleClef.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="assets\NotationImages.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\Flat.svg" />
+    <Resource Include="assets\NotationImages.xaml" />
+    <Resource Include="assets\TrebleClef.png" />
   </ItemGroup>
 
 </Project>

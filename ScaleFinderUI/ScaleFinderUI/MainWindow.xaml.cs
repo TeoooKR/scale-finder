@@ -329,6 +329,16 @@ namespace ScaleFinderUI {
                 this.CVMusicSheet.Children.Add(CreateLine(20, lineGap, 1180, lineGap));
                 lineGap += 20;
             }
+            Image finalImage = new Image();
+            finalImage.Width = 80;
+            Canvas.SetLeft(finalImage, 20.0);
+            //Canvas.SetTop(finalImage, 200.0);
+            BitmapImage logo = new BitmapImage();
+            logo.BeginInit();
+            logo.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
+            logo.EndInit();
+            finalImage.Source = logo;
+            this.CVMusicSheet.Children.Add(finalImage);
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
