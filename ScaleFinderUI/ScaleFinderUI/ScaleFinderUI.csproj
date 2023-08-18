@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="assets\Flat.svg" />
     <None Remove="assets\TrebleClef.png" />
+    <None Remove="assets\WholeNote.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <Resource Include="assets\Flat.svg" />
     <Resource Include="assets\NotationImages.xaml" />
     <Resource Include="assets\TrebleClef.png" />
+    <Resource Include="assets\WholeNote.png" />
   </ItemGroup>
 
 </Project>

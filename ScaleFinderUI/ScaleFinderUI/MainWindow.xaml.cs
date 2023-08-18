@@ -28,10 +28,14 @@ namespace ScaleFinderUI {
         private string SelectedTypeText = " Major";
         static ScaleFinder Finder = new();
         Scale ScaleFindResult;
+        //> Images
+        Image TrebleClefImg = new Image();
+        Image WholeNoteImg = new Image();
 
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
             InitializeComponent();
+            LoadMusicSheetImages();
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e) {
@@ -327,18 +331,30 @@ namespace ScaleFinderUI {
 
             for (int i = 0; i < 5; i++) {
                 this.CVMusicSheet.Children.Add(CreateLine(20, lineGap, 1180, lineGap));
-                lineGap += 20;
+                lineGap += 26;
             }
-            Image finalImage = new Image();
-            finalImage.Width = 80;
-            Canvas.SetLeft(finalImage, 20.0);
+
+            this.CVMusicSheet.Children.Add(TrebleClefImg);
+            this.CVMusicSheet.Children.Add(WholeNoteImg);
+        }
+        private void LoadMusicSheetImages() {
+            TrebleClefImg.Width = 96;
+            Canvas.SetLeft(TrebleClefImg, 19.9);
             //Canvas.SetTop(finalImage, 200.0);
-            BitmapImage logo = new BitmapImage();
-            logo.BeginInit();
-            logo.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
-            logo.EndInit();
-            finalImage.Source = logo;
-            this.CVMusicSheet.Children.Add(finalImage);
+            BitmapImage trebleClefBtm = new BitmapImage();
+            trebleClefBtm.BeginInit();
+            trebleClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
+            trebleClefBtm.EndInit();
+            TrebleClefImg.Source = trebleClefBtm;
+
+            WholeNoteImg.Width = 39;
+            Canvas.SetLeft(WholeNoteImg, 100.0);
+            Canvas.SetTop(WholeNoteImg, 66.0);
+            BitmapImage wholeNoteBtm = new BitmapImage();
+            wholeNoteBtm.BeginInit();
+            wholeNoteBtm.UriSource = new Uri("pack://application:,,,/assets/WholeNote.png");
+            wholeNoteBtm.EndInit();
+            WholeNoteImg.Source = wholeNoteBtm;
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
