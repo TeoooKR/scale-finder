@@ -347,9 +347,9 @@ namespace ScaleFinderUI {
             trebleClefBtm.EndInit();
             TrebleClefImg.Source = trebleClefBtm;
 
-            WholeNoteImg.Width = 39;
+            WholeNoteImg.Width = 36;
             Canvas.SetLeft(WholeNoteImg, 100.0);
-            Canvas.SetTop(WholeNoteImg, 66.0);
+            Canvas.SetTop(WholeNoteImg, 67.32);
             BitmapImage wholeNoteBtm = new BitmapImage();
             wholeNoteBtm.BeginInit();
             wholeNoteBtm.UriSource = new Uri("pack://application:,,,/assets/WholeNote.png");
