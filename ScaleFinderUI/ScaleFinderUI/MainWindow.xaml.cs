@@ -397,10 +397,8 @@ namespace ScaleFinderUI {
                 WholeNoteImgs[i].Width = 36;
                 Canvas.SetLeft(WholeNoteImgs[i], 100.0);
                 Canvas.SetTop(WholeNoteImgs[i], 158.32);
-                
                 WholeNoteImgs[i].Source = wholeNoteBtm;
             }
-            
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
