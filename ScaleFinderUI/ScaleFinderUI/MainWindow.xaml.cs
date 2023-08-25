@@ -1,7 +1,6 @@
 ﻿using NAudio.Midi;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -26,11 +25,12 @@ namespace ScaleFinderUI {
         private string SelectedBasePitchText = "C";
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
+        private int FirstNotePos = 0;
         static ScaleFinder Finder = new();
         Scale ScaleFindResult;
         //> Images
         Image TrebleClefImg = new Image();
-        Image WholeNoteImg = new Image();
+        Image[] WholeNoteImgs = new Image[8];
 
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
@@ -86,13 +86,14 @@ namespace ScaleFinderUI {
                 ButtonDown.IsEnabled = false;
                 ButtonUp.IsEnabled = false;
                 TBAccidCount.IsEnabled = false;
+                Accid = 0;
             }
             else {
                 ButtonDown.IsEnabled = true;
                 ButtonUp.IsEnabled = true;
                 TBAccidCount.IsEnabled = true;
+                Accid = Convert.ToInt32(TBAccidCount.Text);
             }
-            Accid = Convert.ToInt32(TBAccidCount.Text);
             if (TBSelectedScale == null) {
                 return;
             }
@@ -163,7 +164,7 @@ namespace ScaleFinderUI {
                 TBAccidCount.Text = TBAccidCount.Text.Substring(0, 1);
                 return;
             }
-            Accid = Convert.ToInt32(TBAccidCount.Text);
+            //Accid = Convert.ToInt32(TBAccidCount.Text);
             UpdateResult();
         }
 
@@ -293,6 +294,8 @@ namespace ScaleFinderUI {
             TBIntervalsResult.Text = "Intervals: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
+            
+
             DrawMusicSheet();
         }
 
@@ -335,7 +338,42 @@ namespace ScaleFinderUI {
             }
 
             this.CVMusicSheet.Children.Add(TrebleClefImg);
-            this.CVMusicSheet.Children.Add(WholeNoteImg);
+
+
+            string pt = ScaleFindResult.GetPitchText(0);
+            if (pt.StartsWith("C")) {
+                FirstNotePos = 0;
+            }
+            else if (pt.StartsWith("D")) {
+                FirstNotePos = 13;
+            }
+            else if (pt.StartsWith("E")) {
+                FirstNotePos = 13 * 2;
+            }
+            else if (pt.StartsWith("F")) {
+                FirstNotePos = 13 * 3;
+            }
+            else if (pt.StartsWith("G")) {
+                FirstNotePos = 13 * 4;
+            }
+            else if (pt.StartsWith("A")) {
+                FirstNotePos = 13 * 5;
+            }
+            else if (pt.StartsWith("B")) {
+                FirstNotePos = 13 * 6;
+            }
+
+
+            int left = 130;
+            int leftGap = 80;
+            for (int i = 0; i < 8; i++) {
+                Canvas.SetTop(WholeNoteImgs[i], 158.32 - FirstNotePos);
+                Canvas.SetLeft(WholeNoteImgs[i], left);
+                
+                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
+                FirstNotePos += 13;
+                left += leftGap;
+            }
         }
         private void LoadMusicSheetImages() {
             TrebleClefImg.Width = 96;
@@ -347,14 +385,22 @@ namespace ScaleFinderUI {
             trebleClefBtm.EndInit();
             TrebleClefImg.Source = trebleClefBtm;
 
-            WholeNoteImg.Width = 36;
-            Canvas.SetLeft(WholeNoteImg, 100.0);
-            Canvas.SetTop(WholeNoteImg, 67.32);
             BitmapImage wholeNoteBtm = new BitmapImage();
             wholeNoteBtm.BeginInit();
             wholeNoteBtm.UriSource = new Uri("pack://application:,,,/assets/WholeNote.png");
             wholeNoteBtm.EndInit();
-            WholeNoteImg.Source = wholeNoteBtm;
+
+            for (int i = 0; i < 8; i++) {
+                if (WholeNoteImgs[i] == null) {
+                    WholeNoteImgs[i] = new Image();
+                }
+                WholeNoteImgs[i].Width = 36;
+                Canvas.SetLeft(WholeNoteImgs[i], 100.0);
+                Canvas.SetTop(WholeNoteImgs[i], 158.32);
+                
+                WholeNoteImgs[i].Source = wholeNoteBtm;
+            }
+            
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
