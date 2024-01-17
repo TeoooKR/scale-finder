@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="assets\BassClef.png" />
+    <None Remove="assets\CClef.png" />
     <None Remove="assets\DoubleFlat.png" />
     <None Remove="assets\DoubleSharp.png" />
     <None Remove="assets\Flat.png" />
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <Resource Include="assets\BassClef.png" />
+    <Resource Include="assets\CClef.png" />
     <Resource Include="assets\DoubleFlat.png" />
     <Resource Include="assets\DoubleSharp.png" />
     <Resource Include="assets\Flat.png" />

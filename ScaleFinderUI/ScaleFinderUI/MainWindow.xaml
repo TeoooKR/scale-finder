@@ -28,7 +28,7 @@
             <Button Name="ButtonDown" Click="HandleAccidCountDown" FontSize="20" Width="80" Height="48" Margin="5"  Background="Transparent" BorderBrush="Transparent">
                 <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline" Width="44" Height="44" Foreground="Gray"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
-            <TextBox Name="TBAccidCount" PreviewTextInput="NumberValidationTextBox" PreviewMouseDown="OnMouseDownAccidCount"  GotFocus="OnGotFocusAccidCount" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="30" Width="48" Height="48" Margin="5">1</TextBox>
+            <TextBox Name="TBAccidCount" PreviewTextInput="NumberValidationTextBox" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="30" Width="48" Height="48" Margin="5">1</TextBox>
             <Button Name="ButtonUp" Click="HandleAccidCountUp" FontSize="20" Width="80" Height="48" Margin="5" Background="Transparent" BorderBrush="Transparent">
                 <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" Width="44" Height="44" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>

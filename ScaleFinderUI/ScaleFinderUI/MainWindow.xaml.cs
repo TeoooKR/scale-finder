@@ -31,8 +31,13 @@ namespace ScaleFinderUI {
         Scale ScaleFindResult;
         //> Images
         Image TrebleClefImg = new Image();
-        Image SharpImg = new Image();
+        Image BassClefImg = new Image();
+        Image CClefImg = new Image();
         Image[] WholeNoteImgs = new Image[8];
+        Image SharpImg = new Image();
+        Image FlatImg = new Image();
+        Image DoubleSharpImg = new Image();
+        Image DoubleFlatImg = new Image();
 
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
@@ -164,7 +169,6 @@ namespace ScaleFinderUI {
                 TBAccidCount.Text = TBAccidCount.Text.Substring(0, 1);
                 return;
             }
-            //Accid = Convert.ToInt32(TBAccidCount.Text);
             UpdateResult();
         }
 
@@ -190,21 +194,12 @@ namespace ScaleFinderUI {
             Regex regex = new Regex("[^1-9]");
             e.Handled = regex.IsMatch(e.Text);
         }
-
-        private void OnGotFocusAccidCount(object sender, RoutedEventArgs e) {
-        }
-
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 TBAccidCount.Text = "1";
             }
         }
 
-        private void OnClickedAccidCount(object sender, RoutedEventArgs e) {
-        }
-
-        private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
-        }
         private void UpdateResult() {
             if (RBtnAccidN.IsChecked == true) {
                 Accid = 0;
@@ -228,12 +223,10 @@ namespace ScaleFinderUI {
             }
             string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
             int[] intervalsList = ScaleFindResult.GetIntervalsList();
-            int[] pitchList = ScaleFindResult.GetPitchList();
-            
+            int[] pitchList = ScaleFindResult.GetPitchList();           
             string scaleResultText = "";
             string degreesText = "";
-            string intervalsText = "";
-            
+            string intervalsText = "";         
             for (int i = 0; i < scaleResultTexts.Length; i++) {
                 scaleResultText += scaleResultTexts[i] + " ";
             }
@@ -326,12 +319,10 @@ namespace ScaleFinderUI {
             int padding = 14;
             int startY = lineGap + padding;
             this.CVMusicSheet.Children.Clear();
-
             for (int i = 0; i < 5; i++) {
                 this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
                 startY += lineGap;
             }
-
             this.CVMusicSheet.Children.Add(TrebleClefImg);
             string pt = ScaleFindResult.GetPitchText(0);
             if (pt.StartsWith("C")) {
@@ -363,7 +354,6 @@ namespace ScaleFinderUI {
                 Canvas.SetTop(WholeNoteImgs[i], top);
                 Canvas.SetLeft(WholeNoteImgs[i], left);
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
-
                 if (top < lineStart - lineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - lineGap, left + WholeNoteImgs[i].Width + 10, lineStart - lineGap));
                 }
@@ -373,26 +363,39 @@ namespace ScaleFinderUI {
                 FirstNotePos += 13;
                 left += leftGap;
             }
-
             Canvas.SetTop(SharpImg, 160);
             Canvas.SetLeft(SharpImg, 180);
             this.CVMusicSheet.Children.Add(SharpImg);
         }
+
         private void LoadMusicSheetImages() {
-            TrebleClefImg.Width = 96;
-            Canvas.SetLeft(TrebleClefImg, 19.9);
-            //Canvas.SetTop(finalImage, 200.0);
+            // ● Treble Clef
             BitmapImage trebleClefBtm = new BitmapImage();
             trebleClefBtm.BeginInit();
             trebleClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
             trebleClefBtm.EndInit();
+            TrebleClefImg.Width = 96;
+            Canvas.SetLeft(TrebleClefImg, 19.9);
             TrebleClefImg.Source = trebleClefBtm;
-
+            // ● Base Clef
+            BitmapImage bassClefBtm = new BitmapImage();
+            bassClefBtm.BeginInit();
+            bassClefBtm.UriSource = new Uri("pack://application:,,,/assets/BassClef.png");
+            bassClefBtm.EndInit();
+            BassClefImg.Width = 49;
+            BassClefImg.Source = bassClefBtm;
+            // ● C Clef
+            BitmapImage cclefBtm = new BitmapImage();
+            cclefBtm.BeginInit();
+            cclefBtm.UriSource = new Uri("pack://application:,,,/assets/CClef.png");
+            cclefBtm.EndInit();
+            CClefImg.Width = 18;
+            CClefImg.Source = cclefBtm;
+            // ● Whole Note
             BitmapImage wholeNoteBtm = new BitmapImage();
             wholeNoteBtm.BeginInit();
             wholeNoteBtm.UriSource = new Uri("pack://application:,,,/assets/WholeNote.png");
             wholeNoteBtm.EndInit();
-
             for (int i = 0; i < 8; i++) {
                 if (WholeNoteImgs[i] == null) {
                     WholeNoteImgs[i] = new Image();
@@ -402,14 +405,34 @@ namespace ScaleFinderUI {
                 Canvas.SetTop(WholeNoteImgs[i], 158.32);
                 WholeNoteImgs[i].Source = wholeNoteBtm;
             }
-
+            // ● Sharp
             BitmapImage sharpBtm = new BitmapImage();
             sharpBtm.BeginInit();
             sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
             sharpBtm.EndInit();
             SharpImg.Width = 19;
             SharpImg.Source = sharpBtm;
-
+            // ● Flat
+            BitmapImage flatBtm = new BitmapImage();
+            flatBtm.BeginInit();
+            flatBtm.UriSource = new Uri("pack://application:,,,/assets/Flat.png");
+            flatBtm.EndInit();
+            FlatImg.Width = 19;
+            FlatImg.Source = sharpBtm;
+            // ● Double Sharp
+            BitmapImage doubleSharpBtm = new BitmapImage();
+            doubleSharpBtm.BeginInit();
+            doubleSharpBtm.UriSource = new Uri("pack://application:,,,/assets/DoubleSharp.png");
+            doubleSharpBtm.EndInit();
+            DoubleSharpImg.Width = 19;
+            DoubleSharpImg.Source = doubleSharpBtm;
+            // ● Double Flat
+            BitmapImage doubleFlatBtm = new BitmapImage();
+            doubleFlatBtm.BeginInit();
+            doubleFlatBtm.UriSource = new Uri("pack://application:,,,/assets/DoubleFlat.png");
+            doubleFlatBtm.EndInit();
+            DoubleFlatImg.Width = 13;
+            DoubleFlatImg.Source = sharpBtm;
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
