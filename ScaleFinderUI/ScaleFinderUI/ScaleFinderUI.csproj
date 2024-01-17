@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\BassClef.png" />
+    <None Remove="assets\DoubleFlat.png" />
+    <None Remove="assets\DoubleSharp.png" />
+    <None Remove="assets\Flat.png" />
     <None Remove="assets\Flat.svg" />
+    <None Remove="assets\Sharp.png" />
     <None Remove="assets\TrebleClef.png" />
     <None Remove="assets\WholeNote.png" />
   </ItemGroup>
@@ -23,8 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\BassClef.png" />
+    <Resource Include="assets\DoubleFlat.png" />
+    <Resource Include="assets\DoubleSharp.png" />
+    <Resource Include="assets\Flat.png" />
     <Resource Include="assets\Flat.svg" />
     <Resource Include="assets\NotationImages.xaml" />
+    <Resource Include="assets\Sharp.png" />
     <Resource Include="assets\TrebleClef.png" />
     <Resource Include="assets\WholeNote.png" />
   </ItemGroup>

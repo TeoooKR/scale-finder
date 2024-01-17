@@ -1,6 +1,7 @@
 ﻿using NAudio.Midi;
 using System;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -30,6 +31,7 @@ namespace ScaleFinderUI {
         Scale ScaleFindResult;
         //> Images
         Image TrebleClefImg = new Image();
+        Image SharpImg = new Image();
         Image[] WholeNoteImgs = new Image[8];
 
         public MainWindow() {
@@ -82,17 +84,15 @@ namespace ScaleFinderUI {
             if (rb == null) {
                 return;
             }
-            if (rb.Name == "RBtnAccidN") {
+            if (RBtnAccidN.IsChecked == true) {
                 ButtonDown.IsEnabled = false;
                 ButtonUp.IsEnabled = false;
                 TBAccidCount.IsEnabled = false;
-                Accid = 0;
             }
             else {
                 ButtonDown.IsEnabled = true;
                 ButtonUp.IsEnabled = true;
                 TBAccidCount.IsEnabled = true;
-                Accid = Convert.ToInt32(TBAccidCount.Text);
             }
             if (TBSelectedScale == null) {
                 return;
@@ -222,14 +222,17 @@ namespace ScaleFinderUI {
             }
         }
         private void UpdateResult() {
-            int accid = Accid;
             if (RBtnAccidN.IsChecked == true) {
-                accid = 0;
+                Accid = 0;
+            }
+            else if (RBtnAccidS.IsChecked == true) {
+                Accid = Convert.ToInt32(TBAccidCount.Text);
             }
             else if (RBtnAccidF.IsChecked == true) {
-                accid *= -1;
+                Accid = Convert.ToInt32(TBAccidCount.Text);
+                Accid *= -1;
             }
-            ScaleFindResult = Finder.FindScale(BasePitch, accid, Type);
+            ScaleFindResult = Finder.FindScale(BasePitch, Accid, Type);
             SelectedBasePitchText = ScaleFindResult.GetPitchText(0);
             SelectedAccidText = ScaleFindResult.GetAccidentalText(0);
             if (!ScaleFindResult.GetFound()) {
@@ -294,8 +297,6 @@ namespace ScaleFinderUI {
             TBIntervalsResult.Text = "Intervals: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
-            
-
             DrawMusicSheet();
         }
 
@@ -329,51 +330,64 @@ namespace ScaleFinderUI {
         }
 
         private void DrawMusicSheet() {
-            int lineGap = 40;
+            int lineGap = 26;
+            int lineGapHalf = lineGap / 2;
+            int padding = 14;
+            int startY = lineGap + padding;
             this.CVMusicSheet.Children.Clear();
 
             for (int i = 0; i < 5; i++) {
-                this.CVMusicSheet.Children.Add(CreateLine(20, lineGap, 1180, lineGap));
-                lineGap += 26;
+                this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
+                startY += lineGap;
             }
 
             this.CVMusicSheet.Children.Add(TrebleClefImg);
-
-
             string pt = ScaleFindResult.GetPitchText(0);
             if (pt.StartsWith("C")) {
                 FirstNotePos = 0;
             }
             else if (pt.StartsWith("D")) {
-                FirstNotePos = 13;
+                FirstNotePos = lineGapHalf;
             }
             else if (pt.StartsWith("E")) {
-                FirstNotePos = 13 * 2;
+                FirstNotePos = lineGapHalf * 2;
             }
             else if (pt.StartsWith("F")) {
-                FirstNotePos = 13 * 3;
+                FirstNotePos = lineGapHalf * 3;
             }
             else if (pt.StartsWith("G")) {
-                FirstNotePos = 13 * 4;
+                FirstNotePos = lineGapHalf * 4;
             }
             else if (pt.StartsWith("A")) {
-                FirstNotePos = 13 * 5;
+                FirstNotePos = lineGapHalf * 5;
             }
             else if (pt.StartsWith("B")) {
-                FirstNotePos = 13 * 6;
+                FirstNotePos = lineGapHalf * 6;
             }
 
 
             int left = 130;
             int leftGap = 80;
+            double lineStart = lineGap + padding;
             for (int i = 0; i < 8; i++) {
-                Canvas.SetTop(WholeNoteImgs[i], 158.32 - FirstNotePos);
+                double top = 158.32 - FirstNotePos;
+                Canvas.SetTop(WholeNoteImgs[i], top);
                 Canvas.SetLeft(WholeNoteImgs[i], left);
-                
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
+
+                if (top < lineStart - lineGap) {
+                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - lineGap, left + WholeNoteImgs[i].Width + 10, lineStart - lineGap));
+                }
+                else if (top > lineStart + lineGap * 4 + 5) {
+                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart + lineGap * 5, left + WholeNoteImgs[i].Width + 10, lineStart + lineGap * 5));
+                }
                 FirstNotePos += 13;
                 left += leftGap;
             }
+
+            Canvas.SetTop(SharpImg, 160);
+            Canvas.SetLeft(SharpImg, 180);
+            this.CVMusicSheet.Children.Add(SharpImg);
         }
         private void LoadMusicSheetImages() {
             TrebleClefImg.Width = 96;
@@ -394,11 +408,19 @@ namespace ScaleFinderUI {
                 if (WholeNoteImgs[i] == null) {
                     WholeNoteImgs[i] = new Image();
                 }
-                WholeNoteImgs[i].Width = 36;
+                WholeNoteImgs[i].Width = 36.1;
                 Canvas.SetLeft(WholeNoteImgs[i], 100.0);
                 Canvas.SetTop(WholeNoteImgs[i], 158.32);
                 WholeNoteImgs[i].Source = wholeNoteBtm;
             }
+
+            BitmapImage sharpBtm = new BitmapImage();
+            sharpBtm.BeginInit();
+            sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
+            sharpBtm.EndInit();
+            SharpImg.Width = 19;
+            SharpImg.Source = sharpBtm;
+
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
