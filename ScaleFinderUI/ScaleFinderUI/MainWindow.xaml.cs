@@ -205,22 +205,6 @@ namespace ScaleFinderUI {
 
         private void OnMouseDownAccidCount(object sender, RoutedEventArgs e) {
         }
-        private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
-            if (RBtnSortAscending.IsChecked == true) {
-                PlayMidi(0);
-            }
-            else if (RBtnSortDescending.IsChecked == true) {
-                PlayMidi(1);
-            }
-            else if (RBtnSortAscendingDescending.IsChecked == true) {
-                PlayMidi(0);
-                PlayMidi(1);
-            }
-            else if (RBtnSortDescendingAscending.IsChecked == true) {
-                PlayMidi(1);
-                PlayMidi(0);
-            }
-        }
         private void UpdateResult() {
             if (RBtnAccidN.IsChecked == true) {
                 Accid = 0;
@@ -258,27 +242,17 @@ namespace ScaleFinderUI {
                 degreesText += ScaleFindResult.GetAccidentalText(i) + j + " ";
             }
             for (int i = 0; i < intervalsList.Length; i++) {
-                if (i > 5) {
-                    if (intervalsList[i] == 1) {
-                        intervalsText += "H";
-                    }
-                    else if (intervalsList[i] == 2) {
-                        intervalsText += "W";
-                    }
-                    else if (intervalsList[i] == 3) {
-                        intervalsText += "3H";
-                    }
+                if (intervalsList[i] == 1) {
+                    intervalsText += "H";
                 }
-                else {
-                    if (intervalsList[i] == 1) {
-                        intervalsText += "H-";
-                    }
-                    else if (intervalsList[i] == 2) {
-                        intervalsText += "W-";
-                    }
-                    else if (intervalsList[i] == 3) {
-                        intervalsText += "3H-";
-                    }
+                else if (intervalsList[i] == 2) {
+                    intervalsText += "W";
+                }
+                else if (intervalsList[i] == 3) {
+                    intervalsText += "3H";
+                }
+                if (i != intervalsList.Length - 1) {
+                    intervalsText += "-";
                 }
             }
             int[] tempList = new int[7];
@@ -298,6 +272,23 @@ namespace ScaleFinderUI {
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
             DrawMusicSheet();
+        }
+
+        private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
+            if (RBtnSortAscending.IsChecked == true) {
+                PlayMidi(0);
+            }
+            else if (RBtnSortDescending.IsChecked == true) {
+                PlayMidi(1);
+            }
+            else if (RBtnSortAscendingDescending.IsChecked == true) {
+                PlayMidi(0);
+                PlayMidi(1);
+            }
+            else if (RBtnSortDescendingAscending.IsChecked == true) {
+                PlayMidi(1);
+                PlayMidi(0);
+            }
         }
 
         private void PlayMidi(int sort) {
@@ -364,8 +355,6 @@ namespace ScaleFinderUI {
             else if (pt.StartsWith("B")) {
                 FirstNotePos = lineGapHalf * 6;
             }
-
-
             int left = 130;
             int leftGap = 80;
             double lineStart = lineGap + padding;
