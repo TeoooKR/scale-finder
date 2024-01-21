@@ -27,11 +27,16 @@ namespace ScaleFinderUI {
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
         private int FirstNotePos = 0;
+        private int ClefNotePos = 0;
+        private int LineGap = 26;
+        private int LineGapHalf = 13;
+        private int Padding = 14;
+        private int Octave = 0;
         static ScaleFinder Finder = new();
         Scale ScaleFindResult;
         //> Images
-        Image TrebleClefImg = new Image();
-        Image BassClefImg = new Image();
+        Image GClefImg = new Image();
+        Image FClefImg = new Image();
         Image CClefImg = new Image();
         Image[] WholeNoteImgs = new Image[8];
         Image SharpImg = new Image();
@@ -50,6 +55,7 @@ namespace ScaleFinderUI {
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
             RBtnSortAscending.IsChecked = true;
+            RBtnTrebleClef.IsChecked = true;
         }
 
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
@@ -264,9 +270,147 @@ namespace ScaleFinderUI {
             TBIntervalsResult.Text = "Intervals: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
-            DrawMusicSheet();
+            DrawWholeNote();
+        }        
+
+        private void HandleClefChecked(object sender, RoutedEventArgs e) {            
+            ClefNotePos = 0;
+            Octave = 0;
+            // ● Clef Type
+            DrawClef();
+            // ● G Clef
+            if (RBtnTrebleClef.IsChecked == true) {
+                Canvas.SetTop(GClefImg, 0);
+                ClefNotePos = 0;
+            }
+            else if (RBtnFrenchClef.IsChecked == true) {
+                Canvas.SetTop(GClefImg, LineGap);
+                ClefNotePos = LineGap;
+                Octave = 1;
+            }
+            // ● F Clef
+            if (RBtnBassClef.IsChecked == true) {
+                Canvas.SetTop(FClefImg, 34);
+                ClefNotePos = LineGap * 6 * -1;
+                Octave = -1;
+            }
+            else if (RBtnBaritoneFClef.IsChecked == true) {
+                Canvas.SetTop(FClefImg, 34 + LineGap);
+                ClefNotePos = LineGap * 5 * -1;
+                Octave = -1;
+            }
+            else if (RBtnSubbassClef.IsChecked == true) {
+                Canvas.SetTop(FClefImg, 34 - LineGap);
+                ClefNotePos = LineGap * 7 * -1;
+                Octave = -2;
+            }
+            // ● C Clef
+            if (RBtnAltoClef.IsChecked == true) {
+                Canvas.SetTop(CClefImg, 38.9);
+                ClefNotePos = LineGap * 3 * -1;                
+            }
+            else if (RBtnTenorClef.IsChecked == true) {
+                Canvas.SetTop(CClefImg, 38.9 - LineGap);
+                ClefNotePos = LineGap * 4 * -1;
+                Octave = -1;
+            }
+            else if (RBtnBaritoneCClef.IsChecked == true) {
+                Canvas.SetTop(CClefImg, 38.9 - LineGap * 2);
+                ClefNotePos = LineGap * 5 * -1;
+                Octave = -1;
+            }
+            else if (RBtnMezzoSopranoClef.IsChecked == true) {
+                Canvas.SetTop(CClefImg, 38.9 + LineGap);
+                ClefNotePos = LineGap * 2 * -1;
+            }
+            else if (RBtnSopranoClef.IsChecked == true) {
+                Canvas.SetTop(CClefImg, 38.9 + LineGap * 2);
+                ClefNotePos = LineGap * -1;
+            }
+            // ● Whole Note            
+            DrawWholeNote();
+        }
+        
+        private void DrawMusicSheet() {            
+            int startY = LineGap + Padding;
+            this.CVMusicSheet.Children.Clear();
+            for (int i = 0; i < 5; i++) {
+                this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
+                startY += LineGap;
+            }            
+            this.CVMusicSheet.Children.Add(SharpImg);
         }
 
+        private void DrawClef() {
+            CVMusicSheet.Children.Clear();
+            DrawMusicSheet();
+            if (RBtnTrebleClef.IsChecked == true || RBtnFrenchClef.IsChecked == true) {
+                this.CVMusicSheet.Children.Add(GClefImg);
+                GClefImg.Width = 96;
+                Canvas.SetLeft(GClefImg, 19.9);
+            }
+            else if (RBtnBassClef.IsChecked == true || RBtnBaritoneFClef.IsChecked == true || RBtnSubbassClef.IsChecked == true) {
+                CVMusicSheet.Children.Add(FClefImg);
+                FClefImg.Width = 96;
+                Canvas.SetLeft(FClefImg, 19.9);
+            }
+            else if (RBtnAltoClef.IsChecked == true || RBtnTenorClef.IsChecked == true ||
+                RBtnBaritoneCClef.IsChecked == true || RBtnMezzoSopranoClef.IsChecked == true || RBtnSopranoClef.IsChecked == true) {
+                CVMusicSheet.Children.Add(CClefImg);
+                CClefImg.Width = 75.2;
+                Canvas.SetLeft(CClefImg, 33);
+            }
+        }
+
+        private void DrawWholeNote() {
+            CVMusicSheet.Children.Clear();
+            DrawMusicSheet();
+            DrawClef();
+            int left = 130;
+            int leftGap = 80;
+            double top = 0;
+            double lineStart = LineGap + Padding;
+            for (int i = 0; i < WholeNoteImgs.Length; i++) {
+                CVMusicSheet.Children.Remove(WholeNoteImgs[i]);
+            }
+            FirstNotePos = 0;
+            string pt = ScaleFindResult.GetPitchText(0);
+            if (pt.StartsWith("C")) {
+                FirstNotePos = 0;
+            }
+            else if (pt.StartsWith("D")) {
+                FirstNotePos = LineGapHalf;
+            }
+            else if (pt.StartsWith("E")) {
+                FirstNotePos = LineGapHalf * 2;
+            }
+            else if (pt.StartsWith("F")) {
+                FirstNotePos = LineGapHalf * 3;
+            }
+            else if (pt.StartsWith("G")) {
+                FirstNotePos = LineGapHalf * 4;
+            }
+            else if (pt.StartsWith("A")) {
+                FirstNotePos = LineGapHalf * 5;
+            }
+            else if (pt.StartsWith("B")) {
+                FirstNotePos = LineGapHalf * 6;
+            }
+            for (int i = 0; i < 8; i++) {
+                top = 158.32 - FirstNotePos + ClefNotePos + (Octave * (LineGap * 3 + LineGapHalf) * -1);
+                Canvas.SetTop(WholeNoteImgs[i], top);
+                Canvas.SetLeft(WholeNoteImgs[i], left);
+                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
+                if (top < lineStart - LineGap) {
+                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - LineGap, left + WholeNoteImgs[i].Width + 10, lineStart - LineGap));
+                }
+                else if (top > lineStart + LineGap * 4 + 5) {
+                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart + LineGap * 5, left + WholeNoteImgs[i].Width + 10, lineStart + LineGap * 5));
+                }
+                FirstNotePos += 13;
+                left += leftGap;
+            }
+        }
         private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
             if (RBtnSortAscending.IsChecked == true) {
                 PlayMidi(0);
@@ -291,7 +435,7 @@ namespace ScaleFinderUI {
             int speed = Convert.ToInt32(TBSoundSpeed.Text);
             if (sort == 0) {
                 for (int i = 0; i < pitchList.Length; i++) {
-                    pitchToPlay = pitchList[i] + 59;
+                    pitchToPlay = pitchList[i] + 59 + Octave * 12;
                     midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
                     Thread.Sleep(speed);
                     midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
@@ -301,7 +445,7 @@ namespace ScaleFinderUI {
             }
             else if (sort == 1) {
                 for (int i = 7; i >= 0; i--) {
-                    pitchToPlay = pitchList[i] + 59;
+                    pitchToPlay = pitchList[i] + 59 + Octave * 12;
                     midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
                     Thread.Sleep(speed);
                     midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
@@ -313,83 +457,24 @@ namespace ScaleFinderUI {
             midiOut.Dispose();
         }
 
-        private void DrawMusicSheet() {
-            int lineGap = 26;
-            int lineGapHalf = lineGap / 2;
-            int padding = 14;
-            int startY = lineGap + padding;
-            this.CVMusicSheet.Children.Clear();
-            for (int i = 0; i < 5; i++) {
-                this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
-                startY += lineGap;
-            }
-            this.CVMusicSheet.Children.Add(TrebleClefImg);
-            string pt = ScaleFindResult.GetPitchText(0);
-            if (pt.StartsWith("C")) {
-                FirstNotePos = 0;
-            }
-            else if (pt.StartsWith("D")) {
-                FirstNotePos = lineGapHalf;
-            }
-            else if (pt.StartsWith("E")) {
-                FirstNotePos = lineGapHalf * 2;
-            }
-            else if (pt.StartsWith("F")) {
-                FirstNotePos = lineGapHalf * 3;
-            }
-            else if (pt.StartsWith("G")) {
-                FirstNotePos = lineGapHalf * 4;
-            }
-            else if (pt.StartsWith("A")) {
-                FirstNotePos = lineGapHalf * 5;
-            }
-            else if (pt.StartsWith("B")) {
-                FirstNotePos = lineGapHalf * 6;
-            }
-            int left = 130;
-            int leftGap = 80;
-            double lineStart = lineGap + padding;
-            for (int i = 0; i < 8; i++) {
-                double top = 158.32 - FirstNotePos;
-                Canvas.SetTop(WholeNoteImgs[i], top);
-                Canvas.SetLeft(WholeNoteImgs[i], left);
-                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
-                if (top < lineStart - lineGap) {
-                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - lineGap, left + WholeNoteImgs[i].Width + 10, lineStart - lineGap));
-                }
-                else if (top > lineStart + lineGap * 4 + 5) {
-                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart + lineGap * 5, left + WholeNoteImgs[i].Width + 10, lineStart + lineGap * 5));
-                }
-                FirstNotePos += 13;
-                left += leftGap;
-            }
-            Canvas.SetTop(SharpImg, 160);
-            Canvas.SetLeft(SharpImg, 180);
-            this.CVMusicSheet.Children.Add(SharpImg);
-        }
-
         private void LoadMusicSheetImages() {
             // ● Treble Clef
             BitmapImage trebleClefBtm = new BitmapImage();
             trebleClefBtm.BeginInit();
             trebleClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
             trebleClefBtm.EndInit();
-            TrebleClefImg.Width = 96;
-            Canvas.SetLeft(TrebleClefImg, 19.9);
-            TrebleClefImg.Source = trebleClefBtm;
+            GClefImg.Source = trebleClefBtm;
             // ● Base Clef
             BitmapImage bassClefBtm = new BitmapImage();
             bassClefBtm.BeginInit();
             bassClefBtm.UriSource = new Uri("pack://application:,,,/assets/BassClef.png");
             bassClefBtm.EndInit();
-            BassClefImg.Width = 49;
-            BassClefImg.Source = bassClefBtm;
+            FClefImg.Source = bassClefBtm;
             // ● C Clef
             BitmapImage cclefBtm = new BitmapImage();
             cclefBtm.BeginInit();
             cclefBtm.UriSource = new Uri("pack://application:,,,/assets/CClef.png");
             cclefBtm.EndInit();
-            CClefImg.Width = 18;
             CClefImg.Source = cclefBtm;
             // ● Whole Note
             BitmapImage wholeNoteBtm = new BitmapImage();
@@ -411,6 +496,8 @@ namespace ScaleFinderUI {
             sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
             sharpBtm.EndInit();
             SharpImg.Width = 19;
+            Canvas.SetTop(SharpImg, 160);
+            Canvas.SetLeft(SharpImg, 180);
             SharpImg.Source = sharpBtm;
             // ● Flat
             BitmapImage flatBtm = new BitmapImage();
@@ -434,6 +521,7 @@ namespace ScaleFinderUI {
             DoubleFlatImg.Width = 13;
             DoubleFlatImg.Source = sharpBtm;
         }
+
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
             line.X1 = x1;
@@ -448,3 +536,4 @@ namespace ScaleFinderUI {
         }
     }
 }
+
