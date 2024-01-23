@@ -122,25 +122,29 @@ namespace ScaleFinderUI {
             string[] accidText = new string[7] { "", "", "", "", "", "", "" };
             string[] doubleAccidText = new string[7] { "", "", "", "", "", "", "" };
             for (int i = 0; i < accidentalList.Length - 1; i++) {
-                if (accidentalList[i] > 0) {                                          //> Sharp
-                    accid[i] = accidentalList[i] % 2;
-                    doubleAccid[i] = accidentalList[i] / 2;
-                    if (accid[i] > 0) {
-                        accidText[i] = "♯";
+                accid[i] = accidentalList[i] % 2;
+                doubleAccid[i] = accidentalList[i] / 2;
+                if (accid[i] != 0) {
+                    if (accidentalList[i] > 0) {
+                        accidText[i] += "♯";
                     }
-                    if (doubleAccid[i] > 0) {
+                    else if (accidentalList[i] < 0) {
+                        accidText[i] += "♭";
+                    }
+                }
+                if (doubleAccid[i] != 0) {
+                    if (accidentalList[i] > 0) {
                         for (int j = 0; j < doubleAccid[i]; j++) {
                             doubleAccidText[i] += "𝄪";
                         }
                     }
-                    accidentalText[i] = accidText[i] + doubleAccidText[i];
-                }
-                else if (accidentalList[i] < 0) {                                      //> Flat
-                    int count = Math.Abs(accidentalList[i]);
-                    for (int j = 0; j < count; j++) {
-                        accidentalText[i] += "♭";
+                    else if (accidentalList[i] < 0) {
+                        for (int j = 0; j > doubleAccid[i]; j--) {                            
+                            doubleAccidText[i] += "𝄫";                            
+                        }
                     }
                 }
+                accidentalText[i] = accidText[i] + doubleAccidText[i];
             }
             accidentalText[7] = accidentalText[0];
             return accidentalText;

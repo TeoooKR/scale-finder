@@ -165,7 +165,7 @@ namespace ScaleFinderUI {
         }
 
         private void HandleSortChecked(object sender, RoutedEventArgs e) {
-            return;
+            DrawWholeNote();            
         }
 
         protected void HandleTextChanged(object sender, EventArgs e) {
@@ -404,11 +404,14 @@ namespace ScaleFinderUI {
                     else if (top > lineStart + LineGap * 5) {
                         Octave = 1;
                     }
+                    if (RBtnSortDescending.IsChecked == true) {
+                        left += leftGap * 7; 
+                    }
                 }
                 top = 158.32 - FirstNotePos + ClefNotePos + Octave * (LineGap * 3 + LineGapHalf) * -1;
                 Canvas.SetTop(WholeNoteImgs[i], top);
                 Canvas.SetLeft(WholeNoteImgs[i], left);
-                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
+                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);                
                 if (top < lineStart - LineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - LineGap, left + WholeNoteImgs[i].Width + 10, lineStart - LineGap));
                 }
@@ -416,7 +419,12 @@ namespace ScaleFinderUI {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart + LineGap * 5, left + WholeNoteImgs[i].Width + 10, lineStart + LineGap * 5));
                 }
                 FirstNotePos += 13;
-                left += leftGap;
+                if (RBtnSortAscending.IsChecked == true) {
+                    left += leftGap;
+                }
+                else if (RBtnSortDescending.IsChecked == true) {
+                    left -= leftGap;
+                }
             }
         }
         private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
