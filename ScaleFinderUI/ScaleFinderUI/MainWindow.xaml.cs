@@ -25,7 +25,7 @@ namespace ScaleFinderUI {
         private int Accid = ScaleFinder.AccidNatural;
         private int[] Type = ScaleFinder.IntervalMajorScale;
         private string SelectedBasePitchText = "C";
-        private string SelectedAccidText = String.Empty;
+        private string SelectedAccidText = String.Empty;        
         private string SelectedTypeText = " Major";
         private int FirstNotePos = 0;
         private int ClefNotePos = 0;
@@ -35,6 +35,7 @@ namespace ScaleFinderUI {
         private int Octave = 0;
         static ScaleFinder Finder = new();
         Scale ScaleFindResult;
+        Scale ScaleFindResultBaseC;
         //> Images
         Image GClefImg = new Image();
         Image FClefImg = new Image();
@@ -190,22 +191,23 @@ namespace ScaleFinderUI {
 
         private void HandleAccidCountUp(object sender, EventArgs e) {
             int AccidCount = Convert.ToInt32(TBAccidCount.Text);
-            if (AccidCount > 8) {
+            if (AccidCount > 3) {
                 return;
             }
             AccidCount += 1;
             TBAccidCount.Text = AccidCount.ToString();
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
-            Regex regex = new Regex("[^1-9]");
+        private void NumberValidationTextBoxAccidCount(object sender, TextCompositionEventArgs e) {
+            Regex regex = new Regex("[^1-4]");
             e.Handled = regex.IsMatch(e.Text);
         }
+
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 TBAccidCount.Text = "1";
             }
-        }
+        }        
 
         private void UpdateResult() {
             if (RBtnAccidN.IsChecked == true) {
@@ -219,6 +221,7 @@ namespace ScaleFinderUI {
                 Accid *= -1;
             }
             ScaleFindResult = Finder.FindScale(BasePitch, Accid, Type);
+            ScaleFindResultBaseC = Finder.FindScale(ScaleFinder.PitchC , ScaleFinder.AccidNatural, Type);
             SelectedBasePitchText = ScaleFindResult.GetPitchText(0);
             SelectedAccidText = ScaleFindResult.GetAccidentalText(0);
             if (!ScaleFindResult.GetFound()) {
@@ -229,7 +232,7 @@ namespace ScaleFinderUI {
                 return;
             }
             string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
-            int[] intervalsList = ScaleFindResult.GetIntervalsList();
+            int[] intervalsList = ScaleFindResultBaseC.GetIntervalsList();
             int[] pitchList = ScaleFindResult.GetPitchList();           
             string scaleResultText = "";
             string degreesText = "";
@@ -237,9 +240,9 @@ namespace ScaleFinderUI {
             for (int i = 0; i < scaleResultTexts.Length; i++) {
                 scaleResultText += scaleResultTexts[i] + " ";
             }
-            for (int i = 0; i < ScaleFindResult.GetAccidentalTexts().Length - 1; i++) {
+            for (int i = 0; i < ScaleFindResultBaseC.GetAccidentalTexts().Length - 1; i++) {
                 int j = i + 1;
-                degreesText += ScaleFindResult.GetAccidentalText(i) + j + " ";
+                degreesText += ScaleFindResultBaseC.GetAccidentalText(i) + j + " ";
             }
             for (int i = 0; i < intervalsList.Length; i++) {
                 if (intervalsList[i] == 1) {
@@ -250,6 +253,12 @@ namespace ScaleFinderUI {
                 }
                 else if (intervalsList[i] == 3) {
                     intervalsText += "3H";
+                }
+                else if (intervalsList[i] == 4) {
+                    intervalsText += "2W";
+                }
+                else if (intervalsList[i] == 5) {
+                    intervalsText += "5H";
                 }
                 if (i != intervalsList.Length - 1) {
                     intervalsText += "-";
@@ -267,8 +276,8 @@ namespace ScaleFinderUI {
             }
             TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
             TBScaleResult.Text = "Notes: " + scaleResultText;
-            TBDegrees.Text = "Degrees: " + degreesText;
-            TBIntervalsResult.Text = "Intervals: " + intervalsText;
+            TBDegrees.Text = "Degrees / Formulas: " + degreesText;
+            TBIntervalsResult.Text = "Intervals / Steps: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
             DrawWholeNote();
@@ -433,14 +442,6 @@ namespace ScaleFinderUI {
             }
             else if (RBtnSortDescending.IsChecked == true) {
                 PlayMidi(1);
-            }
-            else if (RBtnSortAscendingDescending.IsChecked == true) {
-                PlayMidi(0);
-                PlayMidi(1);
-            }
-            else if (RBtnSortDescendingAscending.IsChecked == true) {
-                PlayMidi(1);
-                PlayMidi(0);
             }
         }
 
