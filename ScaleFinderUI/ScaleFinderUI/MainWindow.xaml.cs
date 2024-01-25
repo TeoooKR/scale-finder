@@ -57,6 +57,7 @@ namespace ScaleFinderUI {
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
             RBtnSortAscending.IsChecked = true;
+            RBtnGClef.IsChecked = true;
             RBtnTrebleClef.IsChecked = true;
         }
 
@@ -283,6 +284,10 @@ namespace ScaleFinderUI {
             DrawWholeNote();
         }        
 
+        private void HandleClefType(object sender, EventArgs e) {
+
+        }
+
         private void HandleClefChecked(object sender, RoutedEventArgs e) {            
             ClefNotePos = 0;
             Octave = 0;
@@ -476,17 +481,17 @@ namespace ScaleFinderUI {
 
         private void LoadMusicSheetImages() {
             // ● Treble Clef
-            BitmapImage trebleClefBtm = new BitmapImage();
-            trebleClefBtm.BeginInit();
-            trebleClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
-            trebleClefBtm.EndInit();
-            GClefImg.Source = trebleClefBtm;
+            BitmapImage gClefBtm = new BitmapImage();
+            gClefBtm.BeginInit();
+            gClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
+            gClefBtm.EndInit();
+            GClefImg.Source = gClefBtm;
             // ● Base Clef
-            BitmapImage bassClefBtm = new BitmapImage();
-            bassClefBtm.BeginInit();
-            bassClefBtm.UriSource = new Uri("pack://application:,,,/assets/BassClef.png");
-            bassClefBtm.EndInit();
-            FClefImg.Source = bassClefBtm;
+            BitmapImage fClefBtm = new BitmapImage();
+            fClefBtm.BeginInit();
+            fClefBtm.UriSource = new Uri("pack://application:,,,/assets/BassClef.png");
+            fClefBtm.EndInit();
+            FClefImg.Source = fClefBtm;
             // ● C Clef
             BitmapImage cclefBtm = new BitmapImage();
             cclefBtm.BeginInit();
