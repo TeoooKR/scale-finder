@@ -12,8 +12,10 @@
     <None Remove="assets\CClef.png" />
     <None Remove="assets\DoubleFlat.png" />
     <None Remove="assets\DoubleSharp.png" />
+    <None Remove="assets\FClef.png" />
     <None Remove="assets\Flat.png" />
     <None Remove="assets\Flat.svg" />
+    <None Remove="assets\GClef.png" />
     <None Remove="assets\Sharp.png" />
     <None Remove="assets\TrebleClef.png" />
     <None Remove="assets\WholeNote.png" />
@@ -29,15 +31,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\BassClef.png" />
     <Resource Include="assets\CClef.png" />
     <Resource Include="assets\DoubleFlat.png" />
     <Resource Include="assets\DoubleSharp.png" />
+    <Resource Include="assets\FClef.png" />
     <Resource Include="assets\Flat.png" />
     <Resource Include="assets\Flat.svg" />
+    <Resource Include="assets\GClef.png" />
     <Resource Include="assets\NotationImages.xaml" />
     <Resource Include="assets\Sharp.png" />
-    <Resource Include="assets\TrebleClef.png" />
     <Resource Include="assets\WholeNote.png" />
   </ItemGroup>
 

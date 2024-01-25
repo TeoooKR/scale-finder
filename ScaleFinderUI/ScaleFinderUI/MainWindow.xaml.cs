@@ -483,13 +483,13 @@ namespace ScaleFinderUI {
             // ● Treble Clef
             BitmapImage gClefBtm = new BitmapImage();
             gClefBtm.BeginInit();
-            gClefBtm.UriSource = new Uri("pack://application:,,,/assets/TrebleClef.png");
+            gClefBtm.UriSource = new Uri("pack://application:,,,/assets/GClef.png");
             gClefBtm.EndInit();
             GClefImg.Source = gClefBtm;
             // ● Base Clef
             BitmapImage fClefBtm = new BitmapImage();
             fClefBtm.BeginInit();
-            fClefBtm.UriSource = new Uri("pack://application:,,,/assets/BassClef.png");
+            fClefBtm.UriSource = new Uri("pack://application:,,,/assets/FClef.png");
             fClefBtm.EndInit();
             FClefImg.Source = fClefBtm;
             // ● C Clef

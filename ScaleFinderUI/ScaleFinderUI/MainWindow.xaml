@@ -57,10 +57,10 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnGClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image Source="assets\TrebleClef.png"></Image>
+                <Image Source="assets\GClef.png"></Image>
             </RadioButton>
             <RadioButton Name="RBtnFClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image Source="assets\BassClef.png"></Image>
+                <Image Source="assets\FClef.png"></Image>
             </RadioButton>
             <RadioButton Name="RBtnCClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Image Source="assets\CClef.png"></Image>
