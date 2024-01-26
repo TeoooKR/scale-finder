@@ -56,27 +56,54 @@
             <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Descending</RadioButton>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnGClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image Source="assets\GClef.png"></Image>
-            </RadioButton>
-            <RadioButton Name="RBtnFClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image Source="assets\FClef.png"></Image>
-            </RadioButton>
-            <RadioButton Name="RBtnCClef"  Checked="HandleClefType" GroupName="ClefType" Style="{StaticResource MaterialDesignTabRadioButton}" Width="50" Height="90" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image Source="assets\CClef.png"></Image>
-            </RadioButton>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnTrebleClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Treble Clef</RadioButton>
-            <RadioButton Name="RBtnFrenchClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">French Clef</RadioButton>
-            <RadioButton Name="RBtnBassClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Bass Clef</RadioButton>
-            <RadioButton Name="RBtnBaritoneFClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Baritone Clef (F Clef)</RadioButton>
-            <RadioButton Name="RBtnSubbassClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Subbass Clef</RadioButton>
-            <RadioButton Name="RBtnAltoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Alto Clef</RadioButton>
-            <RadioButton Name="RBtnTenorClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Tenor Clef</RadioButton>
-            <RadioButton Name="RBtnBaritoneCClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Baritone Clef (C Clef)</RadioButton>
-            <RadioButton Name="RBtnMezzoSopranoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Mezzo-soprano Clef</RadioButton>
-            <RadioButton Name="RBtnSopranoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Soprano Clef</RadioButton>
+            <TabControl>
+                <TabItem Name="TIGClef" Width="400" Height="92">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="70"/>
+                            <TextBlock Name="TBGClef" TextWrapping="Wrap" Text="G Clef" Width="84" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="RBtnTrebleClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Treble Clef</RadioButton>
+                            <RadioButton Name="RBtnFrenchClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">French Clef</RadioButton>
+                        </StackPanel>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Name="TIFClef" Width="400" Height="92">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60"/>
+                            <TextBlock Name="TBFClef" TextWrapping="Wrap" Text="F Clef" Width="84" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="RBtnBassClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="152" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Bass Clef</RadioButton>
+                            <RadioButton Name="RBtnBaritoneFClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Baritone Clef (F Clef)</RadioButton>
+                            <RadioButton Name="RBtnSubbassClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Subbass Clef</RadioButton>
+                        </StackPanel>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem Name="TICClef" Width="400" Height="92">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50"/>
+                            <TextBlock Name="TBCClef" TextWrapping="Wrap" Text="C Clef" Width="84" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="RBtnAltoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Alto Clef</RadioButton>
+                            <RadioButton Name="RBtnTenorClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="156" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Tenor Clef</RadioButton>
+                            <RadioButton Name="RBtnBaritoneCClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="288" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Baritone Clef (C Clef)</RadioButton>
+                            <RadioButton Name="RBtnMezzoSopranoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Mezzo-soprano Clef</RadioButton>
+                            <RadioButton Name="RBtnSopranoClef" Checked="HandleClefChecked" GroupName="Clef" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Soprano Clef</RadioButton>
+                        </StackPanel>
+                    </TabItem.Content>
+                </TabItem>
+            </TabControl>
         </StackPanel>
         <Button Name="BtnPlaySound" Click="HandleBtnPlaySound" FontSize="30" Width="200" Height="48" Margin="5">PLAY</Button>
         <StackPanel Orientation="Horizontal">

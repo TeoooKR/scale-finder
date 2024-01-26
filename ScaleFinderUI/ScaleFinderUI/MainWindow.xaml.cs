@@ -56,9 +56,7 @@ namespace ScaleFinderUI {
             RBtnBaseC.IsChecked = true;
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
-            RBtnSortAscending.IsChecked = true;
-            RBtnGClef.IsChecked = true;
-            RBtnTrebleClef.IsChecked = true;
+            RBtnSortAscending.IsChecked = true;                        
         }
 
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
@@ -480,13 +478,13 @@ namespace ScaleFinderUI {
         }
 
         private void LoadMusicSheetImages() {
-            // ● Treble Clef
+            // ● G Clef
             BitmapImage gClefBtm = new BitmapImage();
             gClefBtm.BeginInit();
             gClefBtm.UriSource = new Uri("pack://application:,,,/assets/GClef.png");
             gClefBtm.EndInit();
             GClefImg.Source = gClefBtm;
-            // ● Base Clef
+            // ● F Clef
             BitmapImage fClefBtm = new BitmapImage();
             fClefBtm.BeginInit();
             fClefBtm.UriSource = new Uri("pack://application:,,,/assets/FClef.png");
