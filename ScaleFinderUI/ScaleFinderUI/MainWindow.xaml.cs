@@ -20,6 +20,11 @@ namespace ScaleFinderUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        const int TAB_CLEF_TYPE_G = 0;
+        const int TAB_CLEF_TYPE_F = 1;
+        const int TAB_CLEF_TYPE_C = 2;
+        int SelectedTabClefType = TAB_CLEF_TYPE_G;
+
         //private Canvas MusicSheetCanvas;
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
@@ -48,15 +53,16 @@ namespace ScaleFinderUI {
 
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
-            InitializeComponent();
             LoadMusicSheetImages();
+            InitializeComponent();            
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e) {
             RBtnBaseC.IsChecked = true;
             RBtnAccidN.IsChecked = true;
             RBtnTypeMajor.IsChecked = true;
-            RBtnSortAscending.IsChecked = true;                        
+            RBtnSortAscending.IsChecked = true;
+            RBtnTrebleClef.IsChecked = true;
         }
 
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
@@ -165,7 +171,7 @@ namespace ScaleFinderUI {
         }
 
         private void HandleSortChecked(object sender, RoutedEventArgs e) {
-            DrawWholeNote();            
+            DrawAll();            
         }
 
         protected void HandleTextChanged(object sender, EventArgs e) {
@@ -279,65 +285,108 @@ namespace ScaleFinderUI {
             TBIntervalsResult.Text = "Intervals / Steps: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
             ScaleFindResult.PrintMyValues();
-            DrawWholeNote();
-        }        
-
-        private void HandleClefType(object sender, EventArgs e) {
-
+            DrawAll();
         }
 
+        private void HandleClefTypeSelectionChanged(object sender, EventArgs e) {
+            string tabItem = ((sender as TabControl).SelectedItem as TabItem).Name as string;
+            switch (tabItem) {
+                case "TIGClef":
+                    SelectedTabClefType = TAB_CLEF_TYPE_G;
+                    if (RBtnTrebleClef.IsChecked == true || RBtnFrenchClef.IsChecked == true) {
+                        break;
+                    }
+                    RBtnTrebleClef.IsChecked = true;
+                    break;
+                case "TIFClef":
+                    SelectedTabClefType = TAB_CLEF_TYPE_F;
+                    if (RBtnBassClef.IsChecked == true || RBtnBaritoneFClef.IsChecked == true || RBtnSubbassClef.IsChecked == true) {
+                        break;
+                    }
+                    RBtnBassClef.IsChecked = true;
+                    break;
+                case "TICClef":
+                    SelectedTabClefType = TAB_CLEF_TYPE_C;
+                    if (RBtnAltoClef.IsChecked == true || RBtnTenorClef.IsChecked == true || RBtnBaritoneCClef.IsChecked == true || 
+                        RBtnMezzoSopranoClef.IsChecked == true || RBtnSopranoClef.IsChecked == true) {
+                        break;
+                    }
+                    RBtnAltoClef.IsChecked = true;
+                    break;
+                default:
+                    return;
+            }
+            ChangeSelectedClefImage();
+            DrawAll();
+
+        }
+        private void ChangeSelectedClefImage() {
+            // ● G Clef
+            if (SelectedTabClefType == TAB_CLEF_TYPE_G) {
+                if (RBtnTrebleClef.IsChecked == true) {
+                    Canvas.SetTop(GClefImg, 0);
+                    ClefNotePos = 0;
+                }
+                else if (RBtnFrenchClef.IsChecked == true) {
+                    Canvas.SetTop(GClefImg, LineGap);
+                    ClefNotePos = LineGap;
+                }
+            }
+            if (RBtnBassClef == null || RBtnAltoClef == null) {
+                return;
+            }
+            // ● F Clef
+            if (SelectedTabClefType == TAB_CLEF_TYPE_F) {
+                if (RBtnBassClef.IsChecked == true) {
+                    Canvas.SetTop(FClefImg, 34);
+                    ClefNotePos = LineGap * 6 * -1;
+                }
+                else if (RBtnBaritoneFClef.IsChecked == true) {
+                    Canvas.SetTop(FClefImg, 34 + LineGap);
+                    ClefNotePos = LineGap * 5 * -1;
+                }
+                else if (RBtnSubbassClef.IsChecked == true) {
+                    Canvas.SetTop(FClefImg, 34 - LineGap);
+                    ClefNotePos = LineGap * 7 * -1;
+                }
+            }
+            // ● C Clef
+            if (SelectedTabClefType == TAB_CLEF_TYPE_C) {
+                if (RBtnAltoClef.IsChecked == true) {
+                    Canvas.SetTop(CClefImg, 38.9);
+                    ClefNotePos = LineGap * 3 * -1;
+                }
+                else if (RBtnTenorClef.IsChecked == true) {
+                    Canvas.SetTop(CClefImg, 38.9 - LineGap);
+                    ClefNotePos = LineGap * 4 * -1;
+                }
+                else if (RBtnBaritoneCClef.IsChecked == true) {
+                    Canvas.SetTop(CClefImg, 38.9 - LineGap * 2);
+                    ClefNotePos = LineGap * 5 * -1;
+                }
+                else if (RBtnMezzoSopranoClef.IsChecked == true) {
+                    Canvas.SetTop(CClefImg, 38.9 + LineGap);
+                    ClefNotePos = LineGap * 2 * -1;
+                }
+                else if (RBtnSopranoClef.IsChecked == true) {
+                    Canvas.SetTop(CClefImg, 38.9 + LineGap * 2);
+                    ClefNotePos = LineGap * -1;
+                }
+            }
+        }
         private void HandleClefChecked(object sender, RoutedEventArgs e) {            
             ClefNotePos = 0;
             Octave = 0;
-            // ● Clef Type
-            DrawClef();
-            // ● G Clef
-            if (RBtnTrebleClef.IsChecked == true) {
-                Canvas.SetTop(GClefImg, 0);
-                ClefNotePos = 0;
-            }
-            else if (RBtnFrenchClef.IsChecked == true) {
-                Canvas.SetTop(GClefImg, LineGap);
-                ClefNotePos = LineGap;                
-            }
-            // ● F Clef
-            if (RBtnBassClef.IsChecked == true) {
-                Canvas.SetTop(FClefImg, 34);
-                ClefNotePos = LineGap * 6 * -1;                
-            }
-            else if (RBtnBaritoneFClef.IsChecked == true) {
-                Canvas.SetTop(FClefImg, 34 + LineGap);
-                ClefNotePos = LineGap * 5 * -1;
-            }
-            else if (RBtnSubbassClef.IsChecked == true) {
-                Canvas.SetTop(FClefImg, 34 - LineGap);
-                ClefNotePos = LineGap * 7 * -1;
-            }
-            // ● C Clef
-            if (RBtnAltoClef.IsChecked == true) {
-                Canvas.SetTop(CClefImg, 38.9);
-                ClefNotePos = LineGap * 3 * -1;                
-            }
-            else if (RBtnTenorClef.IsChecked == true) {
-                Canvas.SetTop(CClefImg, 38.9 - LineGap);
-                ClefNotePos = LineGap * 4 * -1;
-            }
-            else if (RBtnBaritoneCClef.IsChecked == true) {
-                Canvas.SetTop(CClefImg, 38.9 - LineGap * 2);
-                ClefNotePos = LineGap * 5 * -1;
-            }
-            else if (RBtnMezzoSopranoClef.IsChecked == true) {
-                Canvas.SetTop(CClefImg, 38.9 + LineGap);
-                ClefNotePos = LineGap * 2 * -1;
-            }
-            else if (RBtnSopranoClef.IsChecked == true) {
-                Canvas.SetTop(CClefImg, 38.9 + LineGap * 2);
-                ClefNotePos = LineGap * -1;
-            }
-            // ● Whole Note            
-            DrawWholeNote();
+            ChangeSelectedClefImage();
+            DrawAll();
         }
-        
+        private void DrawAll() {
+            CVMusicSheet.Children.Clear();
+            DrawMusicSheet();
+            DrawClef();
+            DrawWholeNote();
+            
+        }
         private void DrawMusicSheet() {            
             int startY = LineGap + Padding;
             this.CVMusicSheet.Children.Clear();
@@ -349,30 +398,27 @@ namespace ScaleFinderUI {
         }
 
         private void DrawClef() {
-            CVMusicSheet.Children.Clear();
-            DrawMusicSheet();
-            if (RBtnTrebleClef.IsChecked == true || RBtnFrenchClef.IsChecked == true) {
-                this.CVMusicSheet.Children.Add(GClefImg);
-                GClefImg.Width = 96;
-                Canvas.SetLeft(GClefImg, 19.9);
-            }
-            else if (RBtnBassClef.IsChecked == true || RBtnBaritoneFClef.IsChecked == true || RBtnSubbassClef.IsChecked == true) {
-                CVMusicSheet.Children.Add(FClefImg);
-                FClefImg.Width = 96;
-                Canvas.SetLeft(FClefImg, 19.9);
-            }
-            else if (RBtnAltoClef.IsChecked == true || RBtnTenorClef.IsChecked == true ||
-                RBtnBaritoneCClef.IsChecked == true || RBtnMezzoSopranoClef.IsChecked == true || RBtnSopranoClef.IsChecked == true) {
-                CVMusicSheet.Children.Add(CClefImg);
-                CClefImg.Width = 75.2;
-                Canvas.SetLeft(CClefImg, 33);
+            switch (SelectedTabClefType) {
+                case TAB_CLEF_TYPE_G:
+                    this.CVMusicSheet.Children.Add(GClefImg);
+                    GClefImg.Width = 96;
+                    Canvas.SetLeft(GClefImg, 19.9);
+                    break;
+                case TAB_CLEF_TYPE_F:
+                    CVMusicSheet.Children.Add(FClefImg);
+                    FClefImg.Width = 96;
+                    Canvas.SetLeft(FClefImg, 19.9); 
+                    break;
+                case TAB_CLEF_TYPE_C:
+                    CVMusicSheet.Children.Add(CClefImg);
+                    CClefImg.Width = 75.2;
+                    Canvas.SetLeft(CClefImg, 33);
+                    break;
+                default:
+                    break;
             }
         }
-
         private void DrawWholeNote() {
-            CVMusicSheet.Children.Clear();
-            DrawMusicSheet();
-            DrawClef();
             int left = 130;
             int leftGap = 80;
             double top = 0;
