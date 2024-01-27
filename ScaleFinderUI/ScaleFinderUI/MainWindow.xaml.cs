@@ -1,4 +1,23 @@
-﻿using NAudio.Midi;
+﻿/*
+MIT License
+Copyright(c) 2023 Teo Han[meteory.kr@gmail.com]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE
+*/
+using NAudio.Midi;
 using System;
 using System.Diagnostics;
 using System.DirectoryServices;
@@ -14,17 +33,15 @@ using System.Windows.Shapes;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
-
 namespace ScaleFinderUI {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        const int TAB_CLEF_TYPE_G = 0;
-        const int TAB_CLEF_TYPE_F = 1;
-        const int TAB_CLEF_TYPE_C = 2;
-        int SelectedTabClefType = TAB_CLEF_TYPE_G;
-
+        const int TabClefTypeG = 0;
+        const int TabClefTypeF = 1;
+        const int TabClefTypeC = 2;
+        int SelectedTabClefType = TabClefTypeG;
         //private Canvas MusicSheetCanvas;
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
@@ -50,141 +67,152 @@ namespace ScaleFinderUI {
         Image FlatImg = new Image();
         Image DoubleSharpImg = new Image();
         Image DoubleFlatImg = new Image();
-
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
             LoadMusicSheetImages();
             InitializeComponent();            
         }
-
         private void WindowLoaded(object sender, RoutedEventArgs e) {
             RBtnBaseC.IsChecked = true;
-            RBtnAccidN.IsChecked = true;
-            RBtnTypeMajor.IsChecked = true;
+            RBtnAccidNatural.IsChecked = true;
+            RBtnTypeMajorScale.IsChecked = true;
             RBtnSortAscending.IsChecked = true;
             RBtnTrebleClef.IsChecked = true;
         }
-
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
-            RadioButton tb = sender as RadioButton;
-            if (tb == null) {
+            RadioButton rb = sender as RadioButton;
+            if (rb == null) {
                 return;
             }
-            if ((bool)RBtnBaseC.IsChecked) {
-                BasePitch = ScaleFinder.PitchC;
-            }
-            else if ((bool)RBtnBaseD.IsChecked) {
-                BasePitch = ScaleFinder.PitchD;
-            }
-            else if ((bool)RBtnBaseE.IsChecked) {
-                BasePitch = ScaleFinder.PitchE;
-            }
-            else if ((bool)RBtnBaseF.IsChecked) {
-                BasePitch = ScaleFinder.PitchF;
-            }
-            else if ((bool)RBtnBaseG.IsChecked) {
-                BasePitch = ScaleFinder.PitchG;
-            }
-            else if ((bool)RBtnBaseA.IsChecked) {
-                BasePitch = ScaleFinder.PitchA;
-            }
-            else if ((bool)RBtnBaseB.IsChecked) {
-                BasePitch = ScaleFinder.PitchB;
-            }
+            switch (rb.Name) {
+                case "RBtnBaseC":
+                    BasePitch = ScaleFinder.PitchC;
+                    break;
+                case "RBtnBaseD":
+                    BasePitch = ScaleFinder.PitchD;
+                    break;
+                case "RBtnBaseE":
+                    BasePitch = ScaleFinder.PitchE;
+                    break;
+                case "RBtnBaseF":
+                    BasePitch = ScaleFinder.PitchF;
+                    break;
+                case "RBtnBaseG":
+                    BasePitch = ScaleFinder.PitchG;
+                    break;
+                case "RBtnBaseA":
+                    BasePitch = ScaleFinder.PitchA;
+                    break;
+                case "RBtnBaseB":
+                    BasePitch = ScaleFinder.PitchB;
+                    break;
+                default:
+                    break;
+            }            
             if (TBSelectedScale == null) {
                 return;
             }
             UpdateResult();
         }
-
         private void HandleAccidChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
                 return;
             }
-            if (RBtnAccidN.IsChecked == true) {
-                ButtonDown.IsEnabled = false;
-                ButtonUp.IsEnabled = false;
-                TBAccidCount.IsEnabled = false;
-            }
-            else {
-                ButtonDown.IsEnabled = true;
-                ButtonUp.IsEnabled = true;
-                TBAccidCount.IsEnabled = true;
+            switch (rb.Name) {
+                case "RBtnAccidNatural":
+                    ButtonDown.IsEnabled = false;
+                    ButtonUp.IsEnabled = false;
+                    TBAccidCount.IsEnabled = false;
+                    break;
+                case "RBtnAccidSharp":
+                    ButtonDown.IsEnabled = true;
+                    ButtonUp.IsEnabled = true;
+                    TBAccidCount.IsEnabled = true;
+                    break;
+                case "RBtnAccidFlat":
+                    ButtonDown.IsEnabled = true;
+                    ButtonUp.IsEnabled = true;
+                    TBAccidCount.IsEnabled = true;
+                    break;
+                default:
+                    break;
             }
             if (TBSelectedScale == null) {
                 return;
             }
             UpdateResult();
         }
-
         private void HandleTypeChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
                 return;
             }
-            if ((bool)RBtnTypeMajor.IsChecked) {
-                Type = ScaleFinder.IntervalMajorScale;
-                SelectedTypeText = "Major Scale";
-            }
-            else if ((bool)RBtnTypeMinor.IsChecked) {
-                Type = ScaleFinder.IntervalNaturalMinorScale;
-                SelectedTypeText = "Natural Minor Scale";
-            }
-            else if ((bool)RBtnTypeHarmonicMinor.IsChecked) {
-                Type = ScaleFinder.IntervalHarmonicMinorScale;
-                SelectedTypeText = "Harmonic Minor Scale";
-            }
-            else if ((bool)RBtnTypeMelodicMinor.IsChecked) {
-                Type = ScaleFinder.IntervalMelodicMinorScale;
-                SelectedTypeText = "Melodic Minor Scale";
-            }
-            else if ((bool)RBtnTypeIonian.IsChecked) {
-                Type = ScaleFinder.IntervalIonianMode;
-                SelectedTypeText = "Ionian Mode";
-            }
-            else if ((bool)RBtnTypeDorian.IsChecked) {
-                Type = ScaleFinder.IntervalDorianMode;
-                SelectedTypeText = "Dorian Mode";
-            }
-            else if ((bool)RBtnTypePhtygian.IsChecked) {
-                Type = ScaleFinder.IntervalPhtygianMode;
-                SelectedTypeText = "Phtygian Mode";
-            }
-            else if ((bool)RBtnTypeLydian.IsChecked) {
-                Type = ScaleFinder.IntervalLydianMode;
-                SelectedTypeText = "Lydian Mode";
-            }
-            else if ((bool)RBtnTypeMixolydian.IsChecked) {
-                Type = ScaleFinder.IntervalMixolydianMode;
-                SelectedTypeText = "Mixolydian Mode";
-            }
-            else if ((bool)RBtnTypeAeolian.IsChecked) {
-                Type = ScaleFinder.IntervalAeolianMode;
-                SelectedTypeText = "Aeolian Mode";
-            }
-            else if ((bool)RBtnTypeLocrain.IsChecked) {
-                Type = ScaleFinder.IntervalLocrainMode;
-                SelectedTypeText = "Locrain Mode";
+            switch (rb.Name) {
+                case "RBtnTypeMajorScale":
+                    Type = ScaleFinder.IntervalMajorScale;
+                    SelectedTypeText = "Major Scale";
+                    break;
+                case "RBtnTypeMinorScale":
+                    Type = ScaleFinder.IntervalNaturalMinorScale;
+                    SelectedTypeText = "Natural Minor Scale";
+                    break;
+                case "RBtnTypeHarmonicMinorScale":
+                    Type = ScaleFinder.IntervalHarmonicMinorScale;
+                    SelectedTypeText = "Harmonic Minor Scale";
+                    break;
+                case "RBtnTypeMelodicMinorScale":
+                    Type = ScaleFinder.IntervalMelodicMinorScale;
+                    SelectedTypeText = "Melodic Minor Scale";
+                    break;
+                case "RBtnTypeIonianMode":
+                    Type = ScaleFinder.IntervalIonianMode;
+                    SelectedTypeText = "Ionian Mode";
+                    break;
+                case "RBtnTypeDorianMode":
+                    Type = ScaleFinder.IntervalDorianMode;
+                    SelectedTypeText = "Dorian Mode";
+                    break;
+                case "RBtnTypePhtygianMode":
+                    Type = ScaleFinder.IntervalPhtygianMode;
+                    SelectedTypeText = "Phtygian Mode";
+                    break;
+                case "RBtnTypeLydianMode":
+                    Type = ScaleFinder.IntervalLydianMode;
+                    SelectedTypeText = "Lydian Mode";
+                    break;
+                case "RBtnTypeMixolydianMode":
+                    Type = ScaleFinder.IntervalMixolydianMode;
+                    SelectedTypeText = "Mixolydian Mode";
+                    break;
+                case "RBtnTypeAeolianMode":
+                    Type = ScaleFinder.IntervalAeolianMode;
+                    SelectedTypeText = "Aeolian Mode";
+                    break;
+                case "RBtnTypeLocrainMode":
+                    Type = ScaleFinder.IntervalLocrainMode;
+                    SelectedTypeText = "Locrain Mode";
+                    break;
+                default:
+                    break;
             }
             UpdateResult();
         }
-
         private void HandleSortChecked(object sender, RoutedEventArgs e) {
             DrawAll();            
         }
-
         protected void HandleTextChanged(object sender, EventArgs e) {
-            if (TBAccidCount.Text.Length < 1) {
-                return;
-            }
-            else if (TBAccidCount.Text.Length > 1) {
-                TBAccidCount.Text = TBAccidCount.Text.Substring(0, 1);
-                return;
-            }
+            switch (TBAccidCount.Text.Length) {
+                case < 1:
+                    return;
+                case > 1:
+                    TBAccidCount.Text = TBAccidCount.Text.Substring(0, 1);
+                    return;
+                default:
+                    break;
+            }       
             UpdateResult();
         }
-
         private void HandleAccidCountDown(object sender, EventArgs e) {
             int AccidCountInt = Convert.ToInt32(TBAccidCount.Text);
             if (AccidCountInt < 2) {
@@ -193,7 +221,6 @@ namespace ScaleFinderUI {
             AccidCountInt -= 1;
             TBAccidCount.Text = AccidCountInt.ToString();
         }
-
         private void HandleAccidCountUp(object sender, EventArgs e) {
             int AccidCount = Convert.ToInt32(TBAccidCount.Text);
             if (AccidCount > 3) {
@@ -202,26 +229,23 @@ namespace ScaleFinderUI {
             AccidCount += 1;
             TBAccidCount.Text = AccidCount.ToString();
         }
-
         private void NumberValidationTextBoxAccidCount(object sender, TextCompositionEventArgs e) {
             Regex regex = new Regex("[^1-4]");
             e.Handled = regex.IsMatch(e.Text);
         }
-
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
             if (TBAccidCount.Text.Length < 1) {
                 TBAccidCount.Text = "1";
             }
         }        
-
         private void UpdateResult() {
-            if (RBtnAccidN.IsChecked == true) {
+            if (RBtnAccidNatural.IsChecked == true) {
                 Accid = 0;
             }
-            else if (RBtnAccidS.IsChecked == true) {
+            else if (RBtnAccidSharp.IsChecked == true) {
                 Accid = Convert.ToInt32(TBAccidCount.Text);
             }
-            else if (RBtnAccidF.IsChecked == true) {
+            else if (RBtnAccidFlat.IsChecked == true) {
                 Accid = Convert.ToInt32(TBAccidCount.Text);
                 Accid *= -1;
             }
@@ -250,20 +274,24 @@ namespace ScaleFinderUI {
                 degreesText += ScaleFindResultBaseC.GetAccidentalText(i) + j + " ";
             }
             for (int i = 0; i < intervalsList.Length; i++) {
-                if (intervalsList[i] == 1) {
-                    intervalsText += "H";
-                }
-                else if (intervalsList[i] == 2) {
-                    intervalsText += "W";
-                }
-                else if (intervalsList[i] == 3) {
-                    intervalsText += "3H";
-                }
-                else if (intervalsList[i] == 4) {
-                    intervalsText += "2W";
-                }
-                else if (intervalsList[i] == 5) {
-                    intervalsText += "5H";
+                switch (intervalsList[i]) {
+                    case 1:
+                        intervalsText += "H";
+                        break;
+                    case 2:
+                        intervalsText += "W";
+                        break;
+                    case 3:
+                        intervalsText += "3H";
+                        break;
+                    case 4:
+                        intervalsText += "2W";
+                        break;
+                    case 5:
+                        intervalsText += "5H";
+                        break;
+                    default:
+                        break;
                 }
                 if (i != intervalsList.Length - 1) {
                     intervalsText += "-";
@@ -287,26 +315,25 @@ namespace ScaleFinderUI {
             ScaleFindResult.PrintMyValues();
             DrawAll();
         }
-
         private void HandleClefTypeSelectionChanged(object sender, EventArgs e) {
             string tabItem = ((sender as TabControl).SelectedItem as TabItem).Name as string;
             switch (tabItem) {
                 case "TIGClef":
-                    SelectedTabClefType = TAB_CLEF_TYPE_G;
+                    SelectedTabClefType = TabClefTypeG;
                     if (RBtnTrebleClef.IsChecked == true || RBtnFrenchClef.IsChecked == true) {
                         break;
                     }
                     RBtnTrebleClef.IsChecked = true;
                     break;
                 case "TIFClef":
-                    SelectedTabClefType = TAB_CLEF_TYPE_F;
+                    SelectedTabClefType = TabClefTypeF;
                     if (RBtnBassClef.IsChecked == true || RBtnBaritoneFClef.IsChecked == true || RBtnSubbassClef.IsChecked == true) {
                         break;
                     }
                     RBtnBassClef.IsChecked = true;
                     break;
                 case "TICClef":
-                    SelectedTabClefType = TAB_CLEF_TYPE_C;
+                    SelectedTabClefType = TabClefTypeC;
                     if (RBtnAltoClef.IsChecked == true || RBtnTenorClef.IsChecked == true || RBtnBaritoneCClef.IsChecked == true || 
                         RBtnMezzoSopranoClef.IsChecked == true || RBtnSopranoClef.IsChecked == true) {
                         break;
@@ -318,11 +345,10 @@ namespace ScaleFinderUI {
             }
             ChangeSelectedClefImage();
             DrawAll();
-
         }
         private void ChangeSelectedClefImage() {
             // ● G Clef
-            if (SelectedTabClefType == TAB_CLEF_TYPE_G) {
+            if (SelectedTabClefType == TabClefTypeG) {
                 if (RBtnTrebleClef.IsChecked == true) {
                     Canvas.SetTop(GClefImg, 0);
                     ClefNotePos = 0;
@@ -336,7 +362,7 @@ namespace ScaleFinderUI {
                 return;
             }
             // ● F Clef
-            if (SelectedTabClefType == TAB_CLEF_TYPE_F) {
+            if (SelectedTabClefType == TabClefTypeF) {
                 if (RBtnBassClef.IsChecked == true) {
                     Canvas.SetTop(FClefImg, 34);
                     ClefNotePos = LineGap * 6 * -1;
@@ -351,7 +377,7 @@ namespace ScaleFinderUI {
                 }
             }
             // ● C Clef
-            if (SelectedTabClefType == TAB_CLEF_TYPE_C) {
+            if (SelectedTabClefType == TabClefTypeC) {
                 if (RBtnAltoClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, 38.9);
                     ClefNotePos = LineGap * 3 * -1;
@@ -385,7 +411,6 @@ namespace ScaleFinderUI {
             DrawMusicSheet();
             DrawClef();
             DrawWholeNote();
-            
         }
         private void DrawMusicSheet() {            
             int startY = LineGap + Padding;
@@ -396,20 +421,19 @@ namespace ScaleFinderUI {
             }            
             this.CVMusicSheet.Children.Add(SharpImg);
         }
-
         private void DrawClef() {
             switch (SelectedTabClefType) {
-                case TAB_CLEF_TYPE_G:
+                case TabClefTypeG:
                     this.CVMusicSheet.Children.Add(GClefImg);
                     GClefImg.Width = 96;
                     Canvas.SetLeft(GClefImg, 19.9);
                     break;
-                case TAB_CLEF_TYPE_F:
+                case TabClefTypeF:
                     CVMusicSheet.Children.Add(FClefImg);
                     FClefImg.Width = 96;
                     Canvas.SetLeft(FClefImg, 19.9); 
                     break;
-                case TAB_CLEF_TYPE_C:
+                case TabClefTypeC:
                     CVMusicSheet.Children.Add(CClefImg);
                     CClefImg.Width = 75.2;
                     Canvas.SetLeft(CClefImg, 33);
@@ -493,7 +517,6 @@ namespace ScaleFinderUI {
                 PlayMidi(1);
             }
         }
-
         private void PlayMidi(int sort) {
             MidiOut midiOut = new MidiOut(0);
             int[] pitchList = ScaleFindResult.GetPitchList();
@@ -522,7 +545,6 @@ namespace ScaleFinderUI {
             midiOut.Close();
             midiOut.Dispose();
         }
-
         private void LoadMusicSheetImages() {
             // ● G Clef
             BitmapImage gClefBtm = new BitmapImage();
@@ -587,7 +609,6 @@ namespace ScaleFinderUI {
             DoubleFlatImg.Width = 13;
             DoubleFlatImg.Source = sharpBtm;
         }
-
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
             line.X1 = x1;
@@ -602,4 +623,3 @@ namespace ScaleFinderUI {
         }
     }
 }
-

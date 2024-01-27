@@ -18,14 +18,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-
 namespace ScaleFinderUI {
     class ScaleFinder {
-
         //------ Bass PITCH ------
         readonly private int[] BasePitchList = new int[13] { 1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22 };
         readonly private string[] BasePitchTextList = new string[7] { "C", "D", "E", "F", "G", "A", "B" };
-
         //------ PITCH ------
         readonly public static int PitchC = 1;
         readonly public static int PitchD = 3;
@@ -34,12 +31,10 @@ namespace ScaleFinderUI {
         readonly public static int PitchG = 8;
         readonly public static int PitchA = 10;
         readonly public static int PitchB = 12;
-
         //------ ACCIDENTAL ------
         readonly public static int AccidNatural = 0;
         readonly public static int AccidSharp = 1;
         readonly public static int AccidFlat = -1;
-
         //------ INTERVALS -------
         readonly public static int[] IntervalMajorScale = new int[6] { 2, 2, 1, 2, 2, 2 };
         readonly public static int[] IntervalNaturalMinorScale = new int[6] { 2, 1, 2, 2, 1, 2 };
@@ -85,7 +80,6 @@ namespace ScaleFinderUI {
             result.SetFound(true);
             return result;
         }
-
         private void GetPitchListByInterval(int[] result, int startPitch, int[] interval) {
             result[0] = startPitch;
             for (int i = 0; i < interval.Length; i++) {
@@ -93,7 +87,6 @@ namespace ScaleFinderUI {
             }
             result[7] = result[0] + 12;
         }
-
         private void CalcAccidentalFromBass(int[] accidental, int startPitchIndex, int[] pitchList) {
             int index = 0;
             for (int i = 0; i < pitchList.Length - 1; i++) {
@@ -102,7 +95,6 @@ namespace ScaleFinderUI {
             }
             accidental[7] = accidental[0];
         }
-
         private string[] GetPitchTextByOrder(string[] BasePitchTextList, int BassPitchIndex) {
             string[] result = new string[7] { "", "", "", "", "", "", "" };
             for (int i = 0; i < BasePitchTextList.Length; i++) {
@@ -114,7 +106,6 @@ namespace ScaleFinderUI {
             }
             return result;
         }
-
         private string[] GetSignFromAccidental(int[] accidentalList) {
             string[] accidentalText = new string[8] { "", "", "", "", "", "", "", "" };
             int[] accid = new int[7] { 0, 0, 0, 0, 0, 0, 0 };

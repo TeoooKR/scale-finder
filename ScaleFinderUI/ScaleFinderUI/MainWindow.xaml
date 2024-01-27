@@ -1,4 +1,23 @@
-﻿<Window x:Class="ScaleFinderUI.MainWindow"
+﻿<!--
+MIT License
+Copyright(c) 2023 Teo Han [meteory.kr@gmail.com]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<Window x:Class="ScaleFinderUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,9 +41,9 @@
             <RadioButton Name="RBtnBaseB" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">B</RadioButton>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnAccidN" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">♮</RadioButton>
-            <RadioButton Name="RBtnAccidS" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">#</RadioButton>
-            <RadioButton Name="RBtnAccidF" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">♭</RadioButton>
+            <RadioButton Name="RBtnAccidNatural" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">♮</RadioButton>
+            <RadioButton Name="RBtnAccidSharp" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">#</RadioButton>
+            <RadioButton Name="RBtnAccidFlat" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">♭</RadioButton>
             <Button Name="ButtonDown" Click="HandleAccidCountDown" FontSize="20" Width="80" Height="48" Margin="5"  Background="Transparent" BorderBrush="Transparent">
                 <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline" Width="44" Height="44" Foreground="Gray"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
@@ -34,17 +53,17 @@
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnTypeMajor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Major</RadioButton>
-            <RadioButton Name="RBtnTypeMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Minor</RadioButton>
-            <RadioButton Name="RBtnTypeHarmonicMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Harmonic Minor</RadioButton>
-            <RadioButton Name="RBtnTypeMelodicMinor" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Melodic Minor</RadioButton>
-            <RadioButton Name="RBtnTypeIonian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Ionian</RadioButton>
-            <RadioButton Name="RBtnTypeDorian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Dorian</RadioButton>
-            <RadioButton Name="RBtnTypePhtygian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="132" Height="48" Margin="5">Phtygian</RadioButton>
-            <RadioButton Name="RBtnTypeLydian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Lydian</RadioButton>
-            <RadioButton Name="RBtnTypeMixolydian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Mixolydian</RadioButton>
-            <RadioButton Name="RBtnTypeAeolian" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Aeolian</RadioButton>
-            <RadioButton Name="RBtnTypeLocrain" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Locrain</RadioButton>
+            <RadioButton Name="RBtnTypeMajorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Major</RadioButton>
+            <RadioButton Name="RBtnTypeMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="96" Height="48" Margin="5">Minor</RadioButton>
+            <RadioButton Name="RBtnTypeHarmonicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Harmonic Minor</RadioButton>
+            <RadioButton Name="RBtnTypeMelodicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="192" Height="48" Margin="5">Melodic Minor</RadioButton>
+            <RadioButton Name="RBtnTypeIonianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Ionian</RadioButton>
+            <RadioButton Name="RBtnTypeDorianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Dorian</RadioButton>
+            <RadioButton Name="RBtnTypePhtygianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="132" Height="48" Margin="5">Phtygian</RadioButton>
+            <RadioButton Name="RBtnTypeLydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="108" Height="48" Margin="5">Lydian</RadioButton>
+            <RadioButton Name="RBtnTypeMixolydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="168" Height="48" Margin="5">Mixolydian</RadioButton>
+            <RadioButton Name="RBtnTypeAeolianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Aeolian</RadioButton>
+            <RadioButton Name="RBtnTypeLocrainMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="120" Height="48" Margin="5">Locrain</RadioButton>
         </StackPanel>
         <TextBlock Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>

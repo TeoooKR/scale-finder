@@ -18,7 +18,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System.Diagnostics;
-
 namespace ScaleFinderUI {
     public class Scale {
         private string[] PitchTexts = new string[8] { "", "", "", "", "", "", "", "" };
@@ -27,7 +26,6 @@ namespace ScaleFinderUI {
         private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private int[] IntervalsList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
-
         public string GetPitchText(int index) {
             return PitchTexts[index];
         }
