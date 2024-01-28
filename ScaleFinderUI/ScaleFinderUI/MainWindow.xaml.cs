@@ -412,15 +412,15 @@ namespace ScaleFinderUI {
             DrawClef();
             DrawWholeNote();
         }
-        private void DrawMusicSheet() {            
+        private void DrawMusicSheet() {
             int startY = LineGap + Padding;
             this.CVMusicSheet.Children.Clear();
             for (int i = 0; i < 5; i++) {
                 this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
                 startY += LineGap;
             }            
-            this.CVMusicSheet.Children.Add(SharpImg);
         }
+
         private void DrawClef() {
             switch (SelectedTabClefType) {
                 case TabClefTypeG:
@@ -474,7 +474,29 @@ namespace ScaleFinderUI {
             else if (pt.StartsWith("B")) {
                 FirstNotePos = LineGapHalf * 6;
             }
+            //System.String myStr = "abcdecvg";            
+            //if (myStr[0] == 'a') {
+
+            ////}
+            //string accidText = ScaleFindResult.GetAccidentalText(0);
+            //char accidFirstText = accidText[0];
+            //if (accidFirstText == "") {
+            //    this.CVMusicSheet.Children.Remove(SharpImg);
+            //    this.CVMusicSheet.Children.Remove(FlatImg);
+            //}
+            //if (accidFirstText == "♯") {
+            //    this.CVMusicSheet.Children.Remove(SharpImg);
+            //    this.CVMusicSheet.Children.Remove(FlatImg);
+            //    this.CVMusicSheet.Children.Add(SharpImg);
+            //}
+            //if (accidFirstText == "♭") {
+            //    this.CVMusicSheet.Children.Remove(SharpImg);
+            //    this.CVMusicSheet.Children.Remove(FlatImg);
+            //    this.CVMusicSheet.Children.Add(FlatImg);
+            //}
+
             for (int i = 0; i < 8; i++) {
+                
                 top = 158.32 - FirstNotePos + ClefNotePos;
                 if (i == 0) {
                     if (top < lineStart + LineGap + LineGapHalf && top > lineStart - LineGap * 2) {
@@ -584,7 +606,7 @@ namespace ScaleFinderUI {
             sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
             sharpBtm.EndInit();
             SharpImg.Width = 19;
-            Canvas.SetTop(SharpImg, 160);
+            Canvas.SetTop(SharpImg, 300);
             Canvas.SetLeft(SharpImg, 180);
             SharpImg.Source = sharpBtm;
             // ● Flat
