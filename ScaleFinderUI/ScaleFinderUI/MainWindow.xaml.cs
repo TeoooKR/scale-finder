@@ -20,14 +20,13 @@ SOFTWARE
 using NAudio.Midi;
 using System;
 using System.Diagnostics;
-using System.DirectoryServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Brush = System.Windows.Media.Brush;
@@ -38,6 +37,8 @@ namespace ScaleFinderUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        const string DoubleSharp = "𝄪";
+        const string DoubleFlat = "𝄫";
         const int TabClefTypeG = 0;
         const int TabClefTypeF = 1;
         const int TabClefTypeC = 2;
@@ -63,10 +64,10 @@ namespace ScaleFinderUI {
         Image FClefImg = new Image();
         Image CClefImg = new Image();
         Image[] WholeNoteImgs = new Image[8];
-        Image SharpImg = new Image();
-        Image FlatImg = new Image();
-        Image DoubleSharpImg = new Image();
-        Image DoubleFlatImg = new Image();
+        Image[] SharpImgs = new Image[8];
+        Image[] FlatImgs = new Image[8];
+        Image[] DoubleSharpImgs = new Image[16];
+        Image[] DoubleFlatImgs = new Image[16];
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(WindowLoaded);
             LoadMusicSheetImages();
@@ -223,14 +224,14 @@ namespace ScaleFinderUI {
         }
         private void HandleAccidCountUp(object sender, EventArgs e) {
             int AccidCount = Convert.ToInt32(TBAccidCount.Text);
-            if (AccidCount > 3) {
+            if (AccidCount > 2) {
                 return;
             }
             AccidCount += 1;
             TBAccidCount.Text = AccidCount.ToString();
         }
         private void NumberValidationTextBoxAccidCount(object sender, TextCompositionEventArgs e) {
-            Regex regex = new Regex("[^1-4]");
+            Regex regex = new Regex("[^1-3]");
             e.Handled = regex.IsMatch(e.Text);
         }
         private void OnLostFocusAccidCount(object sender, RoutedEventArgs e) {
@@ -407,18 +408,17 @@ namespace ScaleFinderUI {
             DrawAll();
         }
         private void DrawAll() {
-            CVMusicSheet.Children.Clear();
-            DrawMusicSheet();
+            CVMusicSheet.Children.Clear();            
             DrawClef();
-            DrawWholeNote();
+            DrawNote();
+            DrawMusicSheet();
         }
-        private void DrawMusicSheet() {
-            int startY = LineGap + Padding;
-            this.CVMusicSheet.Children.Clear();
+        private void DrawMusicSheet() {            
+            int startY = LineGap + Padding;            
             for (int i = 0; i < 5; i++) {
                 this.CVMusicSheet.Children.Add(CreateLine(20, startY, this.SPCanvas.ActualWidth - 80, startY));
                 startY += LineGap;
-            }            
+            }
         }
 
         private void DrawClef() {
@@ -442,7 +442,7 @@ namespace ScaleFinderUI {
                     break;
             }
         }
-        private void DrawWholeNote() {
+        private void DrawNote() {
             int left = 130;
             int leftGap = 80;
             double top = 0;
@@ -473,31 +473,16 @@ namespace ScaleFinderUI {
             }
             else if (pt.StartsWith("B")) {
                 FirstNotePos = LineGapHalf * 6;
-            }
-            //System.String myStr = "abcdecvg";            
-            //if (myStr[0] == 'a') {
-
-            ////}
-            //string accidText = ScaleFindResult.GetAccidentalText(0);
-            //char accidFirstText = accidText[0];
-            //if (accidFirstText == "") {
-            //    this.CVMusicSheet.Children.Remove(SharpImg);
-            //    this.CVMusicSheet.Children.Remove(FlatImg);
-            //}
-            //if (accidFirstText == "♯") {
-            //    this.CVMusicSheet.Children.Remove(SharpImg);
-            //    this.CVMusicSheet.Children.Remove(FlatImg);
-            //    this.CVMusicSheet.Children.Add(SharpImg);
-            //}
-            //if (accidFirstText == "♭") {
-            //    this.CVMusicSheet.Children.Remove(SharpImg);
-            //    this.CVMusicSheet.Children.Remove(FlatImg);
-            //    this.CVMusicSheet.Children.Add(FlatImg);
-            //}
-
+            }            
+            Debug.WriteLine("sizeof(char): {0}", sizeof(char));
+            Debug.WriteLine("sizeof(int): {0}", sizeof(int));
+            Debug.WriteLine("sizeof(float): {0}", sizeof(float));
+            Debug.WriteLine("sizeof(double): {0}", sizeof(double));
+            int accidList = 0;
+            //Debug.WriteLine("accidText {0} " + accidList, accidList.Length);                        
             for (int i = 0; i < 8; i++) {
-                
                 top = 158.32 - FirstNotePos + ClefNotePos;
+                accidList = ScaleFindResult.GetAccidentalList()[i];
                 if (i == 0) {
                     if (top < lineStart + LineGap + LineGapHalf && top > lineStart - LineGap * 2) {
                         Octave = -1;
@@ -514,14 +499,104 @@ namespace ScaleFinderUI {
                 }
                 top = 158.32 - FirstNotePos + ClefNotePos + Octave * (LineGap * 3 + LineGapHalf) * -1;
                 Canvas.SetTop(WholeNoteImgs[i], top);
-                Canvas.SetLeft(WholeNoteImgs[i], left);
-                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);                
+                switch (accidList) {
+                    case 0:
+                        break;
+                    case 1:
+                        CVMusicSheet.Children.Add(SharpImgs[i]);
+                        Canvas.SetTop(SharpImgs[i], top - 20);
+                        Canvas.SetLeft(SharpImgs[i], left - 22 + 13);
+                        left += 13;
+                        break;
+                    case -1:
+                        CVMusicSheet.Children.Add(FlatImgs[i]);
+                        Canvas.SetTop(FlatImgs[i], top - 20);
+                        Canvas.SetLeft(FlatImgs[i], left - 22 + 13);
+                        left += 13;
+                        break;
+                    case 2:
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25 + 13);
+                        left += 13;
+                        break;
+                    case -2:
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32 + 16);
+                        left += 16;
+                        break;
+                    case 3:
+                        CVMusicSheet.Children.Add(SharpImgs[i]);
+                        Canvas.SetTop(SharpImgs[i], top - 20);
+                        Canvas.SetLeft(SharpImgs[i], left - 22 - 19 - 5 + 26);
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25 + 26);
+                        left += 26;
+                        break;
+                    case -3:
+                        CVMusicSheet.Children.Add(FlatImgs[i]);
+                        Canvas.SetTop(FlatImgs[i], top - 20);
+                        Canvas.SetLeft(FlatImgs[i], left - 22 - 28 - 5 + 29);
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32 + 29);
+                        left += 29;
+                        break;
+                    case 4:
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25 - 19 - 5 + 26);
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i + 8]);
+                        Canvas.SetTop(DoubleSharpImgs[i + 8], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i + 8], left - 25 + 26);
+                        left += 26;
+                        break;
+                    case -4:
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32 - 31 - 5 + 32);
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i + 8]);
+                        Canvas.SetTop(DoubleFlatImgs[i + 8], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i + 8], left - 32 + 32);
+                        left += 32;
+                        break;
+                    case 5:
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25 - 19 - 5 + 63);
+                        CVMusicSheet.Children.Add(DoubleSharpImgs[i + 8]);
+                        Canvas.SetTop(DoubleSharpImgs[i + 8], top - 0);
+                        Canvas.SetLeft(DoubleSharpImgs[i + 8], left - 25 + 63);
+                        CVMusicSheet.Children.Add(SharpImgs[i]);
+                        Canvas.SetTop(SharpImgs[i], top - 20);
+                        Canvas.SetLeft(SharpImgs[i], left - 22 - 19 - 5 - 25 + 63);
+                        left += 63;
+                        break;
+                    case -5:
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32 - 31 - 5 + 63);
+                        CVMusicSheet.Children.Add(DoubleFlatImgs[i + 8]);
+                        Canvas.SetTop(DoubleFlatImgs[i + 8], top - 18);
+                        Canvas.SetLeft(DoubleFlatImgs[i + 8], left - 32 + 63);
+                        CVMusicSheet.Children.Add(FlatImgs[i]);
+                        Canvas.SetTop(FlatImgs[i], top - 20);
+                        Canvas.SetLeft(FlatImgs[i], left - 22 - 32 - 31 - 5 + 63);
+                        left += 63;
+                        break;
+                    default:
+                        break;
+                }
+                Canvas.SetLeft(WholeNoteImgs[i], left);                
+                this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
                 if (top < lineStart - LineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart - LineGap, left + WholeNoteImgs[i].Width + 10, lineStart - LineGap));
                 }
                 else if (top > lineStart + LineGap * 4 + 5) {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, lineStart + LineGap * 5, left + WholeNoteImgs[i].Width + 10, lineStart + LineGap * 5));
-                }
+                }                
                 FirstNotePos += 13;
                 if (RBtnSortAscending.IsChecked == true) {
                     left += leftGap;
@@ -544,25 +619,29 @@ namespace ScaleFinderUI {
             int[] pitchList = ScaleFindResult.GetPitchList();
             int pitchToPlay = 0;
             int speed = Convert.ToInt32(TBSoundSpeed.Text);
-            if (sort == 0) {
-                for (int i = 0; i < pitchList.Length; i++) {
-                    pitchToPlay = pitchList[i] + 59 + Octave * 12;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(speed);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                Thread.Sleep(400);
-            }
-            else if (sort == 1) {
-                for (int i = 7; i >= 0; i--) {
-                    pitchToPlay = pitchList[i] + 59 + Octave * 12;
-                    midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                    Thread.Sleep(speed);
-                    midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                    Thread.Sleep(1);
-                }
-                Thread.Sleep(400);
+            switch (sort) {
+                case 0:
+                    for (int i = 0; i < pitchList.Length; i++) {
+                        pitchToPlay = pitchList[i] + 59 + Octave * 12;
+                        midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                        Thread.Sleep(speed);
+                        midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                        Thread.Sleep(1);
+                    }
+                    Thread.Sleep(400);
+                    break;
+                case 1:
+                    for (int i = 7; i >= 0; i--) {
+                        pitchToPlay = pitchList[i] + 59 + Octave * 12;
+                        midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
+                        Thread.Sleep(speed);
+                        midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
+                        Thread.Sleep(1);
+                    }
+                    Thread.Sleep(400);
+                    break;
+                default:
+                    break;
             }
             midiOut.Close();
             midiOut.Dispose();
@@ -605,31 +684,57 @@ namespace ScaleFinderUI {
             sharpBtm.BeginInit();
             sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
             sharpBtm.EndInit();
-            SharpImg.Width = 19;
-            Canvas.SetTop(SharpImg, 300);
-            Canvas.SetLeft(SharpImg, 180);
-            SharpImg.Source = sharpBtm;
+            for (int i = 0; i < 8; i++) {
+                if (SharpImgs[i] == null) {
+                    SharpImgs[i] = new Image();
+                }
+                SharpImgs[i].Width = 19;
+                Canvas.SetLeft(SharpImgs[i], 300);
+                Canvas.SetTop(SharpImgs[i], 180);
+                SharpImgs[i].Source = sharpBtm;
+            }
             // ● Flat
             BitmapImage flatBtm = new BitmapImage();
             flatBtm.BeginInit();
             flatBtm.UriSource = new Uri("pack://application:,,,/assets/Flat.png");
             flatBtm.EndInit();
-            FlatImg.Width = 19;
-            FlatImg.Source = sharpBtm;
+            for (int i = 0; i < 8; i++) {
+                if (FlatImgs[i] == null) {
+                    FlatImgs[i] = new Image();
+                }
+                FlatImgs[i].Width = 21;
+                Canvas.SetLeft(FlatImgs[i], 300);
+                Canvas.SetTop(FlatImgs[i], 180);
+                FlatImgs[i].Source = flatBtm;
+            }
             // ● Double Sharp
             BitmapImage doubleSharpBtm = new BitmapImage();
             doubleSharpBtm.BeginInit();
             doubleSharpBtm.UriSource = new Uri("pack://application:,,,/assets/DoubleSharp.png");
             doubleSharpBtm.EndInit();
-            DoubleSharpImg.Width = 19;
-            DoubleSharpImg.Source = doubleSharpBtm;
+            for (int i = 0; i < 16; i++) {
+                if (DoubleSharpImgs[i] == null) {
+                    DoubleSharpImgs[i] = new Image();
+                }
+                DoubleSharpImgs[i].Width = 19;
+                Canvas.SetLeft(DoubleSharpImgs[i], 300);
+                Canvas.SetTop(DoubleSharpImgs[i], 180);
+                DoubleSharpImgs[i].Source = doubleSharpBtm;
+            }
             // ● Double Flat
             BitmapImage doubleFlatBtm = new BitmapImage();
             doubleFlatBtm.BeginInit();
             doubleFlatBtm.UriSource = new Uri("pack://application:,,,/assets/DoubleFlat.png");
             doubleFlatBtm.EndInit();
-            DoubleFlatImg.Width = 13;
-            DoubleFlatImg.Source = sharpBtm;
+            for (int i = 0; i < 16; i++) {
+                if (DoubleFlatImgs[i] == null) {
+                    DoubleFlatImgs[i] = new Image();
+                }
+                DoubleFlatImgs[i].Width = 31;
+                Canvas.SetLeft(DoubleFlatImgs[i], 300);
+                Canvas.SetTop(DoubleFlatImgs[i], 180);
+                DoubleFlatImgs[i].Source = doubleFlatBtm;
+            }
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
             Line line = new Line();
