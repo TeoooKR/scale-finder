@@ -25,11 +25,11 @@ SOFTWARE.
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ScaleFinderUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Title="Scale Finder" Height="1080" Width="1920">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
 
         <StackPanel x:Name="SPCanvas" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Canvas x:Name="CVMusicSheet" Width="960" Height="190" Background="#f0f0f0" Margin="30"></Canvas>
+            <Canvas x:Name="CVMusicSheet" Width="1080" Height="240" Background="#f0f0f0" Margin="30"></Canvas>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <RadioButton Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="30" Width="48" Height="48" Margin="5">C</RadioButton>
@@ -71,7 +71,7 @@ SOFTWARE.
         <TextBlock Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <TextBlock Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="32" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="24"/>
         <StackPanel Orientation="Horizontal">
-            <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Ascending</RadioButton>
+            <RadioButton Name="RBtnSortAscending" Checked="HandleSortChecked" IsChecked="true" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Ascending</RadioButton>
             <RadioButton Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" FontSize="26" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">Descending</RadioButton>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
