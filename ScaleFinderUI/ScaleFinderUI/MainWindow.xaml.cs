@@ -266,6 +266,12 @@ namespace ScaleFinderUI {
             if (TBSelectedScale == null) {
                 return;
             }
+            if (TBScaleResult == null) {
+                return;
+            }
+            if (TBDegrees == null) {
+                return;
+            }
             string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
             int[] intervalsList = ScaleFindResultBaseC.GetIntervalsList();
             int[] pitchList = ScaleFindResult.GetPitchList();           
@@ -455,7 +461,7 @@ namespace ScaleFinderUI {
             if (RBtnSortDescending == null) {
                 return;
             }
-            int left = 156;
+            int left = 130;
             int leftGap = 80;
             double top = 0;
             //double lineStart = LineGap + Padding;
@@ -614,10 +620,10 @@ namespace ScaleFinderUI {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, StartLineTop + LineGap * 5, left + WholeNoteImgs[i].Width + 10, StartLineTop + LineGap * 5));
                 }
                 if (RBtnSortAscending.IsChecked == true) {
-                    FirstNotePos += 13;
+                    FirstNotePos += LineGapHalf;
                 }
                 else if (RBtnSortDescending.IsChecked == true) {
-                    FirstNotePos -= 13;
+                    FirstNotePos -= LineGapHalf;
                 }
             }
             Debug.Print("----------------------------------------");
