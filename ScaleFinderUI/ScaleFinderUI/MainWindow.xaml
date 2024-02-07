@@ -30,7 +30,15 @@ SOFTWARE.
         <StackPanel x:Name="SPCanvas" Orientation="Vertical" HorizontalAlignment="Center">
             <Canvas x:Name="CVMusicSheet" Width="920" Height="180" Background="#f0f0f0" Margin="30"></Canvas>
             <materialDesign:PopupBox Name="PBClef" StaysOpen="True">
-                <StackPanel HorizontalAlignment="Center">
+             <materialDesign:PopupBox.ToggleContent>
+          <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="30,-20,0,0">
+            <TextBlock x:Name="TBClefs" TextWrapping="Wrap" Text="Clefs" Width="48" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="18" TextAlignment="Center" VerticalAlignment="Center"/>
+            <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="48"/>
+            <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="36" Margin="-5"/>
+            <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="32" Margin="10"/>
+          </StackPanel>
+        </materialDesign:PopupBox.ToggleContent>
+              <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TabControl SelectionChanged="HandleClefTypeSelectionChanged">
                             <TabItem x:Name="TIGClef" Width="400" Height="92">
