@@ -52,8 +52,8 @@ namespace ScaleFinderUI {
         private double StartLineTop = 0;
         private int FirstNotePos = 0;
         private int ClefNotePos = 0;
-        private int LineGap = 26;
-        private int LineGapHalf = 13;
+        private int LineGap = 20;
+        private int LineGapHalf = 10;
         //private int Padding = 14;
         private int Octave = 0;
         private int AdditionalGap = 0;
@@ -500,10 +500,10 @@ namespace ScaleFinderUI {
             int accidList = 0;            
             //Debug.WriteLine("accidText {0} " + accidList, accidList.Length);                        
             for (int i = 0; i < 8; i++) {
-                leftGap = 80;
+                leftGap = 60;
                 top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;
                 accidList = ScaleFindResult.GetAccidentalList()[i];
-                AdditionalGap = 16;                                
+                AdditionalGap = 18;                                
                 if (i == 0) {
                     if (top < StartLineTop + LineGap + LineGapHalf && top > StartLineTop - LineGap * 2) {
                         Octave = -1;
@@ -519,23 +519,20 @@ namespace ScaleFinderUI {
                 if (RBtnSortDescending.IsChecked == true) {
                     top -= LineGapHalf * 7;
                 }
-                switch (accidList) {
-                    case -2:
-                        AdditionalGap += 2;
-                        break;
+                switch (accidList) {                                        
                     case 3:
-                        AdditionalGap += 16;
+                        AdditionalGap += 14;
                         break;
                     case -3:
                         AdditionalGap += 18;
                         break;
                     case 4:
-                        AdditionalGap += 10;
+                        AdditionalGap += 8;
                         break;
                     case -4:
-                        AdditionalGap += 16;
+                        AdditionalGap += 28;
                         break;
-                    default:
+                    default:                        
                         break;
                 }                
                 leftGap += AdditionalGap;
@@ -553,7 +550,7 @@ namespace ScaleFinderUI {
                         break;
                     case 1:
                         CVMusicSheet.Children.Add(SharpImgs[i]);
-                        Canvas.SetTop(SharpImgs[i], top - 20);
+                        Canvas.SetTop(SharpImgs[i], top - 19);
                         Canvas.SetLeft(SharpImgs[i], left - 22);
                         break;
                     case -1:
@@ -564,7 +561,7 @@ namespace ScaleFinderUI {
                     case 2:
                         CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
                         Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 20);
                         break;
                     case -2:
                         CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
@@ -573,32 +570,32 @@ namespace ScaleFinderUI {
                         break;
                     case 3:
                         CVMusicSheet.Children.Add(SharpImgs[i]);
-                        Canvas.SetTop(SharpImgs[i], top - 20);
-                        Canvas.SetLeft(SharpImgs[i], left - 22 - 19 - 5);
+                        Canvas.SetTop(SharpImgs[i], top - 19);
+                        Canvas.SetLeft(SharpImgs[i], left - 41);
                         CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
                         Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 20);
                         break;
                     case -3:
                         CVMusicSheet.Children.Add(FlatImgs[i]);
                         Canvas.SetTop(FlatImgs[i], top - 20);
-                        Canvas.SetLeft(FlatImgs[i], left - 22 - 28 - 5);
+                        Canvas.SetLeft(FlatImgs[i], left - 57);
                         CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
                         Canvas.SetTop(DoubleFlatImgs[i], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 35);
                         break;
                     case 4:
                         CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
                         Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 25 - 19 - 5);
+                        Canvas.SetLeft(DoubleSharpImgs[i], left - 39);
                         CVMusicSheet.Children.Add(DoubleSharpImgs[i + 8]);
                         Canvas.SetTop(DoubleSharpImgs[i + 8], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i + 8], left - 25);
+                        Canvas.SetLeft(DoubleSharpImgs[i + 8], left - 20);
                         break;
                     case -4:
                         CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
                         Canvas.SetTop(DoubleFlatImgs[i], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32 - 31 - 5);
+                        Canvas.SetLeft(DoubleFlatImgs[i], left - 68);
                         CVMusicSheet.Children.Add(DoubleFlatImgs[i + 8]);
                         Canvas.SetTop(DoubleFlatImgs[i + 8], top - 18);
                         Canvas.SetLeft(DoubleFlatImgs[i + 8], left - 32);
@@ -640,7 +637,7 @@ namespace ScaleFinderUI {
             MidiOut midiOut = new MidiOut(0);
             int[] pitchList = ScaleFindResult.GetPitchList();
             int pitchToPlay = 0;
-            int speed = Convert.ToInt32(TBSoundSpeed.Text);
+            int speed = 200;
             switch (sort) {
                 case 0:
                     for (int i = 0; i < pitchList.Length; i++) {
@@ -674,14 +671,14 @@ namespace ScaleFinderUI {
             gClefBtm.BeginInit();
             gClefBtm.UriSource = new Uri("pack://application:,,,/assets/GClef.png");
             gClefBtm.EndInit();
-            GClefImg.Height = 204;
+            GClefImg.Height = 153;
             GClefImg.Source = gClefBtm;
             // ● F Clef
             BitmapImage fClefBtm = new BitmapImage();
             fClefBtm.BeginInit();
             fClefBtm.UriSource = new Uri("pack://application:,,,/assets/FClef.png");
             fClefBtm.EndInit();
-            FClefImg.Height = 122;
+            FClefImg.Height = 91.5;
             FClefImg.Source = fClefBtm;
             // ● C Clef
             BitmapImage cclefBtm = new BitmapImage();
@@ -716,10 +713,12 @@ namespace ScaleFinderUI {
                 if (SharpImgs[i] == null) {
                     SharpImgs[i] = new Image();
                 }
-                SharpImgs[i].Width = 19;
+                SharpImgs[i].Source = sharpBtm;
+                SharpImgs[i].Height = LineGap * 3;
+                SharpImgs[i].Width = (LineGap * SharpImgs[i].Source.Width / SharpImgs[i].Source.Height) * 3;
                 Canvas.SetLeft(SharpImgs[i], 300);
                 Canvas.SetTop(SharpImgs[i], 180);
-                SharpImgs[i].Source = sharpBtm;
+                
             }
             // ● Flat
             BitmapImage flatBtm = new BitmapImage();
@@ -730,10 +729,11 @@ namespace ScaleFinderUI {
                 if (FlatImgs[i] == null) {
                     FlatImgs[i] = new Image();
                 }
-                FlatImgs[i].Width = 21;
-                Canvas.SetLeft(FlatImgs[i], 300);
-                Canvas.SetTop(FlatImgs[i], 180);
                 FlatImgs[i].Source = flatBtm;
+                FlatImgs[i].Height = LineGap * 2.26;
+                FlatImgs[i].Width = (LineGap * FlatImgs[i].Source.Width / FlatImgs[i].Source.Height) * 2.26;
+                Canvas.SetLeft(FlatImgs[i], 300);
+                Canvas.SetTop(FlatImgs[i], 180);                
             }
             // ● Double Sharp
             BitmapImage doubleSharpBtm = new BitmapImage();
@@ -744,10 +744,11 @@ namespace ScaleFinderUI {
                 if (DoubleSharpImgs[i] == null) {
                     DoubleSharpImgs[i] = new Image();
                 }
-                DoubleSharpImgs[i].Width = 19;
-                Canvas.SetLeft(DoubleSharpImgs[i], 300);
-                Canvas.SetTop(DoubleSharpImgs[i], 180);
                 DoubleSharpImgs[i].Source = doubleSharpBtm;
+                DoubleSharpImgs[i].Height = LineGap;
+                DoubleSharpImgs[i].Width = (LineGap * DoubleSharpImgs[i].Source.Width / DoubleSharpImgs[i].Source.Height);
+                Canvas.SetLeft(DoubleSharpImgs[i], 300);
+                Canvas.SetTop(DoubleSharpImgs[i], 180);                
             }
             // ● Double Flat
             BitmapImage doubleFlatBtm = new BitmapImage();
@@ -758,10 +759,12 @@ namespace ScaleFinderUI {
                 if (DoubleFlatImgs[i] == null) {
                     DoubleFlatImgs[i] = new Image();
                 }
-                DoubleFlatImgs[i].Width = 31;
+                DoubleFlatImgs[i].Source = doubleFlatBtm;
+                DoubleFlatImgs[i].Height = LineGap * 2.26;
+                DoubleFlatImgs[i].Width = (LineGap * DoubleFlatImgs[i].Source.Width / DoubleFlatImgs[i].Source.Height) * 2.26;
                 Canvas.SetLeft(DoubleFlatImgs[i], 300);
                 Canvas.SetTop(DoubleFlatImgs[i], 180);
-                DoubleFlatImgs[i].Source = doubleFlatBtm;
+                
             }
         }
         private Line CreateLine(double x1, double y1, double x2, double y2) {
