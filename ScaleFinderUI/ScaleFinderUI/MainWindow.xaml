@@ -30,11 +30,6 @@ SOFTWARE.
         <StackPanel x:Name="SPCanvas" Orientation="Vertical" HorizontalAlignment="Center">
             <Canvas x:Name="CVMusicSheet" Width="920" Height="180" Background="#f0f0f0" Margin="30"></Canvas>
             <materialDesign:PopupBox Name="PBClef" StaysOpen="True">
-                <materialDesign:PopupBox.ToggleContent>
-                    <materialDesign:PackIcon Kind="Button">
-                        <TextBlock Name="ASDF" TextWrapping="Wrap" Text="asdfasdf~~~&#xA;" Width="720" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="32" TextAlignment="Center"/>
-                    </materialDesign:PackIcon>
-                </materialDesign:PopupBox.ToggleContent>
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <TabControl SelectionChanged="HandleClefTypeSelectionChanged">
