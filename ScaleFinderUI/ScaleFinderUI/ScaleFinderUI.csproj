@@ -5,9 +5,13 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>assets\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\AltoClef.png" />
+    <None Remove="assets\BaritoneCClef.png" />
+    <None Remove="assets\BaritoneFClef.png" />
     <None Remove="assets\BassClef.png" />
     <None Remove="assets\CClef.png" />
     <None Remove="assets\DoubleFlat.png" />
@@ -15,8 +19,13 @@
     <None Remove="assets\FClef.png" />
     <None Remove="assets\Flat.png" />
     <None Remove="assets\Flat.svg" />
+    <None Remove="assets\FrenchClef.png" />
     <None Remove="assets\GClef.png" />
+    <None Remove="assets\MezzoSopranoClef.png" />
     <None Remove="assets\Sharp.png" />
+    <None Remove="assets\SopranoClef.png" />
+    <None Remove="assets\SubbassClef.png" />
+    <None Remove="assets\TenorClef.png" />
     <None Remove="assets\TrebleClef.png" />
     <None Remove="assets\WholeNote.png" />
   </ItemGroup>
@@ -26,21 +35,46 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="assets\Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\AltoClef.png" />
+    <Resource Include="assets\BaritoneCClef.png" />
+    <Resource Include="assets\BaritoneFClef.png" />
     <Resource Include="assets\CClef.png" />
     <Resource Include="assets\DoubleFlat.png" />
     <Resource Include="assets\DoubleSharp.png" />
     <Resource Include="assets\FClef.png" />
     <Resource Include="assets\Flat.png" />
-    <Resource Include="assets\Flat.svg" />
+    <Resource Include="assets\FrenchClef.png" />
     <Resource Include="assets\GClef.png" />
-    <Resource Include="assets\NotationImages.xaml" />
+    <Resource Include="assets\MezzoSopranoClef.png" />
     <Resource Include="assets\Sharp.png" />
+    <Resource Include="assets\SopranoClef.png" />
+    <Resource Include="assets\SubbassClef.png" />
+    <Resource Include="assets\TenorClef.png" />
     <Resource Include="assets\WholeNote.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

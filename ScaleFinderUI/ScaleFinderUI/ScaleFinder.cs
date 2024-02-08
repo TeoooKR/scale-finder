@@ -116,23 +116,31 @@ namespace ScaleFinderUI {
                 accid[i] = accidentalList[i] % 2;
                 doubleAccid[i] = accidentalList[i] / 2;
                 if (accid[i] != 0) {
-                    if (accidentalList[i] > 0) {
-                        accidText[i] += "♯";
-                    }
-                    else if (accidentalList[i] < 0) {
-                        accidText[i] += "♭";
+                    switch (accidentalList[i]) {
+                        case > 0:
+                            accidText[i] += "♯";
+                            break;
+                        case < 0:
+                            accidText[i] += "♭";
+                            break;
+                        default:
+                            break;
                     }
                 }
                 if (doubleAccid[i] != 0) {
-                    if (accidentalList[i] > 0) {
-                        for (int j = 0; j < doubleAccid[i]; j++) {
-                            doubleAccidText[i] += "𝄪";
-                        }
-                    }
-                    else if (accidentalList[i] < 0) {
-                        for (int j = 0; j > doubleAccid[i]; j--) {                            
-                            doubleAccidText[i] += "𝄫";                            
-                        }
+                    switch (accidentalList[i]) {
+                        case > 0:
+                            for (int j = 0; j < doubleAccid[i]; j++) {
+                                doubleAccidText[i] += "𝄪";
+                            }
+                            break;
+                        case < 0:
+                            for (int j = 0; j > doubleAccid[i]; j--) {
+                                doubleAccidText[i] += "𝄫";
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 accidentalText[i] = accidText[i] + doubleAccidText[i];
