@@ -498,11 +498,18 @@ namespace ScaleFinderUI {
             Debug.WriteLine("sizeof(float): {0}", sizeof(float));
             Debug.WriteLine("sizeof(double): {0}", sizeof(double));
             int accidList = 0;
+            int accidLeft = 0;
+            int getAccidList = 0;
             //Debug.WriteLine("accidText {0} " + accidList, accidList.Length);                        
             for (int i = 0; i < 8; i++) {
                 leftGap = 60;
-                top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;
-                accidList = ScaleFindResult.GetAccidentalList()[i];
+                top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;                
+                if (RBtnSortAscending.IsChecked == true) {
+                    accidList = ScaleFindResult.GetAccidentalList()[i];
+                }
+                else if (RBtnSortDescending.IsChecked == true) {
+                    accidList = ScaleFindResult.GetAccidentalList()[7-i];
+                }
                 AdditionalGap = 18;
                 if (i == 0) {
                     if (top < StartLineTop + LineGap + LineGapHalf && top >= StartLineTop - LineGap * 2) {
@@ -544,7 +551,7 @@ namespace ScaleFinderUI {
                 //}
                 //else if (RBtnSortDescending.IsChecked == true) {
                 //    left -= leftGap;
-                // }
+                // }                
                 switch (accidList) {
                     case 0:
                         break;
@@ -605,10 +612,7 @@ namespace ScaleFinderUI {
                 }
                 Canvas.SetTop(WholeNoteImgs[i], top);
                 Canvas.SetLeft(WholeNoteImgs[i], left);
-
                 Debug.Print("WNote POS : " + top + " , " + left);
-
-
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
                 if (top < StartLineTop - LineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(left - 10, StartLineTop - LineGap, left + WholeNoteImgs[i].Width + 10, StartLineTop - LineGap));
