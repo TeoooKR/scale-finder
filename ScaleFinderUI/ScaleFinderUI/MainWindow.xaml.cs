@@ -18,11 +18,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE
 */
 using NAudio.Midi;
+using NAudio.Utils;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Channels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -37,12 +44,15 @@ namespace ScaleFinderUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private const string DoubleSharp = "𝄪";
-        private const string DoubleFlat = "𝄫";
+        //> Clef
         private const int TabClefTypeG = 0;
         private const int TabClefTypeF = 1;
         private const int TabClefTypeC = 2;
         private int SelectedTabClefType = TabClefTypeG;
+        //> Scale Finder
+        static ScaleFinder Finder = new();
+        static Scale ScaleFindResult;
+        Scale ScaleFindResultBaseC;
         private int BasePitch = ScaleFinder.PitchC;
         private int Accid = ScaleFinder.AccidNatural;
         private int[] Type = ScaleFinder.IntervalMajorScale;
@@ -50,16 +60,16 @@ namespace ScaleFinderUI {
         private string SelectedAccidText = String.Empty;
         private string SelectedTypeText = " Major";
         private double StartLineTop = 0;
+        //> Note Position
+        static public int Octave = 0;
         private int FirstNotePos = 0;
         private int ClefNotePos = 0;
         private int LineGap = 20;
         private int LineGapHalf = 10;
-        //private int Padding = 14;
-        private int Octave = 0;
+        private double Top = 0;
+        private int Left = 130;
+        private int LeftGap = 80;
         private int AdditionalGap = 0;
-        static ScaleFinder Finder = new();
-        Scale ScaleFindResult;
-        Scale ScaleFindResultBaseC;
         //> Images
         Image GClefImg = new Image();
         Image FClefImg = new Image();
@@ -69,22 +79,35 @@ namespace ScaleFinderUI {
         Image[] FlatImgs = new Image[8];
         Image[] DoubleSharpImgs = new Image[16];
         Image[] DoubleFlatImgs = new Image[16];
+        //> Window Load
         private bool IsWindowLoaded = false;
+        private static bool isChanged = false;
+        private static int isPlaySort = 0;
+        Thread playMidiThread = null;
         public MainWindow() {
-            this.Loaded += new RoutedEventHandler(WindowLoaded);
+            this.Loaded += new RoutedEventHandler(OnWindowLoaded);
+            //this.Closed += new EventHandler(OnWindowClosed);
             LoadMusicSheetImages();
             InitializeComponent();
         }
-        private void WindowLoaded(object sender, RoutedEventArgs e) {
+        private void OnWindowLoaded(object sender, RoutedEventArgs e) {
             RBtnBaseC.IsChecked = true;
             RBtnAccidNatural.IsChecked = true;
             RBtnTypeMajorScale.IsChecked = true;
+            TIGClef.IsSelected = true;
             RBtnTrebleClef.IsChecked = true;
             StartLineTop = CVMusicSheet.Height / 2 - (LineGap * 2);
             Debug.Print("> WindowLoaded() StartLineTop ====== " + StartLineTop);
             IsWindowLoaded = true;
-            DrawAll();
+            UpdateUI();
+            if (playMidiThread == null) {
+                playMidiThread = new Thread(MidiPlayTask.PlayMidiTask);
+            }
+            playMidiThread.Start();
         }
+        //private void OnWindowClosed(object sender, EventArgs e) {
+        //    Environment.Exit(Environment.ExitCode);
+        //}
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
@@ -205,7 +228,12 @@ namespace ScaleFinderUI {
             UpdateResult();
         }
         private void HandleSortChecked(object sender, RoutedEventArgs e) {
-            DrawAll();
+            if (RBtnSortAscending.IsChecked == true) {
+                isPlaySort = 0;
+            } else if (RBtnSortDescending.IsChecked == true) {
+                isPlaySort = 1;
+            }
+            UpdateUI();            
         }
         protected void HandleTextChanged(object sender, EventArgs e) {
             switch (TBAccidCount.Text.Length) {
@@ -245,46 +273,55 @@ namespace ScaleFinderUI {
             }
         }
         private void UpdateResult() {
+            UpdateAccidental();
+            ScaleFindResult = Finder.FindScale(BasePitch, Accid, Type);
+            ScaleFindResultBaseC = Finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, Type);
+            if (!ScaleFindResult.GetFound() || TBSelectedScale == null || TBScaleResult == null || TBDegrees == null) {
+                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
+                return;
+            }            
+            UpdateSelectedScale();
+            UpdateScaleResult();
+            UpdateDegrees();
+            UpdateIntervals();
+            UpdateIntegerNotation();
+            ScaleFindResult.PrintMyValues();
+            UpdateUI();
+        }
+        private void UpdateAccidental() {
             if (RBtnAccidNatural.IsChecked == true) {
                 Accid = 0;
-            }
-            else if (RBtnAccidSharp.IsChecked == true) {
+            } else if (RBtnAccidSharp.IsChecked == true) {
                 Accid = Convert.ToInt32(TBAccidCount.Text);
-            }
-            else if (RBtnAccidFlat.IsChecked == true) {
+            } else if (RBtnAccidFlat.IsChecked == true) {
                 Accid = Convert.ToInt32(TBAccidCount.Text);
                 Accid *= -1;
             }
-            ScaleFindResult = Finder.FindScale(BasePitch, Accid, Type);
-            ScaleFindResultBaseC = Finder.FindScale(ScaleFinder.PitchC, ScaleFinder.AccidNatural, Type);
+        }
+        private void UpdateSelectedScale() {
             SelectedBasePitchText = ScaleFindResult.GetPitchText(0);
             SelectedAccidText = ScaleFindResult.GetAccidentalText(0);
-            if (!ScaleFindResult.GetFound()) {
-                Debug.WriteLine("Error.. I cannot find your scale. sigh....");
-                return;
-            }
-            if (TBSelectedScale == null) {
-                return;
-            }
-            if (TBScaleResult == null) {
-                return;
-            }
-            if (TBDegrees == null) {
-                return;
-            }
+            TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
+        }
+        private void UpdateScaleResult() {
             string[] scaleResultTexts = ScaleFindResult.GetPitchTexts();
-            int[] intervalsList = ScaleFindResultBaseC.GetIntervalsList();
-            int[] pitchList = ScaleFindResult.GetPitchList();
             string scaleResultText = "";
-            string degreesText = "";
-            string intervalsText = "";
             for (int i = 0; i < scaleResultTexts.Length; i++) {
                 scaleResultText += scaleResultTexts[i] + " ";
             }
+            TBScaleResult.Text = "Notes: " + scaleResultText;
+        }
+        private void UpdateDegrees() {
+            string degreesText = "";
             for (int i = 0; i < ScaleFindResultBaseC.GetAccidentalTexts().Length - 1; i++) {
                 int j = i + 1;
                 degreesText += ScaleFindResultBaseC.GetAccidentalText(i) + j + " ";
             }
+            TBDegrees.Text = "Degrees / Formulas: " + degreesText;
+        }
+        private void UpdateIntervals() {
+            int[] intervalsList = ScaleFindResultBaseC.GetIntervalsList();
+            string intervalsText = "";
             for (int i = 0; i < intervalsList.Length; i++) {
                 switch (intervalsList[i]) {
                     case 1:
@@ -309,6 +346,10 @@ namespace ScaleFinderUI {
                     intervalsText += "-";
                 }
             }
+            TBIntervalsResult.Text = "Intervals / Steps: " + intervalsText;
+        }
+        private void UpdateIntegerNotation() {
+            int[] pitchList = ScaleFindResult.GetPitchList();
             int[] tempList = new int[7];
             string pitchListText = "";
             for (int i = 0; i < pitchList.Length - 1; i++) {
@@ -319,13 +360,7 @@ namespace ScaleFinderUI {
                 tempList[i] %= 12;
                 pitchListText += tempList[i] + " ";
             }
-            TBSelectedScale.Text = SelectedBasePitchText + " " + SelectedTypeText;
-            TBScaleResult.Text = "Notes: " + scaleResultText;
-            TBDegrees.Text = "Degrees / Formulas: " + degreesText;
-            TBIntervalsResult.Text = "Intervals / Steps: " + intervalsText;
             TBIntegerNotation.Text = "Integer notation: " + pitchListText;
-            ScaleFindResult.PrintMyValues();
-            DrawAll();
         }
         private void HandleClefTypeSelectionChanged(object sender, EventArgs e) {
             string tabItem = ((sender as TabControl).SelectedItem as TabItem).Name as string;
@@ -356,7 +391,7 @@ namespace ScaleFinderUI {
                     return;
             }
             ChangeSelectedClefImage();
-            DrawAll();
+            UpdateUI();            
         }
         private void ChangeSelectedClefImage() {
             // ● G Clef
@@ -365,8 +400,7 @@ namespace ScaleFinderUI {
                 if (RBtnTrebleClef.IsChecked == true) {
                     Canvas.SetTop(GClefImg, clefTop);
                     ClefNotePos = 0;
-                }
-                else if (RBtnFrenchClef.IsChecked == true) {
+                } else if (RBtnFrenchClef.IsChecked == true) {
                     Canvas.SetTop(GClefImg, clefTop + LineGap);
                     ClefNotePos = LineGap;
                 }
@@ -380,12 +414,10 @@ namespace ScaleFinderUI {
                 if (RBtnBassClef.IsChecked == true) {
                     Canvas.SetTop(FClefImg, clefTop);
                     ClefNotePos = LineGap * 6 * -1;
-                }
-                else if (RBtnBaritoneFClef.IsChecked == true) {
+                } else if (RBtnBaritoneFClef.IsChecked == true) {
                     Canvas.SetTop(FClefImg, clefTop + LineGap);
                     ClefNotePos = LineGap * 5 * -1;
-                }
-                else if (RBtnSubbassClef.IsChecked == true) {
+                } else if (RBtnSubbassClef.IsChecked == true) {
                     Canvas.SetTop(FClefImg, clefTop - LineGap);
                     ClefNotePos = LineGap * 7 * -1;
                 }
@@ -396,20 +428,16 @@ namespace ScaleFinderUI {
                 if (RBtnAltoClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, clefTop);
                     ClefNotePos = LineGap * 3 * -1;
-                }
-                else if (RBtnTenorClef.IsChecked == true) {
+                } else if (RBtnTenorClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, clefTop - LineGap);
                     ClefNotePos = LineGap * 4 * -1;
-                }
-                else if (RBtnBaritoneCClef.IsChecked == true) {
+                } else if (RBtnBaritoneCClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, clefTop - LineGap * 2);
                     ClefNotePos = LineGap * 5 * -1;
-                }
-                else if (RBtnMezzoSopranoClef.IsChecked == true) {
+                } else if (RBtnMezzoSopranoClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, clefTop + LineGap);
                     ClefNotePos = LineGap * 2 * -1;
-                }
-                else if (RBtnSopranoClef.IsChecked == true) {
+                } else if (RBtnSopranoClef.IsChecked == true) {
                     Canvas.SetTop(CClefImg, clefTop + LineGap * 2);
                     ClefNotePos = LineGap * -1;
                 }
@@ -419,9 +447,9 @@ namespace ScaleFinderUI {
             ClefNotePos = 0;
             Octave = 0;
             ChangeSelectedClefImage();
-            DrawAll();
+            UpdateUI();            
         }
-        private void DrawAll() {
+        private void UpdateUI() {
             if (!IsWindowLoaded) {
                 return;
             }
@@ -429,6 +457,7 @@ namespace ScaleFinderUI {
             DrawClef();
             DrawNote();
             DrawMusicSheet();
+            MidiPlayTask.MidiItem.Clear();
         }
         private void DrawMusicSheet() {
             Debug.Print("> DrawMusicSheet() StartLineTop ====== " + StartLineTop);
@@ -438,7 +467,6 @@ namespace ScaleFinderUI {
                 startY += LineGap;
             }
         }
-
         private void DrawClef() {
             switch (SelectedTabClefType) {
                 case TabClefTypeG:
@@ -457,217 +485,170 @@ namespace ScaleFinderUI {
                     break;
             }
         }
+        private void MeasureOctave() {
+            if (Top < StartLineTop + LineGap + LineGapHalf && Top >= StartLineTop - LineGap * 2) {
+                Octave = -1;
+            } else if (Top < StartLineTop - LineGap * 2) {
+                Octave = -2;
+            } else if (Top >= StartLineTop + LineGap * 5) {
+                Octave = 1;
+            }
+        }
+        private void CalcFirstNotePos() {
+            string pitch = ScaleFindResult.GetPitchText(0);
+            int pos = 0;            
+            if (pitch.StartsWith("C")) {
+                pos = 0;
+            } else if (pitch.StartsWith("D")) {
+                pos = 1;
+            } else if (pitch.StartsWith("E")) {
+                pos = 2;
+            } else if (pitch.StartsWith("F")) {
+                pos = 3;
+            } else if (pitch.StartsWith("G")) {
+                pos = 4;
+            } else if (pitch.StartsWith("A")) {
+                pos = 5;
+            } else if (pitch.StartsWith("B")) {
+                pos = 6;
+            }
+            FirstNotePos = LineGapHalf * pos;
+        }
         private void DrawNote() {
             if (RBtnSortDescending == null) {
                 return;
             }
-            int left = 130;
-            int leftGap = 80;
-            double top = 0;
-            //double lineStart = LineGap + Padding;
-            for (int i = 0; i < WholeNoteImgs.Length; i++) {
-                CVMusicSheet.Children.Remove(WholeNoteImgs[i]);
-            }
+            Left = 130;
+            LeftGap = 80;
+            Top = 0;
             Octave = 0;
-            string pt = ScaleFindResult.GetPitchText(0);
-            int pos = 0;
-            if (pt.StartsWith("C")) {
-                pos = 0;
-            }
-            else if (pt.StartsWith("D")) {
-                pos = 1;
-            }
-            else if (pt.StartsWith("E")) {
-                pos = 2;
-            }
-            else if (pt.StartsWith("F")) {
-                pos = 3;
-            }
-            else if (pt.StartsWith("G")) {
-                pos = 4;
-            }
-            else if (pt.StartsWith("A")) {
-                pos = 5;
-            }
-            else if (pt.StartsWith("B")) {
-                pos = 6;
-            }
-            FirstNotePos = LineGapHalf * pos;
+            CalcFirstNotePos();
             Debug.WriteLine("sizeof(char): {0}", sizeof(char));
             Debug.WriteLine("sizeof(int): {0}", sizeof(int));
             Debug.WriteLine("sizeof(float): {0}", sizeof(float));
             Debug.WriteLine("sizeof(double): {0}", sizeof(double));
+            Top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;
             int accidList = 0;
-            int accidLeft = 0;
-            int getAccidList = 0;
-            //Debug.WriteLine("accidText {0} " + accidList, accidList.Length);                        
             for (int i = 0; i < 8; i++) {
-                leftGap = 60;
-                top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;                
-                if (RBtnSortAscending.IsChecked == true) {
-                    accidList = ScaleFindResult.GetAccidentalList()[i];
-                }
-                else if (RBtnSortDescending.IsChecked == true) {
-                    accidList = ScaleFindResult.GetAccidentalList()[7-i];
-                }
+                LeftGap = 60;
                 AdditionalGap = 18;
                 if (i == 0) {
-                    if (top < StartLineTop + LineGap + LineGapHalf && top >= StartLineTop - LineGap * 2) {
-                        Octave = -1;
-                    }
-                    else if (top < StartLineTop - LineGap * 2) {
-                        Octave = -2;
-                    }
-                    else if (top >= StartLineTop + LineGap * 5) {
-                        Octave = 1;
-                    }
+                    // ● Octave changes depending on Top
+                    MeasureOctave();
                 }
-                top += Octave * (LineGap * 3 + LineGapHalf) * -1;
-                if (RBtnSortDescending.IsChecked == true) {
-                    top -= LineGapHalf * 7;
+                Top = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9 + (Octave * (LineGap * 3 + LineGapHalf) * -1);
+                // ● Accid location changes depending on ascending/descending
+                if (RBtnSortAscending.IsChecked == true) {
+                    accidList = ScaleFindResult.GetAccidentalList()[i];
+                } else if (RBtnSortDescending.IsChecked == true) {
+                    accidList = ScaleFindResult.GetAccidentalList()[7 - i];
+                    Top -= LineGapHalf * 7;
                 }
-                switch (accidList) {
-                    case 3:
-                        AdditionalGap += 14;
-                        break;
-                    case -3:
-                        AdditionalGap += 18;
-                        break;
-                    case 4:
-                        AdditionalGap += 8;
-                        break;
-                    case -4:
-                        AdditionalGap += 28;
-                        break;
-                    default:
-                        break;
-                }
-                leftGap += AdditionalGap;
-                if (i == 0) {
-                    leftGap = AdditionalGap;
-                }
-                //if (RBtnSortAscending.IsChecked == true) {
-                left += leftGap;
-                //}
-                //else if (RBtnSortDescending.IsChecked == true) {
-                //    left -= leftGap;
-                // }                
-                switch (accidList) {
-                    case 0:
-                        break;
-                    case 1:
-                        CVMusicSheet.Children.Add(SharpImgs[i]);
-                        Canvas.SetTop(SharpImgs[i], top - 19);
-                        Canvas.SetLeft(SharpImgs[i], left - 22);
-                        break;
-                    case -1:
-                        CVMusicSheet.Children.Add(FlatImgs[i]);
-                        Canvas.SetTop(FlatImgs[i], top - 20);
-                        Canvas.SetLeft(FlatImgs[i], left - 22);
-                        break;
-                    case 2:
-                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
-                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 20);
-                        break;
-                    case -2:
-                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
-                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i], left - 32);
-                        break;
-                    case 3:
-                        CVMusicSheet.Children.Add(SharpImgs[i]);
-                        Canvas.SetTop(SharpImgs[i], top - 19);
-                        Canvas.SetLeft(SharpImgs[i], left - 41);
-                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
-                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 20);
-                        break;
-                    case -3:
-                        CVMusicSheet.Children.Add(FlatImgs[i]);
-                        Canvas.SetTop(FlatImgs[i], top - 20);
-                        Canvas.SetLeft(FlatImgs[i], left - 57);
-                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
-                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i], left - 35);
-                        break;
-                    case 4:
-                        CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
-                        Canvas.SetTop(DoubleSharpImgs[i], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i], left - 39);
-                        CVMusicSheet.Children.Add(DoubleSharpImgs[i + 8]);
-                        Canvas.SetTop(DoubleSharpImgs[i + 8], top - 0);
-                        Canvas.SetLeft(DoubleSharpImgs[i + 8], left - 20);
-                        break;
-                    case -4:
-                        CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
-                        Canvas.SetTop(DoubleFlatImgs[i], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i], left - 68);
-                        CVMusicSheet.Children.Add(DoubleFlatImgs[i + 8]);
-                        Canvas.SetTop(DoubleFlatImgs[i + 8], top - 18);
-                        Canvas.SetLeft(DoubleFlatImgs[i + 8], left - 32);
-                        break;
-                    default:
-                        break;
-                }
-                Canvas.SetTop(WholeNoteImgs[i], top);
-                Canvas.SetLeft(WholeNoteImgs[i], left);
-                Debug.Print("WNote POS : " + top + " , " + left);
+                // ● Change AdditionalGap according to Accidental
+                DecisionAdditionalGap(i, accidList);
+                Left += LeftGap;
+                // ● Draw Accidental
+                DrawAccidental(i, accidList);
+                Canvas.SetTop(WholeNoteImgs[i], Top);
+                Canvas.SetLeft(WholeNoteImgs[i], Left);
+                Debug.Print("WNote POS : " + Top + " , " + Left);
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
-                if (top < StartLineTop - LineGap) {
-                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, StartLineTop - LineGap, left + WholeNoteImgs[i].Width + 10, StartLineTop - LineGap));
+                // ● Draw lines on notes that deviate from the staff
+                if (Top < StartLineTop - LineGap) {
+                    this.CVMusicSheet.Children.Add(CreateLine(Left - 10, StartLineTop - LineGap, Left + WholeNoteImgs[i].Width + 10, StartLineTop - LineGap));
+                } else if (Top > StartLineTop + LineGap * 4 + 5) {
+                    this.CVMusicSheet.Children.Add(CreateLine(Left - 10, StartLineTop + LineGap * 5, Left + WholeNoteImgs[i].Width + 10, StartLineTop + LineGap * 5));
                 }
-                else if (top > StartLineTop + LineGap * 4 + 5) {
-                    this.CVMusicSheet.Children.Add(CreateLine(left - 10, StartLineTop + LineGap * 5, left + WholeNoteImgs[i].Width + 10, StartLineTop + LineGap * 5));
-                }
+                // ● Add or subtract LineGapHalf to FirstNotePos in ascending/descending order respectively
                 if (RBtnSortAscending.IsChecked == true) {
                     FirstNotePos += LineGapHalf;
-                }
-                else if (RBtnSortDescending.IsChecked == true) {
+                } else if (RBtnSortDescending.IsChecked == true) {
                     FirstNotePos -= LineGapHalf;
                 }
             }
             Debug.Print("----------------------------------------");
         }
-        private void HandleBtnPlaySound(object sender, RoutedEventArgs e) {
-            if (RBtnSortAscending.IsChecked == true) {
-                PlayMidi(0);
-            }
-            else if (RBtnSortDescending.IsChecked == true) {
-                PlayMidi(1);
-            }
-        }
-        private void PlayMidi(int sort) {
-            MidiOut midiOut = new MidiOut(0);
-            int[] pitchList = ScaleFindResult.GetPitchList();
-            int pitchToPlay = 0;
-            int speed = 200;
-            switch (sort) {
-                case 0:
-                    for (int i = 0; i < pitchList.Length; i++) {
-                        pitchToPlay = pitchList[i] + 59 + Octave * 12;
-                        midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                        Thread.Sleep(speed);
-                        midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                        Thread.Sleep(1);
-                    }
-                    Thread.Sleep(400);
+        private void DecisionAdditionalGap(int i, int accidList) {
+            switch (accidList) {
+                case 3:
+                    AdditionalGap += 14;
                     break;
-                case 1:
-                    for (int i = 7; i >= 0; i--) {
-                        pitchToPlay = pitchList[i] + 59 + Octave * 12;
-                        midiOut.Send(MidiMessage.StartNote(pitchToPlay, 127, 1).RawData);
-                        Thread.Sleep(speed);
-                        midiOut.Send(MidiMessage.StopNote(pitchToPlay, 0, 1).RawData);
-                        Thread.Sleep(1);
-                    }
-                    Thread.Sleep(400);
+                case -3:
+                    AdditionalGap += 18;
+                    break;
+                case 4:
+                    AdditionalGap += 8;
+                    break;
+                case -4:
+                    AdditionalGap += 28;
                     break;
                 default:
                     break;
             }
-            midiOut.Close();
-            midiOut.Dispose();
+            LeftGap += AdditionalGap;
+            if (i == 0) {
+                LeftGap = AdditionalGap;
+            }
+        }
+        private void DrawAccidental(int i, int accidList) {
+            switch (accidList) {
+                case 0:
+                    break;
+                case 1:
+                    CVMusicSheet.Children.Add(SharpImgs[i]);
+                    Canvas.SetTop(SharpImgs[i], Top - 19);
+                    Canvas.SetLeft(SharpImgs[i], Left - 22);
+                    break;
+                case -1:
+                    CVMusicSheet.Children.Add(FlatImgs[i]);
+                    Canvas.SetTop(FlatImgs[i], Top - 20);
+                    Canvas.SetLeft(FlatImgs[i], Left - 22);
+                    break;
+                case 2:
+                    CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                    Canvas.SetTop(DoubleSharpImgs[i], Top - 0);
+                    Canvas.SetLeft(DoubleSharpImgs[i], Left - 20);
+                    break;
+                case -2:
+                    CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                    Canvas.SetTop(DoubleFlatImgs[i], Top - 18);
+                    Canvas.SetLeft(DoubleFlatImgs[i], Left - 32);
+                    break;
+                case 3:
+                    CVMusicSheet.Children.Add(SharpImgs[i]);
+                    Canvas.SetTop(SharpImgs[i], Top - 19);
+                    Canvas.SetLeft(SharpImgs[i], Left - 41);
+                    CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                    Canvas.SetTop(DoubleSharpImgs[i], Top - 0);
+                    Canvas.SetLeft(DoubleSharpImgs[i], Left - 20);
+                    break;
+                case -3:
+                    CVMusicSheet.Children.Add(FlatImgs[i]);
+                    Canvas.SetTop(FlatImgs[i], Top - 20);
+                    Canvas.SetLeft(FlatImgs[i], Left - 57);
+                    CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                    Canvas.SetTop(DoubleFlatImgs[i], Top - 18);
+                    Canvas.SetLeft(DoubleFlatImgs[i], Left - 32);
+                    break;
+                case 4:
+                    CVMusicSheet.Children.Add(DoubleSharpImgs[i]);
+                    Canvas.SetTop(DoubleSharpImgs[i], Top - 0);
+                    Canvas.SetLeft(DoubleSharpImgs[i], Left - 39);
+                    CVMusicSheet.Children.Add(DoubleSharpImgs[i + 8]);
+                    Canvas.SetTop(DoubleSharpImgs[i + 8], Top - 0);
+                    Canvas.SetLeft(DoubleSharpImgs[i + 8], Left - 20);
+                    break;
+                case -4:
+                    CVMusicSheet.Children.Add(DoubleFlatImgs[i]);
+                    Canvas.SetTop(DoubleFlatImgs[i], Top - 18);
+                    Canvas.SetLeft(DoubleFlatImgs[i], Left - 68);
+                    CVMusicSheet.Children.Add(DoubleFlatImgs[i + 8]);
+                    Canvas.SetTop(DoubleFlatImgs[i + 8], Top - 18);
+                    Canvas.SetLeft(DoubleFlatImgs[i + 8], Left - 32);
+                    break;
+                default:
+                    break;
+            }
         }
         private void LoadMusicSheetImages() {
             // ● G Clef
@@ -783,8 +764,33 @@ namespace ScaleFinderUI {
             line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
             return line;
         }
-        private void OpenGithubURL(object sender, EventArgs e) {            
+        private void OpenGithubURL(object sender, EventArgs e) {
             Process.Start(new ProcessStartInfo("https://github.com/TeoDevKR/scale-finder") { UseShellExecute = true });
+        }
+        private void HandlePlaySound(object sender, RoutedEventArgs e) {
+            SetChanged(true);
+        }
+        public static bool IsChanged() {
+            return isChanged;
+        }
+        public static void SetChanged(bool changed) {
+            //TODO LOCK
+            isChanged = changed;
+        }
+        public static void SetPitchesToPlay() {
+            MidiPlayTask.MidiItem.Clear();
+            MidiPlayTask.MidiItem.Octave = Octave;
+            int[] pitchs = ScaleFindResult.GetPitchList();            
+            if (isPlaySort == 0) {
+                for (int i = 0; i < pitchs.Length; ++i) {
+                    MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
+                }
+            } else if (isPlaySort == 1) {
+                for (int i = 0; i < pitchs.Length; ++i) {
+                    MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
+                }
+            }            
+            Debug.WriteLine(">>>>>>>>>>>>> SetPitchesToPlay() " + MidiPlayTask.MidiItem.PitchList.Count);
         }
     }
 }

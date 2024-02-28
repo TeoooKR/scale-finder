@@ -19,60 +19,60 @@ SOFTWARE.
 */
 using System.Diagnostics;
 namespace ScaleFinderUI {
-    public class Scale {
-        private string[] PitchTexts = new string[8] { "", "", "", "", "", "", "", "" };
-        private string[] AccidentalTexts = new string[8] { "", "", "", "", "", "", "", "" };
-        private int[] PitchList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
-        private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
-        private int[] IntervalsList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
-        private bool Found = false;
-        public string GetPitchText(int index) {
-            return PitchTexts[index];
-        }
-        public string GetAccidentalText(int index) {
-            return AccidentalTexts[index];
-        }
-        public string[] GetPitchTexts() {
-            return PitchTexts;
-        }
-        public void SetPitchTexts(string[] pitchTexts) {
-            this.PitchTexts = pitchTexts;
-        }
-        public string[] GetAccidentalTexts() {
-            return AccidentalTexts;
-        }
-        public void SetAccidentalTexts(string[] accidentalTexts) {
-            this.AccidentalTexts = accidentalTexts;
-        }
-        public int[] GetPitchList() {
-            return PitchList;
-        }
-        public void SetPitchList(int[] pitchList) {
-            this.PitchList = pitchList;
-        }
-        public int[] GetAccidentalList() {
-            return AccidentalList;
-        }
-        public void SetAccidentalList(int[] accidentalList) {
-            this.AccidentalList = accidentalList;
-        }
-        public int[] GetIntervalsList() {
-            return IntervalsList;
-        }
-        public void SetIntervalsList(int[] intervalsList) {
-            this.IntervalsList = intervalsList;
-        }
-        public bool GetFound() {
-            return Found;
-        }
-        public void SetFound(bool found) {
-            this.Found = found;
-        }
-        public void PrintMyValues() {
-            Debug.WriteLine("         " + "PITCH" + "\t\t" + "INDEX" + "\t\t" + "ACCID.");
-            for (int i = 0; i < PitchTexts.Length; i++) {
-                Debug.WriteLine("- [" + i + "]    " + PitchTexts[i] + "\t\t\t" + PitchList[i] + "\t\t\t" + AccidentalList[i]);
-            }
-        }
+  public class Scale {
+    private string[] PitchTexts = new string[8] { "", "", "", "", "", "", "", "" };
+    private string[] AccidentalTexts = new string[8] { "", "", "", "", "", "", "", "" };
+    private int[] PitchList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+    private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+    private int[] IntervalsList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+    private bool Found = false;
+    public string GetPitchText(int index) {
+      return PitchTexts[index];
     }
+    public string GetAccidentalText(int index) {
+      return AccidentalTexts[index];
+    }
+    public string[] GetPitchTexts() {
+      return PitchTexts;
+    }
+    public void SetPitchTexts(string[] pitchTexts) {
+      this.PitchTexts = pitchTexts;
+    }
+    public string[] GetAccidentalTexts() {
+      return AccidentalTexts;
+    }
+    public void SetAccidentalTexts(string[] accidentalTexts) {
+      this.AccidentalTexts = accidentalTexts;
+    }
+    public int[] GetPitchList() {
+      return PitchList;
+    }
+    public void SetPitchList(int[] pitchList) {
+      this.PitchList = pitchList;
+    }
+    public int[] GetAccidentalList() {
+      return AccidentalList;
+    }
+    public void SetAccidentalList(int[] accidentalList) {
+      this.AccidentalList = accidentalList;
+    }
+    public int[] GetIntervalsList() {
+      return IntervalsList;
+    }
+    public void SetIntervalsList(int[] intervalsList) {
+      this.IntervalsList = intervalsList;
+    }
+    public bool GetFound() {
+      return Found;
+    }
+    public void SetFound(bool found) {
+      this.Found = found;
+    }
+    public void PrintMyValues() {
+      Debug.WriteLine("         " + "PITCH" + "\t\t" + "INDEX" + "\t\t" + "ACCID.");
+      for (int i = 0; i < PitchTexts.Length; i++) {
+        Debug.WriteLine("- [" + i + "]    " + PitchTexts[i] + "\t\t\t" + PitchList[i] + "\t\t\t" + AccidentalList[i]);
+      }
+    }
+  }
 }
