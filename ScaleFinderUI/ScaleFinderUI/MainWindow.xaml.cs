@@ -79,14 +79,15 @@ namespace ScaleFinderUI {
         Image[] FlatImgs = new Image[8];
         Image[] DoubleSharpImgs = new Image[16];
         Image[] DoubleFlatImgs = new Image[16];
+        Rectangle[] rec = new Rectangle[8];
         //> Window Load
         private bool IsWindowLoaded = false;
         private static bool isChanged = false;
         private static int isPlaySort = 0;
         Thread playMidiThread = null;
         public MainWindow() {
-            this.Loaded += new RoutedEventHandler(OnWindowLoaded);
-            //this.Closed += new EventHandler(OnWindowClosed);
+            this.Loaded += new RoutedEventHandler(OnWindowLoaded);            
+            this.Closing += OnWindowClosed;
             LoadMusicSheetImages();
             InitializeComponent();
         }
@@ -103,11 +104,16 @@ namespace ScaleFinderUI {
             if (playMidiThread == null) {
                 playMidiThread = new Thread(MidiPlayTask.PlayMidiTask);
             }
-            playMidiThread.Start();
+            playMidiThread.Start();            
+            Debug.WriteLine(Properties.Settings.Default.volume);
+            SlVolume.Value = Properties.Settings.Default.volume;
         }
-        //private void OnWindowClosed(object sender, EventArgs e) {
-        //    Environment.Exit(Environment.ExitCode);
-        //}
+        private void OnWindowClosed(object sender, EventArgs e) {
+            Debug.Print("Window Closed");
+            Properties.Settings.Default.volume = SlVolume.Value;
+            Properties.Settings.Default.Save();
+            Environment.Exit(Environment.ExitCode);
+        }
         private void HandleBasePitchChecked(object sender, RoutedEventArgs e) {
             RadioButton rb = sender as RadioButton;
             if (rb == null) {
@@ -154,11 +160,11 @@ namespace ScaleFinderUI {
                     ButtonUp.IsEnabled = false;
                     TBAccidCount.IsEnabled = false;
                     break;
-                case "RBtnAccidSharp" or "RBtnAccidFlat":                
+                case "RBtnAccidSharp" or "RBtnAccidFlat":
                     ButtonDown.IsEnabled = true;
                     ButtonUp.IsEnabled = true;
                     TBAccidCount.IsEnabled = true;
-                    break;                
+                    break;
                 default:
                     break;
             }
@@ -228,7 +234,7 @@ namespace ScaleFinderUI {
             } else if (RBtnSortDescending.IsChecked == true) {
                 isPlaySort = 1;
             }
-            UpdateUI();            
+            UpdateUI();
         }
         protected void HandleTextChanged(object sender, EventArgs e) {
             switch (TBAccidCount.Text.Length) {
@@ -274,7 +280,7 @@ namespace ScaleFinderUI {
             if (!ScaleFindResult.GetFound() || TBSelectedScale == null || TBScaleResult == null || TBDegrees == null) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
-            }            
+            }
             UpdateSelectedScale();
             UpdateScaleResult();
             UpdateDegrees();
@@ -386,7 +392,7 @@ namespace ScaleFinderUI {
                     return;
             }
             ChangeSelectedClefImage();
-            UpdateUI();            
+            UpdateUI();
         }
         private void ChangeSelectedClefImage() {
             // ● G Clef
@@ -442,7 +448,7 @@ namespace ScaleFinderUI {
             ClefNotePos = 0;
             Octave = 0;
             ChangeSelectedClefImage();
-            UpdateUI();            
+            UpdateUI();
         }
         private void UpdateUI() {
             if (!IsWindowLoaded) {
@@ -491,7 +497,7 @@ namespace ScaleFinderUI {
         }
         private void CalcFirstNotePos() {
             string pitch = ScaleFindResult.GetPitchText(0);
-            int pos = 0;            
+            int pos = 0;
             if (pitch.StartsWith("C")) {
                 pos = 0;
             } else if (pitch.StartsWith("D")) {
@@ -548,6 +554,7 @@ namespace ScaleFinderUI {
                 Canvas.SetLeft(WholeNoteImgs[i], Left);
                 Debug.Print("WNote POS : " + Top + " , " + Left);
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
+                DrawRectangleForCurrentPlayingNote(i);
                 // ● Draw lines on notes that deviate from the staff                
                 if (Top < StartLineTop - LineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(Left - 10, StartLineTop - LineGap, Left + WholeNoteImgs[i].Width + 10, StartLineTop - LineGap));
@@ -562,6 +569,19 @@ namespace ScaleFinderUI {
                 }
             }
             Debug.Print("----------------------------------------");
+        }
+        private void DrawRectangleForCurrentPlayingNote(int i) {
+            if (rec[i] == null) {
+                rec[i] = new Rectangle();
+            }
+            rec[i].Width = 50;
+            rec[i].Height = CVMusicSheet.Height;
+            Canvas.SetLeft(rec[i], Left - WholeNoteImgs[i].Width * 0.33);
+            SolidColorBrush recColor = new SolidColorBrush();
+            recColor.Color = Color.FromArgb(32, 134, 52, 235);
+            rec[i].Fill = recColor;
+            this.CVMusicSheet.Children.Add(rec[i]);
+            rec[i].Visibility = Visibility.Collapsed;
         }
         private void DecisionAdditionalGap(int i, int accidList) {
             switch (accidList) {
@@ -793,7 +813,7 @@ namespace ScaleFinderUI {
             TBVolume.Text = volume.ToString();
         }
         public static void CurrentPlayingNote(int n) {
-            Debug.WriteLine(n);            
+            Debug.WriteLine(n);
         }
     }
 }

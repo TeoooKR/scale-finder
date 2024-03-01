@@ -29,7 +29,7 @@ namespace ScaleFinderUI {
                     if (MainWindow.IsChanged()) {
                         GetData();
                     }
-                });
+                });                
                 if (MidiItem.PitchList.Count < 1) {
                     Thread.Sleep(1);
                     continue;
@@ -41,9 +41,7 @@ namespace ScaleFinderUI {
                     continue;
                 }
                 MidiItem.Clear();
-            }
-            MidiOut.Close();
-            MidiOut.Dispose();
+            }            
         }
         private static void PlayMidi() {
             for (int i = 0; i < MidiItem.PitchList.Count; i++) {
@@ -51,7 +49,7 @@ namespace ScaleFinderUI {
                     GetData();
                     break;
                 }
-                MainWindow.CurrentPlayingNote(i);                
+                MainWindow.CurrentPlayingNote(i);
                 int pitchToPlay = MidiItem.PitchList[i] + 59 + MidiItem.Octave * 12;
                 NoteOnEvent noteOnEvent = new NoteOnEvent(0, 2, pitchToPlay, MidiItem.Volume, 1);
                 MidiOut.Send(noteOnEvent.GetAsShortMessage());

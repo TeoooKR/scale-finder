@@ -22,5 +22,16 @@ namespace ScaleFinderUI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public double volume {
+            get {
+                return ((double)(this["volume"]));
+            }
+            set {
+                this["volume"] = value;
+            }
+        }
     }
 }

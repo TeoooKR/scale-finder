@@ -150,8 +150,3 @@ namespace ScaleFinderUI {
         }
     }
 }
-
-
-
-
-
