@@ -45,15 +45,18 @@ namespace ScaleFinderUI {
             MidiOut.Close();
             MidiOut.Dispose();
         }
-        private static void PlayMidi() {                              
+        private static void PlayMidi() {
             for (int i = 0; i < MidiItem.PitchList.Count; i++) {
                 if (MainWindow.IsChanged()) {
                     GetData();
                     break;
                 }
+                MainWindow.CurrentPlayingNote(i);
+                dispatcher.Invoke(() => {
+                    MainWindow.CurrentPlayingNote(i);
+                });
                 int pitchToPlay = MidiItem.PitchList[i] + 59 + MidiItem.Octave * 12;
-                NoteOnEvent noteOnEvent = new NoteOnEvent(0, 2, pitchToPlay, 24, 1);
-                
+                NoteOnEvent noteOnEvent = new NoteOnEvent(0, 2, pitchToPlay, MidiItem.Volume, 1);
                 MidiOut.Send(noteOnEvent.GetAsShortMessage());
                 Thread.Sleep(175);
                 MidiOut.Send(noteOnEvent.OffEvent.GetAsShortMessage());

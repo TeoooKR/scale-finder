@@ -154,16 +154,11 @@ namespace ScaleFinderUI {
                     ButtonUp.IsEnabled = false;
                     TBAccidCount.IsEnabled = false;
                     break;
-                case "RBtnAccidSharp":
+                case "RBtnAccidSharp" or "RBtnAccidFlat":                
                     ButtonDown.IsEnabled = true;
                     ButtonUp.IsEnabled = true;
                     TBAccidCount.IsEnabled = true;
-                    break;
-                case "RBtnAccidFlat":
-                    ButtonDown.IsEnabled = true;
-                    ButtonUp.IsEnabled = true;
-                    TBAccidCount.IsEnabled = true;
-                    break;
+                    break;                
                 default:
                     break;
             }
@@ -553,7 +548,7 @@ namespace ScaleFinderUI {
                 Canvas.SetLeft(WholeNoteImgs[i], Left);
                 Debug.Print("WNote POS : " + Top + " , " + Left);
                 this.CVMusicSheet.Children.Add(WholeNoteImgs[i]);
-                // ● Draw lines on notes that deviate from the staff
+                // ● Draw lines on notes that deviate from the staff                
                 if (Top < StartLineTop - LineGap) {
                     this.CVMusicSheet.Children.Add(CreateLine(Left - 10, StartLineTop - LineGap, Left + WholeNoteImgs[i].Width + 10, StartLineTop - LineGap));
                 } else if (Top > StartLineTop + LineGap * 4 + 5) {
@@ -780,7 +775,7 @@ namespace ScaleFinderUI {
         public static void SetPitchesToPlay() {
             MidiPlayTask.MidiItem.Clear();
             MidiPlayTask.MidiItem.Octave = Octave;
-            int[] pitchs = ScaleFindResult.GetPitchList();            
+            int[] pitchs = ScaleFindResult.GetPitchList();
             if (isPlaySort == 0) {
                 for (int i = 0; i < pitchs.Length; ++i) {
                     MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
@@ -789,8 +784,16 @@ namespace ScaleFinderUI {
                 for (int i = 0; i < pitchs.Length; ++i) {
                     MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
                 }
-            }            
+            }
             Debug.WriteLine(">>>>>>>>>>>>> SetPitchesToPlay() " + MidiPlayTask.MidiItem.PitchList.Count);
+        }
+        private void HandleVolume(object sender, RoutedEventArgs e) {
+            int volume = Convert.ToInt32(SlVolume.Value * 10);
+            MidiPlayTask.MidiItem.Volume = volume;
+            TBVolume.Text = volume.ToString();
+        }
+        public static void CurrentPlayingNote(int n) {
+            Debug.WriteLine(n);            
         }
     }
 }

@@ -105,7 +105,7 @@ SOFTWARE.
             <TextBox Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="720" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
                FontSize="32" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
             <TextBox Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="720" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
-               FontSize="20" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
+               FontSize="20" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-5,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <RadioButton Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">C</RadioButton>
@@ -128,7 +128,7 @@ SOFTWARE.
             </Button>
         </StackPanel>
         <StackPanel>
-            <TextBlock Name="TBBlank" TextWrapping="Wrap" Text=" " Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Name="TBBlank" TextWrapping="Wrap" Text=" " Width="64" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <RadioButton Name="RBtnTypeMajorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="72" Height="44" Margin="3">Major</RadioButton>
@@ -152,19 +152,27 @@ SOFTWARE.
                      IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="7,-5,7,7"/>
         <TextBox Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
                      IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-13,0,0"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBox Name="TBVolume" TextWrapping="Wrap" Text="100&#xA;" Width="64" Height="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="4,-13,0,-7"/>
+            <Slider x:Name="SlVolume" Width="160" HorizontalAlignment="Left" Margin="-7,0,0,0" ValueChanged="HandleVolume" Value="6"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,44,0,0">
             <Button x:Name="BtnPlaySound" Click="HandlePlaySound" FontSize="30" Width="210" Height="48" Content="PLAY" HorizontalAlignment="Right" Margin="20,-25,0,0"/>
             <RadioButton x:Name="RBtnSortAscending" Checked="HandleSortChecked" IsChecked="true" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
                    FontSize="22" Width="144" Height="48" Margin="15,-25,0,0" Padding="100" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Ascending"/>
             <RadioButton x:Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
                    FontSize="22" Width="144" Height="48" Margin="5,-25,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Descending"/>
+            <TextBox Name="TBCurrentPlayingNote" TextWrapping="Wrap" Text="0&#xA;" Width="64" Height="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="4,-13,0,-7"/>
+            <!--<TextBlock x:Name="TBPlayingNote" Width="150" Text="0"/>-->
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="BtnGit" Click="OpenGithubURL" Margin="0,-100,-75,20" HorizontalAlignment="Center" BorderBrush="{x:Null}" Background="White"
               VerticalAlignment="Top" Height="88" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                 <materialDesign:PackIcon Kind="Github" Foreground="Black" FontSize="24" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
             </Button>
-            <TextBlock Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.0</TextBlock>
+            <TextBlock Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.1</TextBlock>
         </StackPanel>
     </StackPanel>
 </Window>
