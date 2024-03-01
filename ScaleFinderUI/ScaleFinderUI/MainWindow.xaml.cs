@@ -86,7 +86,7 @@ namespace ScaleFinderUI {
         private static int isPlaySort = 0;
         Thread playMidiThread = null;
         public MainWindow() {
-            this.Loaded += new RoutedEventHandler(OnWindowLoaded);            
+            this.Loaded += new RoutedEventHandler(OnWindowLoaded);
             this.Closing += OnWindowClosed;
             LoadMusicSheetImages();
             InitializeComponent();
@@ -104,7 +104,7 @@ namespace ScaleFinderUI {
             if (playMidiThread == null) {
                 playMidiThread = new Thread(MidiPlayTask.PlayMidiTask);
             }
-            playMidiThread.Start();            
+            playMidiThread.Start();
             Debug.WriteLine(Properties.Settings.Default.volume);
             SlVolume.Value = Properties.Settings.Default.volume;
         }
