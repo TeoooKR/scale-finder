@@ -154,11 +154,11 @@ namespace ScaleFinderUI {
                     ButtonUp.IsEnabled = false;
                     TBAccidCount.IsEnabled = false;
                     break;
-                case "RBtnAccidSharp" or "RBtnAccidFlat":                
+                case "RBtnAccidSharp" or "RBtnAccidFlat":
                     ButtonDown.IsEnabled = true;
                     ButtonUp.IsEnabled = true;
                     TBAccidCount.IsEnabled = true;
-                    break;                
+                    break;
                 default:
                     break;
             }
@@ -228,7 +228,7 @@ namespace ScaleFinderUI {
             } else if (RBtnSortDescending.IsChecked == true) {
                 isPlaySort = 1;
             }
-            UpdateUI();            
+            UpdateUI();
         }
         protected void HandleTextChanged(object sender, EventArgs e) {
             switch (TBAccidCount.Text.Length) {
@@ -274,7 +274,7 @@ namespace ScaleFinderUI {
             if (!ScaleFindResult.GetFound() || TBSelectedScale == null || TBScaleResult == null || TBDegrees == null) {
                 Debug.WriteLine("Error.. I cannot find your scale. sigh....");
                 return;
-            }            
+            }
             UpdateSelectedScale();
             UpdateScaleResult();
             UpdateDegrees();
@@ -386,7 +386,7 @@ namespace ScaleFinderUI {
                     return;
             }
             ChangeSelectedClefImage();
-            UpdateUI();            
+            UpdateUI();
         }
         private void ChangeSelectedClefImage() {
             // ● G Clef
@@ -442,7 +442,7 @@ namespace ScaleFinderUI {
             ClefNotePos = 0;
             Octave = 0;
             ChangeSelectedClefImage();
-            UpdateUI();            
+            UpdateUI();
         }
         private void UpdateUI() {
             if (!IsWindowLoaded) {
@@ -491,7 +491,7 @@ namespace ScaleFinderUI {
         }
         private void CalcFirstNotePos() {
             string pitch = ScaleFindResult.GetPitchText(0);
-            int pos = 0;            
+            int pos = 0;
             if (pitch.StartsWith("C")) {
                 pos = 0;
             } else if (pitch.StartsWith("D")) {
@@ -793,7 +793,7 @@ namespace ScaleFinderUI {
             TBVolume.Text = volume.ToString();
         }
         public static void CurrentPlayingNote(int n) {
-            Debug.WriteLine(n);            
+            Debug.WriteLine(n);
         }
     }
 }
