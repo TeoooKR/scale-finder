@@ -51,10 +51,7 @@ namespace ScaleFinderUI {
                     GetData();
                     break;
                 }
-                MainWindow.CurrentPlayingNote(i);
-                dispatcher.Invoke(() => {
-                    MainWindow.CurrentPlayingNote(i);
-                });
+                MainWindow.CurrentPlayingNote(i);                
                 int pitchToPlay = MidiItem.PitchList[i] + 59 + MidiItem.Octave * 12;
                 NoteOnEvent noteOnEvent = new NoteOnEvent(0, 2, pitchToPlay, MidiItem.Volume, 1);
                 MidiOut.Send(noteOnEvent.GetAsShortMessage());

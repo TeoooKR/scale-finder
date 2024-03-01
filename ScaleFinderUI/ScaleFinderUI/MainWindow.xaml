@@ -172,7 +172,7 @@ SOFTWARE.
               VerticalAlignment="Top" Height="88" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                 <materialDesign:PackIcon Kind="Github" Foreground="Black" FontSize="24" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
             </Button>
-            <TextBlock Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.1</TextBlock>
+            <TextBlock Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.0</TextBlock>
         </StackPanel>
     </StackPanel>
 </Window>
