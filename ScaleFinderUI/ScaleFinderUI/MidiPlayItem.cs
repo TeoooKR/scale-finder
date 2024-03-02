@@ -11,7 +11,7 @@ namespace ScaleFinderUI {
     class MidiPlayItem {
         public List<int> PitchList { get; set; }
         public int Octave { get; set; }
-        public int Volume { get; set; }
+        public byte Volume { get; set; }
         
         public MidiPlayItem() {
             PitchList = new List<int>();

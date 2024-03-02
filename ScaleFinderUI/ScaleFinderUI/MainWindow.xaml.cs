@@ -36,6 +36,7 @@ namespace ScaleFinderUI {
     /// </summary>
     public partial class MainWindow : Window {
         //> Clef
+        // ▣ byte (4)
         private const int TabClefTypeG = 0;
         private const int TabClefTypeF = 1;
         private const int TabClefTypeC = 2;
@@ -44,19 +45,27 @@ namespace ScaleFinderUI {
         private static readonly ScaleFinder Finder = new();
         static Scale? ScaleFindResult;
         private static Scale? ScaleFindResultBaseC;
+        // ▣ byte
         private int BasePitch = ScaleFinder.PitchC;
+        // ▣ sbyte
         private int Accid = ScaleFinder.AccidNatural;
+        // ▣ byte
         private int[] Type = ScaleFinder.IntervalMajorScale;
         private string SelectedTypeText = " Major";
         private double StartLineTop = 0;
         //> Note Position
+        // ▣ sbyte
         static public int Octave = 0;
+        // ▣ short (2)
         private int FirstNotePos = 0;
         private int ClefNotePos = 0;
-        private int LineGap = 20;
-        private int LineGapHalf = 10;
+        // ▣ byte (2)
+        private readonly int LineGap = 20;
+        private readonly int LineGapHalf = 10;
         private double NoteTop = 0;
+        // ▣ ushort
         private int NoteLeft = 130;
+        // ▣ byte (2)
         private int NoteLeftGap = 80;
         private int NoteAdditionalGap = 0;
         //> Images
@@ -72,7 +81,7 @@ namespace ScaleFinderUI {
         //> Window Load
         private bool IsWindowLoaded = false;
         private static bool isChanged = false;
-        private static int isPlaySort = 0;
+        private static bool isDescending = false;
         Thread? playMidiThread = null;
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(OnWindowLoaded);
@@ -221,9 +230,9 @@ namespace ScaleFinderUI {
         }
         private void HandleSortChecked(object sender, RoutedEventArgs e) {
             if (RBtnSortAscending.IsChecked == true) {
-                isPlaySort = 0;
+                isDescending = false;
             } else if (RBtnSortDescending.IsChecked == true) {
-                isPlaySort = 1;
+                isDescending = true;
             }
             UpdateUI();
         }
@@ -240,15 +249,15 @@ namespace ScaleFinderUI {
             UpdateResult();
         }
         private void HandleAccidCountDown(object sender, EventArgs e) {
-            int AccidCountInt = Convert.ToInt32(TBAccidCount.Text);
-            if (AccidCountInt < 2) {
+            sbyte AccidCount = Convert.ToSByte(TBAccidCount.Text);
+            if (AccidCount < 2) {
                 return;
             }
-            AccidCountInt -= 1;
-            TBAccidCount.Text = AccidCountInt.ToString();
+            AccidCount -= 1;
+            TBAccidCount.Text = AccidCount.ToString();
         }
         private void HandleAccidCountUp(object sender, EventArgs e) {
-            int AccidCount = Convert.ToInt32(TBAccidCount.Text);
+            sbyte AccidCount = Convert.ToSByte(TBAccidCount.Text);
             if (AccidCount > 2) {
                 return;
             }
@@ -306,6 +315,7 @@ namespace ScaleFinderUI {
         }
         private void UpdateIntervals()
         {
+            // ▣ byte
             int[]? intervalsList = ScaleFindResultBaseC?.GetIntervalsList();
             if (intervalsList != null)
             {
@@ -350,7 +360,9 @@ namespace ScaleFinderUI {
 
         private void UpdateIntegerNotation()
         {
+            // ▣ sbyte
             int[] pitchList = ScaleFindResult?.GetPitchList() ?? Array.Empty<int>();
+            // ▣ byte
             int[] tempList = new int[7];
             string pitchListText = "";
 
@@ -388,14 +400,14 @@ namespace ScaleFinderUI {
                     }
                     RBtnBassClef.IsChecked = true;
                     break;
-                case "TICClef":
+                case "TICClef":                 
                     SelectedTabClefType = TabClefTypeC;
                     if (RBtnAltoClef.IsChecked == true || RBtnTenorClef.IsChecked == true || RBtnBaritoneCClef.IsChecked == true ||
                         RBtnMezzoSopranoClef.IsChecked == true || RBtnSopranoClef.IsChecked == true) {
-                        break;
+                        break;                 
                     }
-                    RBtnAltoClef.IsChecked = true;
-                    break;
+                    RBtnAltoClef.IsChecked = true;                 
+                    break;               
                 default:
                     return;
             }
@@ -421,7 +433,7 @@ namespace ScaleFinderUI {
             if (SelectedTabClefType == TabClefTypeF) {
                 double clefTop = CVMusicSheet.Height / 2 - FClefImg.Height / 2;
                 if (RBtnBassClef.IsChecked == true) {
-                    Canvas.SetTop(FClefImg, clefTop);
+                    Canvas.SetTop(FClefImg, clefTop);        
                     ClefNotePos = LineGap * 6 * -1;
                 } else if (RBtnBaritoneFClef.IsChecked == true) {
                     Canvas.SetTop(FClefImg, clefTop + LineGap);
@@ -503,8 +515,10 @@ namespace ScaleFinderUI {
                 Octave = 1;
             }
         }
-        private void CalcFirstNotePos() {
+        private void CalcFirstNotePos()
+        {
             string pitch = ScaleFindResult?.GetPitchTexts()[0] ?? String.Empty;
+            // ▣ byte
             int pos = 0;
             if (pitch.StartsWith("C")) {
                 pos = 0;
@@ -537,6 +551,7 @@ namespace ScaleFinderUI {
             Debug.WriteLine("sizeof(float): {0}", sizeof(float));
             Debug.WriteLine("sizeof(double): {0}", sizeof(double));
             NoteTop = StartLineTop - FirstNotePos + ClefNotePos + LineGapHalf * 9;
+            // ▣ sbyte
             int accidList = 0;
             for (int i = 0; i < 8; i++) {
                 NoteLeftGap = 60;
@@ -691,7 +706,7 @@ namespace ScaleFinderUI {
             BitmapImage fClefBtm = new BitmapImage();
             fClefBtm.BeginInit();
             fClefBtm.UriSource = new Uri("pack://application:,,,/assets/FClef.png");
-            fClefBtm.EndInit();
+            fClefBtm.EndInit();          
             FClefImg.Height = 91.5;
             FClefImg.Source = fClefBtm;
             // ● C Clef
@@ -719,7 +734,7 @@ namespace ScaleFinderUI {
                 Canvas.SetTop(img, StartLineTop);
             }
             // ● Sharp
-            BitmapImage sharpBtm = new BitmapImage();
+            BitmapImage sharpBtm = new BitmapImage();                
             sharpBtm.BeginInit();
             sharpBtm.UriSource = new Uri("pack://application:,,,/assets/Sharp.png");
             sharpBtm.EndInit();
@@ -746,7 +761,7 @@ namespace ScaleFinderUI {
                 FlatImgs[i].Source = flatBtm;
                 FlatImgs[i].Height = LineGap * 2.26;
                 FlatImgs[i].Width = (LineGap * FlatImgs[i].Source.Width / FlatImgs[i].Source.Height) * 2.26;
-                Canvas.SetLeft(FlatImgs[i], 300);
+                Canvas.SetLeft(FlatImgs[i], 300);                  
                 Canvas.SetTop(FlatImgs[i], 180);
             }
             // ● Double Sharp
@@ -769,7 +784,7 @@ namespace ScaleFinderUI {
             doubleFlatBtm.BeginInit();
             doubleFlatBtm.UriSource = new Uri("pack://application:,,,/assets/DoubleFlat.png");
             doubleFlatBtm.EndInit();
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 16; i++) {                
                 if (DoubleFlatImgs[i] == null) {
                     DoubleFlatImgs[i] = new Image();
                 }
@@ -787,7 +802,7 @@ namespace ScaleFinderUI {
             line.Y1 = y1;
             line.X2 = x2;
             line.Y2 = y2;
-            line.StrokeThickness = 1.5;
+            line.StrokeThickness = 1.5;                 
             line.Stroke = (Brush)(Brushes.Black);
             line.SnapsToDevicePixels = true;
             line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
@@ -809,32 +824,34 @@ namespace ScaleFinderUI {
         public static void SetPitchesToPlay() {
             MidiPlayTask.MidiItem.Clear();
             MidiPlayTask.MidiItem.Octave = Octave;
+            // ▣ sbyte
             int[] pitchs = ScaleFindResult?.GetPitchList() ?? Array.Empty<int>();
             if (ScaleFindResult != null)
             {
-                if (isPlaySort == 0)
+                switch (isDescending)
                 {
-                    for (int i = 0; i < pitchs.Length; ++i)
-                    {
-                        MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
-                    }
-                }
-                else if (isPlaySort == 1)
-                {
-                    for (int i = 0; i < pitchs.Length; ++i)
-                    {
-                        MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
-                    }
+                    case false:
+                        for (int i = 0; i < pitchs.Length; ++i)
+                        {
+                            MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
+                        }
+                        break;
+                    case true:
+                        for (int i = 0; i < pitchs.Length; ++i)
+                        {
+                            MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
+                        }
+                        break;
                 }
             }
             Debug.WriteLine(">>>>>>>>>>>>> SetPitchesToPlay() " + MidiPlayTask.MidiItem.PitchList.Count);
         }
         private void HandleVolume(object sender, RoutedEventArgs e) {
-            int volume = Convert.ToInt32(SlVolume.Value * 10);
-            MidiPlayTask.MidiItem.Volume = volume;
-            TBVolume.Text = volume.ToString();
+            byte volume = Convert.ToByte(SlVolume.Value * 10);
+            MidiPlayTask.MidiItem.Volume = volume;                   
+            TBVolume.Text = volume.ToString();                  
         }
-        public static void CurrentPlayingNote(int n) {
+        public static void CurrentPlayingNote(int n) {       
             Debug.WriteLine(n);
         }
     }
