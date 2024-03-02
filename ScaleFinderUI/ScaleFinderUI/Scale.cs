@@ -26,9 +26,6 @@ namespace ScaleFinderUI {
         private int[] AccidentalList = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private int[] IntervalsList = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
         private bool Found = false;
-        public string GetPitchText(int index) {
-            return PitchTexts[index];
-        }
         public string GetAccidentalText(int index) {
             return AccidentalTexts[index];
         }
