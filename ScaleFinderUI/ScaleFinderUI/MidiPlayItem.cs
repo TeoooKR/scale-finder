@@ -1,12 +1,5 @@
-﻿using MaterialDesignThemes.Wpf.Internal;
-using NAudio.Midi;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ScaleFinderUI {
     class MidiPlayItem {
         public List<int> PitchList { get; set; }

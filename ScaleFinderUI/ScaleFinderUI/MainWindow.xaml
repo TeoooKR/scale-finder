@@ -27,153 +27,184 @@ SOFTWARE.
         mc:Ignorable="d"
         Title="Scale Finder" Height="768" Width="1080" ResizeMode="NoResize">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
-        <StackPanel x:Name="SPCanvas" Orientation="Vertical" HorizontalAlignment="Center">
-            <Canvas x:Name="CVMusicSheet" Width="920" Height="180" Background="#f3f3f3" Margin="30"></Canvas>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Left">
-            <Canvas x:Name="CVClefs" Width="160" Height="48" Background="#f8f0ff" Margin="75,-10,5,5" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <materialDesign:PopupBox Name="PBClef" StaysOpen="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <materialDesign:PopupBox.ToggleContent>
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="30,5,0,0" VerticalAlignment="Center">
-                            <TextBlock x:Name="TBClefs" TextWrapping="Wrap" Text="Clefs" Width="40" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="16" TextAlignment="Center" VerticalAlignment="Center"/>
-                            <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="36"/>
-                            <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="28" Margin="-5"/>
-                            <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26" Margin="5"/>
-                        </StackPanel>
-                    </materialDesign:PopupBox.ToggleContent>
-                    <StackPanel HorizontalAlignment="Center">
+        <TabControl HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>Note</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>Intervals</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>Chord</TextBlock>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem x:Name="TIScale" IsSelected="True">
+                <TabItem.Header>
+                    <TextBlock>Scale</TextBlock>
+                </TabItem.Header>
+                <StackPanel>
+                    <StackPanel x:Name="SPCanvas" Orientation="Vertical" HorizontalAlignment="Center">
+                        <Canvas x:Name="CVMusicSheet" Width="920" Height="180" Background="#f3f3f3" Margin="30"></Canvas>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="BtnPlaySound" Click="HandlePlaySound" FontSize="30" Width="108" Height="48" HorizontalAlignment="Right" Margin="72,-20,0,0" Style="{StaticResource MaterialDesignFlatLightButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="24">Play</TextBlock>
+                                <materialDesign:PackIcon Kind="PlayCircleOutline" Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                         <StackPanel Orientation="Horizontal">
-                            <TabControl TabStripPlacement="Left" SelectionChanged="HandleClefTypeSelectionChanged" >
-                                <TabItem x:Name="TIGClef" Width="80" Height="84" >
-                                    <TabItem.Header>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="64"/>
-                                        </StackPanel>
-                                    </TabItem.Header>
-                                    <StackPanel>
-                                        <RadioButton x:Name="RBtnTrebleClef" Checked="HandleClefChecked" GroupName="GClef" IsChecked="True" FontSize="22" Width="144" Height="48" Margin="5"
-                               HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}">
-                                            <WrapPanel>
-                                                <TextBlock Text="Treble Clef"/>
-                                            </WrapPanel>
-                                        </RadioButton>
-                                        <RadioButton x:Name="RBtnFrenchClef" Checked="HandleClefChecked" GroupName="GClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="French Clef"/>
-                                    </StackPanel>
-                                </TabItem>
-                                <TabItem x:Name="TIFClef" Width="80" Height="84">
-                                    <TabItem.Header>
-                                        <StackPanel>
-                                            <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60"/>
-                                        </StackPanel>
-                                    </TabItem.Header>
-                                    <StackPanel>
-                                        <RadioButton x:Name="RBtnBassClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="152" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Bass Clef"/>
-                                        <RadioButton x:Name="RBtnBaritoneFClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Baritone Clef (F Clef)"/>
-                                        <RadioButton x:Name="RBtnSubbassClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Subbass Clef"/>
-                                    </StackPanel>
-                                </TabItem>
-                                <TabItem x:Name="TICClef" Width="80" Height="84">
-                                    <TabItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50"/>
-                                        </StackPanel>
-                                    </TabItem.Header>
-                                    <StackPanel>
-                                        <RadioButton x:Name="RBtnAltoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Alto Clef"/>
-                                        <RadioButton x:Name="RBtnTenorClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="156" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Tenor Clef"/>
-                                        <RadioButton x:Name="RBtnBaritoneCClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="288" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Baritone Clef (C Clef)"/>
-                                        <RadioButton x:Name="RBtnMezzoSopranoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Mezzo-soprano Clef"/>
-                                        <RadioButton x:Name="RBtnSopranoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                               FontSize="22" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Soprano Clef"/>
-                                    </StackPanel>
-                                </TabItem>
-                            </TabControl>
+                            <TextBox x:Name="TBVolume" TextWrapping="Wrap" Text="100&#xA;" Width="64" Height="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="-12,-40,0,5"/>
+                            <Slider x:Name="SlVolume" Width="124" HorizontalAlignment="Left" Margin="-5,-5,0,0" ValueChanged="HandleVolume" Value="6"/>
                         </StackPanel>
                     </StackPanel>
-                </materialDesign:PopupBox>
-            </Canvas>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Center">
-            <TextBox Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="720" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
-               FontSize="32" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
-            <TextBox Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="720" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
-               FontSize="20" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-5,0,0"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <RadioButton Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">C</RadioButton>
-            <RadioButton Name="RBtnBaseD" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">D</RadioButton>
-            <RadioButton Name="RBtnBaseE" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">E</RadioButton>
-            <RadioButton Name="RBtnBaseF" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">F</RadioButton>
-            <RadioButton Name="RBtnBaseG" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">G</RadioButton>
-            <RadioButton Name="RBtnBaseA" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">A</RadioButton>
-            <RadioButton Name="RBtnBaseB" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">B</RadioButton>
-            <TextBlock Name="TBSlash" TextWrapping="Wrap" Text="/" Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
-            <RadioButton Name="RBtnAccidNatural" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">♮</RadioButton>
-            <RadioButton Name="RBtnAccidSharp" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">#</RadioButton>
-            <RadioButton Name="RBtnAccidFlat" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">♭</RadioButton>
-            <Button Name="ButtonDown" Click="HandleAccidCountDown" FontSize="18" Width="72" Height="48" Margin="3"  Background="Transparent" BorderBrush="Transparent">
-                <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline" Width="44" Height="44" Foreground="Gray"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Button>
-            <TextBox Name="TBAccidCount" PreviewTextInput="NumberValidationTextBoxAccidCount" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="24" Width="40" Height="40" Margin="5">1</TextBox>
-            <Button Name="ButtonUp" Click="HandleAccidCountUp" FontSize="18" Width="72" Height="48" Margin="3" Background="Transparent" BorderBrush="Transparent">
-                <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" Width="44" Height="44" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Button>
-        </StackPanel>
-        <StackPanel>
-            <TextBlock Name="TBBlank" TextWrapping="Wrap" Text=" " Width="64" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <RadioButton Name="RBtnTypeMajorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="72" Height="44" Margin="3">Major</RadioButton>
-            <RadioButton Name="RBtnTypeMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="72" Height="44" Margin="3">Minor</RadioButton>
-            <RadioButton Name="RBtnTypeHarmonicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="187" Height="44" Margin="3">Harmonic Minor</RadioButton>
-            <RadioButton Name="RBtnTypeMelodicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="174" Height="44" Margin="3" Padding="50">Melodic Minor</RadioButton>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <RadioButton Name="RBtnTypeIonianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="86" Height="44" Margin="3">Ionian</RadioButton>
-            <RadioButton Name="RBtnTypeDorianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="85" Height="44" Margin="3">Dorian</RadioButton>
-            <RadioButton Name="RBtnTypePhtygianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="111" Height="44" Margin="3">Phtygian</RadioButton>
-            <RadioButton Name="RBtnTypeLydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="96" Height="44" Margin="3">Lydian</RadioButton>
-            <RadioButton Name="RBtnTypeMixolydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="138" Height="44" Margin="3">Mixolydian</RadioButton>
-            <RadioButton Name="RBtnTypeAeolianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="108" Height="44" Margin="3">Aeolian</RadioButton>
-            <RadioButton Name="RBtnTypeLocrainMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="103" Height="44" Margin="3">Locrain</RadioButton>
-            <TextBlock Name="TBBlank2" TextWrapping="Wrap" Text=" " Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
-        <TextBox Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
-                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
-        <TextBox Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
-                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="7,-5,7,7"/>
-        <TextBox Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
-                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-13,0,0"/>
-        <StackPanel Orientation="Horizontal">
-            <TextBox Name="TBVolume" TextWrapping="Wrap" Text="100&#xA;" Width="64" Height="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
-                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="4,-13,0,-7"/>
-            <Slider x:Name="SlVolume" Width="160" HorizontalAlignment="Left" Margin="-7,0,0,0" ValueChanged="HandleVolume" Value="6"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,44,0,0">
-            <Button x:Name="BtnPlaySound" Click="HandlePlaySound" FontSize="30" Width="210" Height="48" Content="PLAY" HorizontalAlignment="Right" Margin="20,-25,0,0"/>
-            <RadioButton x:Name="RBtnSortAscending" Checked="HandleSortChecked" IsChecked="true" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                   FontSize="22" Width="144" Height="48" Margin="15,-25,0,0" Padding="100" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Ascending"/>
-            <RadioButton x:Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
-                   FontSize="22" Width="144" Height="48" Margin="5,-25,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Descending"/>
-            <TextBox Name="TBCurrentPlayingNote" TextWrapping="Wrap" Text="0&#xA;" Width="64" Height="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
-                     IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="4,-13,0,-7"/>
-            <!--<TextBlock x:Name="TBPlayingNote" Width="150" Text="0"/>-->
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Name="BtnGit" Click="OpenGithubURL" Margin="0,-100,-75,20" HorizontalAlignment="Center" BorderBrush="{x:Null}" Background="White"
-              VerticalAlignment="Top" Height="88" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                <materialDesign:PackIcon Kind="Github" Foreground="Black" FontSize="24" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
-            </Button>
-            <TextBlock Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.0</TextBlock>
-        </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-30,73,0">
+                        <Canvas x:Name="CVClefs" Width="144" Height="48" Background="#f8f0ff" Margin="10,-20,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <materialDesign:PopupBox Name="PBClef" StaysOpen="True" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,5,0,0" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock x:Name="TBClefs" TextWrapping="Wrap" Text="Clefs" Width="40" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="16" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="36"/>
+                                        <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="28" Margin="-5"/>
+                                        <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26" Margin="5"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TabControl TabStripPlacement="Left" SelectionChanged="HandleClefTypeSelectionChanged">
+                                            <TabItem x:Name="TIGClef" Width="80" Height="84" >
+                                                <TabItem.Header>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                        <Image Source="assets\GClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="64"/>
+                                                    </StackPanel>
+                                                </TabItem.Header>
+                                                <StackPanel>
+                                                    <RadioButton x:Name="RBtnTrebleClef" Checked="HandleClefChecked" GroupName="GClef" IsChecked="True" FontSize="22" Width="144" Height="48" Margin="5"
+    HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}">
+                                                        <WrapPanel>
+                                                            <TextBlock Text="Treble Clef"/>
+                                                        </WrapPanel>
+                                                    </RadioButton>
+                                                    <RadioButton x:Name="RBtnFrenchClef" Checked="HandleClefChecked" GroupName="GClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="French Clef"/>
+                                                </StackPanel>
+                                            </TabItem>
+                                            <TabItem x:Name="TIFClef" Width="80" Height="84">
+                                                <TabItem.Header>
+                                                    <StackPanel>
+                                                        <Image Source="assets\FClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60"/>
+                                                    </StackPanel>
+                                                </TabItem.Header>
+                                                <StackPanel>
+                                                    <RadioButton x:Name="RBtnBassClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="152" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Bass Clef"/>
+                                                    <RadioButton x:Name="RBtnBaritoneFClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Baritone Clef (F Clef)"/>
+                                                    <RadioButton x:Name="RBtnSubbassClef" Checked="HandleClefChecked" GroupName="FClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Subbass Clef"/>
+                                                </StackPanel>
+                                            </TabItem>
+                                            <TabItem x:Name="TICClef" Width="80" Height="84">
+                                                <TabItem.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="assets\CClef.png" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50"/>
+                                                    </StackPanel>
+                                                </TabItem.Header>
+                                                <StackPanel>
+                                                    <RadioButton x:Name="RBtnAltoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="144" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Alto Clef"/>
+                                                    <RadioButton x:Name="RBtnTenorClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="156" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Tenor Clef"/>
+                                                    <RadioButton x:Name="RBtnBaritoneCClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="288" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Baritone Clef (C Clef)"/>
+                                                    <RadioButton x:Name="RBtnMezzoSopranoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="264" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Mezzo-soprano Clef"/>
+                                                    <RadioButton x:Name="RBtnSopranoClef" Checked="HandleClefChecked" GroupName="CClef" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+    FontSize="22" Width="188" Height="48" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Soprano Clef"/>
+                                                </StackPanel>
+                                            </TabItem>
+                                        </TabControl>
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </Canvas>
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBox x:Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="720" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
+       FontSize="32" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
+                        <TextBox x:Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="720" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
+       FontSize="20" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-5,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <RadioButton x:Name="RBtnBaseC" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">C</RadioButton>
+                        <RadioButton x:Name="RBtnBaseD" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">D</RadioButton>
+                        <RadioButton x:Name="RBtnBaseE" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">E</RadioButton>
+                        <RadioButton x:Name="RBtnBaseF" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">F</RadioButton>
+                        <RadioButton x:Name="RBtnBaseG" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">G</RadioButton>
+                        <RadioButton x:Name="RBtnBaseA" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">A</RadioButton>
+                        <RadioButton x:Name="RBtnBaseB" Checked="HandleBasePitchChecked" GroupName="BasePitch" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">B</RadioButton>
+                        <TextBlock x:Name="TBSlash" TextWrapping="Wrap" Text="/" Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <RadioButton x:Name="RBtnAccidNatural" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">♮</RadioButton>
+                        <RadioButton x:Name="RBtnAccidSharp" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">#</RadioButton>
+                        <RadioButton x:Name="RBtnAccidFlat" Checked="HandleAccidChecked" GroupName="Accid" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="24" Width="40" Height="40" Margin="3">♭</RadioButton>
+                        <Button x:Name="ButtonDown" Click="HandleAccidCountDown" FontSize="18" Width="72" Height="48" Margin="3"  Background="Transparent" BorderBrush="Transparent">
+                            <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline" Width="44" Height="44" Foreground="Gray"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Button>
+                        <TextBox x:Name="TBAccidCount" PreviewTextInput="NumberValidationTextBoxAccidCount" LostFocus="OnLostFocusAccidCount" TextChanged="HandleTextChanged" TextAlignment="Center" FontSize="24" Width="40" Height="40" Margin="5">1</TextBox>
+                        <Button x:Name="ButtonUp" Click="HandleAccidCountUp" FontSize="18" Width="72" Height="48" Margin="3" Background="Transparent" BorderBrush="Transparent">
+                            <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" Width="44" Height="44" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock x:Name="TBBlank" TextWrapping="Wrap" Text=" " Width="64" Height="24" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <RadioButton x:Name="RBtnTypeMajorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="72" Height="44" Margin="3">Major</RadioButton>
+                        <RadioButton x:Name="RBtnTypeMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="72" Height="44" Margin="3">Minor</RadioButton>
+                        <RadioButton x:Name="RBtnTypeHarmonicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="187" Height="44" Margin="3">Harmonic Minor</RadioButton>
+                        <RadioButton x:Name="RBtnTypeMelodicMinorScale" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="174" Height="44" Margin="3" Padding="50">Melodic Minor</RadioButton>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <RadioButton x:Name="RBtnTypeIonianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="86" Height="44" Margin="3">Ionian</RadioButton>
+                        <RadioButton x:Name="RBtnTypeDorianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="85" Height="44" Margin="3">Dorian</RadioButton>
+                        <RadioButton x:Name="RBtnTypePhtygianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="111" Height="44" Margin="3">Phtygian</RadioButton>
+                        <RadioButton x:Name="RBtnTypeLydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="96" Height="44" Margin="3">Lydian</RadioButton>
+                        <RadioButton x:Name="RBtnTypeMixolydianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="138" Height="44" Margin="3">Mixolydian</RadioButton>
+                        <RadioButton x:Name="RBtnTypeAeolianMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="108" Height="44" Margin="3">Aeolian</RadioButton>
+                        <RadioButton x:Name="RBtnTypeLocrainMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="103" Height="44" Margin="3">Locrain</RadioButton>
+                        <TextBlock x:Name="TBBlank2" TextWrapping="Wrap" Text=" " Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBox x:Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+             IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
+                    <TextBox x:Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+             IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="7,-5,7,7"/>
+                    <TextBox x:Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+             IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-13,0,0"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="24,0,0,0">
+
+                        <RadioButton x:Name="RBtnSortAscending" Checked="HandleSortChecked" IsChecked="true" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+           FontSize="22" Width="144" Height="48" Margin="15,-25,0,0" Padding="100" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Ascending"/>
+                        <RadioButton x:Name="RBtnSortDescending" Checked="HandleSortChecked" GroupName="Sort" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButton}"
+           FontSize="22" Width="144" Height="48" Margin="5,-25,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Descending"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="BtnGit" Click="OpenGithubURL" Margin="0,-100,-75,20" HorizontalAlignment="Center" BorderBrush="{x:Null}" Background="White"
+      VerticalAlignment="Top" Height="88" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                            <materialDesign:PackIcon Kind="Github" Foreground="Black" FontSize="24" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"/>
+                        </Button>
+                        <TextBlock x:Name="TBVersion" VerticalAlignment="Bottom" TextAlignment="Center" TextWrapping="Wrap" Width="64" Margin="0,-30,25,20">v1.1.0</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </StackPanel>
 </Window>
     

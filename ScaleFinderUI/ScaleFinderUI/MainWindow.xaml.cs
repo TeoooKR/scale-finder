@@ -82,12 +82,13 @@ namespace ScaleFinderUI {
         private bool IsWindowLoaded = false;
         private static bool isChanged = false;
         private static bool isDescending = false;
+        //> Thread
+        MidiPlayTask? midiPlayTask = new MidiPlayTask();
         Thread? playMidiThread = null;
+
         public MainWindow() {
             this.Loaded += new RoutedEventHandler(OnWindowLoaded);
-#pragma warning disable CS8622 // 매개 변수 형식에서 참조 형식의 Null 허용 여부가 대상 대리자와 일치하지 않습니다(Null 허용 여부 특성 때문일 수 있음).
             this.Closing += OnWindowClosed;
-#pragma warning restore CS8622 // 매개 변수 형식에서 참조 형식의 Null 허용 여부가 대상 대리자와 일치하지 않습니다(Null 허용 여부 특성 때문일 수 있음).
             LoadMusicSheetImages();
             InitializeComponent();
         }
@@ -102,7 +103,7 @@ namespace ScaleFinderUI {
             IsWindowLoaded = true;
             UpdateUI();
             if (playMidiThread == null) {
-                playMidiThread = new Thread(MidiPlayTask.PlayMidiTask);
+                playMidiThread = new Thread(midiPlayTask.PlayMidiTask);
             }
             playMidiThread.Start();
             Debug.WriteLine(Properties.Settings.Default.volume);
@@ -358,10 +359,10 @@ namespace ScaleFinderUI {
             }
         }
 
-        private void UpdateIntegerNotation()
-        {
+        private void UpdateIntegerNotation() {
             // ▣ sbyte
             int[] pitchList = ScaleFindResult?.GetPitchList() ?? Array.Empty<int>();
+            Debug.Print("◐◐◐◐◐◐◐◐◐◐◐◐◐◐◐" + String.Join(" ", pitchList));
             // ▣ byte
             int[] tempList = new int[7];
             string pitchListText = "";
@@ -478,7 +479,7 @@ namespace ScaleFinderUI {
             DrawClef();
             DrawNote();
             DrawMusicSheet();
-            MidiPlayTask.MidiItem.Clear();
+            midiPlayTask?.MidiItem?.Clear();
         }
         private void DrawMusicSheet() {
             Debug.Print("> DrawMusicSheet() StartLineTop ====== " + StartLineTop);
@@ -817,13 +818,13 @@ namespace ScaleFinderUI {
         public static bool IsChanged() {
             return isChanged;
         }
-        public static void SetChanged(bool changed) {
+        public void SetChanged(bool changed) {
             //TODO LOCK
             isChanged = changed;
         }
-        public static void SetPitchesToPlay() {
-            MidiPlayTask.MidiItem.Clear();
-            MidiPlayTask.MidiItem.Octave = Octave;
+        public void SetPitchesToPlay() {
+            midiPlayTask.MidiItem.Clear();
+            midiPlayTask.MidiItem.Octave = Octave;
             // ▣ sbyte
             int[] pitchs = ScaleFindResult?.GetPitchList() ?? Array.Empty<int>();
             if (ScaleFindResult != null)
@@ -833,26 +834,35 @@ namespace ScaleFinderUI {
                     case false:
                         for (int i = 0; i < pitchs.Length; ++i)
                         {
-                            MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
+                            midiPlayTask?.MidiItem?.PitchList.Add(ScaleFindResult.GetPitchList()[i]);
                         }
                         break;
                     case true:
                         for (int i = 0; i < pitchs.Length; ++i)
                         {
-                            MidiPlayTask.MidiItem.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
+                            midiPlayTask?.MidiItem?.PitchList.Add(ScaleFindResult.GetPitchList()[7 - i]);
                         }
                         break;
                 }
             }
-            Debug.WriteLine(">>>>>>>>>>>>> SetPitchesToPlay() " + MidiPlayTask.MidiItem.PitchList.Count);
+            Debug.WriteLine(">>>>>>>>>>>>> SetPitchesToPlay() " + midiPlayTask?.MidiItem?.PitchList.Count);
         }
         private void HandleVolume(object sender, RoutedEventArgs e) {
             byte volume = Convert.ToByte(SlVolume.Value * 10);
-            MidiPlayTask.MidiItem.Volume = volume;                   
-            TBVolume.Text = volume.ToString();                  
+            midiPlayTask.MidiItem.Volume = volume;                   
+            TBVolume.Text = volume.ToString();
         }
-        public static void CurrentPlayingNote(int n) {       
+        public void CurrentPlayingNote(byte n) {
             Debug.WriteLine(n);
+            if (n > 0) {
+                rec[n - 1].Visibility = Visibility.Collapsed;
+            }
+            rec[n].Visibility = Visibility.Visible;
+        }
+        public void ChangeRecVisibilityCollapsed() {
+            for (byte i = 0; i < 8; ++i) {
+                rec[i].Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
