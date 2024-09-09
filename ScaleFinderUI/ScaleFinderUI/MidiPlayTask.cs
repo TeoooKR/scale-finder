@@ -57,9 +57,7 @@ namespace ScaleFinderUI {
                     });
                     break;
                 }
-
                 Debug.WriteLine(">>>>>>>>>>>> IsChanged 3");
-
                 //TODO Update Canvas Rectagle
                 dispatcher.Invoke(() => {
                     lock (objLock) {
@@ -70,9 +68,6 @@ namespace ScaleFinderUI {
                             });
                     }
                 });
-
-
-
                 // ▣ byte
                 int pitchToPlay = MidiItem.PitchList[i] + 59 + MidiItem.Octave * 12;
                 NoteOnEvent noteOnEvent = new NoteOnEvent(0, 2, pitchToPlay, MidiItem.Volume, 1);

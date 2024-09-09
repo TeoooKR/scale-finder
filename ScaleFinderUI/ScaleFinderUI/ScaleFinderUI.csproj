@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GetHarmony.cs" />
+    <Compile Remove="HarmonyFinder.cs" />
+    <Compile Remove="Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="assets\AltoClef.png" />
     <None Remove="assets\BaritoneCClef.png" />
     <None Remove="assets\BaritoneFClef.png" />
@@ -38,6 +44,12 @@
 
   <ItemGroup>
     <Content Include="assets\Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="GetHarmony.cs" />
+    <None Include="HarmonyFinder.cs" />
+    <None Include="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>

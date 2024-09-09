@@ -137,9 +137,9 @@ SOFTWARE.
                     </StackPanel>
 
                     <StackPanel HorizontalAlignment="Center">
-                        <TextBox x:Name="TBSelectedScale" TextWrapping="Wrap" Text="응어절티비~~~&#xA;" Width="720" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
+                        <TextBox x:Name="TBSelectedScale" TextWrapping="Wrap" Width="720" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
        FontSize="32" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
-                        <TextBox x:Name="TBScaleResult" TextWrapping="Wrap" Text="응어절비데~~~&#xA;" Width="720" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
+                        <TextBox x:Name="TBScaleResult" TextWrapping="Wrap" Width="720" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105"
        FontSize="20" TextAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-5,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -181,11 +181,11 @@ SOFTWARE.
                         <RadioButton x:Name="RBtnTypeLocrainMode" Checked="HandleTypeChecked" GroupName="Type" Style="{StaticResource MaterialDesignCalendarMeridiemRadioButtonDefault}" FontSize="20" Width="103" Height="44" Margin="3">Locrain</RadioButton>
                         <TextBlock x:Name="TBBlank2" TextWrapping="Wrap" Text=" " Width="64" Height="32" RenderTransformOrigin="1.907,1.105" FontSize="24" TextAlignment="Center" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBox x:Name="TBDegrees" TextWrapping="Wrap" Text="응어절변기~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+                    <TextBox x:Name="TBDegrees" TextWrapping="Wrap" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
              IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>
-                    <TextBox x:Name="TBIntervalsResult" TextWrapping="Wrap" Text="응어절곰팡이~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+                    <TextBox x:Name="TBIntervalsResult" TextWrapping="Wrap" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
              IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="7,-5,7,7"/>
-                    <TextBox x:Name="TBIntegerNotation" TextWrapping="Wrap" Text="응어절하수구~~~&#xA;" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
+                    <TextBox x:Name="TBIntegerNotation" TextWrapping="Wrap" Width="1600" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="1.907,1.105" FontSize="20" TextAlignment="Center" Foreground="#FF8A8A8A"
              IsReadOnly="True" BorderThickness="0" Background="#00000000" BorderBrush="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Margin="0,-13,0,0"/>
 
                     <StackPanel Orientation="Horizontal" Margin="24,0,0,0">
